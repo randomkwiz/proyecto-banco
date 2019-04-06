@@ -111,4 +111,11 @@ public class ClienteImpl implements Cliente{
         System.out.println("En construcción");
     }
 
+
+    //Metodos Object
+
+    @Override
+    public String toString(){
+        return getDNI()+","+getIngresoMensual();
+    }
 }
