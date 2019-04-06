@@ -78,5 +78,11 @@ public class BancoComercial {
         return false;
     }
 
+    //Metodos object
+    @Override
+    public String toString(){
+        return getBIC()+","+getNombre();
+    }
+
 
 }
