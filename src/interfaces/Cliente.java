@@ -27,6 +27,8 @@ package interfaces;
 public interface Cliente {
 
     public String getDNI();
+    public String getBIC_Banco();
+    public void setBIC_Banco(String BIC_Banco);
     public double getIngresoMensual();
     public void setIngresoMensual(double ingresoMensual);
 

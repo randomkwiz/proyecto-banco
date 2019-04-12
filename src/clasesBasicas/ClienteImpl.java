@@ -2,6 +2,7 @@
  * Nombre: Cliente
  * Propiedades:
  *   -Basicas:
+ *      private String BIC_Banco consultable y modificable
  *       private String DNI  consultable y no modificable
  *       private double ingresoMensual consultable y modificable
  *
@@ -29,15 +30,19 @@ import interfaces.Cuenta;
 
 public class ClienteImpl implements Cliente{
 
+    private String BIC_Banco;
     private String DNI;
     private double ingresoMensual;
 
-    public ClienteImpl(String DNI, double ingresoMensual) {
+
+    public ClienteImpl(String BIC_Banco, String DNI, double ingresoMensual) {
+        this.BIC_Banco = BIC_Banco;
         this.DNI = DNI;
         this.ingresoMensual = ingresoMensual;
     }
 
     public ClienteImpl(ClienteImpl o){
+        this.BIC_Banco = o.BIC_Banco;
         this.DNI = o.DNI;
         this.ingresoMensual = o.ingresoMensual;
     }
@@ -47,7 +52,8 @@ public class ClienteImpl implements Cliente{
     public String getDNI() {
         return DNI;
     }
-
+    public String getBIC_Banco(){return BIC_Banco;}
+    public void setBIC_Banco(String BIC_Banco){this.BIC_Banco = BIC_Banco;}
     public double getIngresoMensual() {
         return ingresoMensual;
     }
@@ -111,4 +117,11 @@ public class ClienteImpl implements Cliente{
         System.out.println("En construcción");
     }
 
+
+    //Metodos Object
+
+    @Override
+    public String toString(){
+        return  getBIC_Banco()+","+  getDNI()+","+getIngresoMensual();
+    }
 }
