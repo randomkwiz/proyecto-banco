@@ -2,6 +2,7 @@
  * Nombre: BancoComercial
  * Propiedades:
  *   -Basicas:
+ *       private String ID_BancoCentral consultable y modificable
  *       private String BIC  consultable y no modificable
  *       private String nombre consultable y modificable
  *
@@ -27,10 +28,12 @@ import interfaces.Cuenta;
 
 public class BancoComercial {
 
+    private String ID_BancoCentral;
     private String BIC;
     private String nombre;
 
-    public BancoComercial(String BIC, String nombre) {
+    public BancoComercial(String ID_BancoCentral,String BIC, String nombre) {
+        this.ID_BancoCentral = ID_BancoCentral;
         this.BIC = BIC;
         this.nombre = nombre;
     }
@@ -42,6 +45,14 @@ public class BancoComercial {
 
     public String getNombre() {
         return nombre;
+    }
+
+    public String getID_BancoCentral() {
+        return ID_BancoCentral;
+    }
+
+    public void setID_BancoCentral(String ID_BancoCentral) {
+        this.ID_BancoCentral = ID_BancoCentral;
     }
 
     public void setNombre(String nombre) {
@@ -81,7 +92,7 @@ public class BancoComercial {
     //Metodos object
     @Override
     public String toString(){
-        return getBIC()+","+getNombre();
+        return   getID_BancoCentral()+","+getBIC()+","+getNombre();
     }
 
 

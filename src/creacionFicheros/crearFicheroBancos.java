@@ -8,7 +8,7 @@ import clasesBasicas.BancoComercial;
 
 import java.io.*;
 
-public class crearFicheroBancos {
+public class crearFicheroBancos {   //banco comercial
     public static void main(String[] args) {
         File carpetaFicheros = new File("./ficheros/");
         carpetaFicheros.mkdir();    //crea la carpeta "ficherosCuentas"
@@ -19,9 +19,9 @@ public class crearFicheroBancos {
         BufferedReader br = null;
         BancoComercial bancos[] = new BancoComercial[3];
 
-        bancos[0] = new BancoComercial("CAIXESBBXXX", "La Caixa");
-        bancos[1] = new BancoComercial("BSCHESMMXXX", "Santander");
-        bancos[2] = new BancoComercial("INGDESMMXXX", "ING Direct");
+        bancos[0] = new BancoComercial("ESP","CAIXESBBXXX", "LaCaixa");
+        bancos[1] = new BancoComercial("ESP","BSCHESMMXXX", "Santander");
+        bancos[2] = new BancoComercial("ESP","INGDESMMXXX", "INGDirect");
 
         try{
             escribir = new FileWriter(archivoBancos, false);
