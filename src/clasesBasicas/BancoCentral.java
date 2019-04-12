@@ -1,6 +1,7 @@
 /* ESTUDIO DE INTERFAZ
  *
  * Propiedades basicas:
+ *    ->  ID: String, consultable, modificable //se necesita el set
  * 		-> tasaInteres: double, consultable, modificable
  * 		-> coeficienteCaja: double, consultable, modificable
  *
@@ -75,3 +76,4 @@ public class BancoCentral implements Cloneable, Serializable
         return copia;
     }
 }
+
