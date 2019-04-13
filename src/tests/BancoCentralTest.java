@@ -7,7 +7,7 @@ public class BancoCentralTest {
 	public static void main(String[] args) 
 	{
 		BancoCentral porDefecto = new BancoCentral();
-		BancoCentral conParametros = new BancoCentral(1.5, 10);
+		BancoCentral conParametros = new BancoCentral("BANCOCENTRAL",1.5, 10);
 		BancoCentral deCopia = new BancoCentral(conParametros);
 		
 		System.out.println("porDefecto.getTasaInteres(): " + porDefecto.getTasaInteres());

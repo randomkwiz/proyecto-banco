@@ -38,6 +38,13 @@ public class BancoCentral implements Cloneable, Serializable
         this.tasaInteres = tasaInteres;
         this.coeficienteCaja = coeficienteCaja;
     }
+    
+    public BancoCentral(BancoCentral otro)
+    {
+    	this.ID = otro.ID;
+    	this.tasaInteres = otro.tasaInteres;
+    	this.coeficienteCaja = otro.coeficienteCaja;
+    }
 
     public double getTasaInteres() { return this.tasaInteres; }
     public double getCoeficienteCaja() { return this.coeficienteCaja; }
