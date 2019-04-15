@@ -59,6 +59,13 @@ public class CuentaImpl implements Cuenta {
 
     @Override
     public String toString(){
-    	 return getID_Banco()+","+getIBAN()+","+getCantidadDinero();
+    	
+    	String ret = getID_Banco()+","+getIBAN()+","+getCantidadDinero();
+    	
+    	for(int i = Double.toString(cantidadDinero).length() ; i < 20 ; i++)
+    	{
+    		ret += " ";
+    	}
+    	return ret;
     }
 }
