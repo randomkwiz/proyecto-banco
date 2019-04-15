@@ -59,6 +59,6 @@ public class CuentaImpl implements Cuenta {
 
     @Override
     public String toString(){
-        return getID_Banco()+","+getIBAN()+","+getCantidadDinero();
+    	 return getID_Banco()+","+getIBAN()+","+getCantidadDinero();
     }
 }
