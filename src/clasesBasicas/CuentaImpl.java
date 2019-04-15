@@ -16,7 +16,7 @@
  *   public double getCantidadDinero();
  *
  *   public void setCantidadDinero(double cantidadDinero);
- * Metodos aÃ±adidos:
+ * Metodos añadidos:
  * Metodos object:
  *   public String toString();
  * */
@@ -59,6 +59,6 @@ public class CuentaImpl implements Cuenta {
 
     @Override
     public String toString(){
-        return getID_Banco()+","+getIBAN()+","+getCantidadDinero();
+    	 return getID_Banco()+","+getIBAN()+","+getCantidadDinero();
     }
 }
