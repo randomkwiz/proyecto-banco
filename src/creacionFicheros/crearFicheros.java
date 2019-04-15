@@ -100,7 +100,7 @@ public class crearFicheros {
             escribir = new FileWriter(listadoCuentas_BancoCentral);
             bw = new BufferedWriter(escribir);
             for(int i = 0; i < cuentas.length; i ++){
-                bw.write(cuentas[i].toString()+" €");
+                bw.write(cuentas[i].toString());
                 bw.newLine();
             }
             bw.close();

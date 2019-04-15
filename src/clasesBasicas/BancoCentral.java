@@ -18,6 +18,11 @@
  */
 package clasesBasicas;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.io.Serializable;
 
 public class BancoCentral implements Cloneable, Serializable
@@ -82,9 +87,82 @@ public class BancoCentral implements Cloneable, Serializable
      * 	Modificar el dinero de las cuentas de origen y destino
      * Fin
      */
-    public boolean realizarIngreso (ClienteImpl cl_origen, CuentaImpl cu_origen, ClienteImpl cl_destino, CuentaImpl cu_destino, double cantidad){
-        System.out.println("realizarIngreso en construccion");
-    return false;
+    public boolean realizarIngreso (CuentaImpl cu_origen, CuentaImpl cu_destino, double cantidad)
+    {
+    	File ficheroCuentaOrigen = null;
+    	File ficheroCuentaDestino = null;
+    	File ficheroCuentas = null;
+    	FileWriter salidaFichero = null;
+    	BufferedWriter writer = null;
+    	RandomAccessFile randAccessFile = null;
+    	
+        //Abrir fichero de la cuenta de origen
+        try
+        {
+        	//Escribir registro del movimiento de salida de dinero
+        	ficheroCuentaOrigen = new File("./Files/BancoCentral/MovimientosCuentas/Movimientos_" + cu_origen.getIBAN() + ".txt");
+        	salidaFichero = new FileWriter(ficheroCuentaOrigen,true);
+        	writer = new BufferedWriter(salidaFichero);
+        	
+        	writer.write(cu_origen.getIBAN() + "," + cu_destino.getIBAN() + "," + cantidad + ",R");
+        	writer.newLine();
+        	
+        }
+        catch(IOException e)
+        {
+        	e.printStackTrace();
+        }
+        finally
+        {
+        	try
+            {
+        		//Cerrar fichero de la cuenta de origen
+        		writer.close();
+        		salidaFichero.close();
+            }
+            catch(IOException e)
+            {
+            	e.printStackTrace();
+            }
+        }
+        
+      //Abrir fichero la cuenta de destino
+        try
+        {
+        	//Escribir registro del movimiento de entrada de dinero
+        	ficheroCuentaDestino = new File("./Files/BancoCentral/MovimientosCuentas/Movimientos_" + cu_destino.getIBAN() + ".txt");
+        	salidaFichero = new FileWriter(ficheroCuentaDestino,true);
+        	writer = new BufferedWriter(salidaFichero);
+        	
+        	writer.write(cu_origen.getIBAN() + "," + cu_destino.getIBAN() + "," + cantidad + ",D");
+        	writer.newLine();
+        	
+        }
+        catch(IOException e)
+        {
+        	e.printStackTrace();
+        }
+        finally
+        {
+        	try
+            {
+        		//Cerrar fichero de la cuenta de destino
+        		writer.close();
+        		salidaFichero.close();
+            }
+            catch(IOException e)
+            {
+            	e.printStackTrace();
+            }
+        }
+        
+        //TODO Falta que se modifique el dinero en el fichero de las cuentas del banco
+        
+        //Abrir fichero de las cuentas del banco
+        
+        //Modificar el dinero de las cuentas de origen y destino
+
+        return false;
     }
 
     //Representacion como cadena: sus atributos separados por coma

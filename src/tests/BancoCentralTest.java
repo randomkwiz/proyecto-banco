@@ -1,6 +1,7 @@
 package tests;
 
 import clasesBasicas.BancoCentral;
+import clasesBasicas.CuentaImpl;
 
 public class BancoCentralTest {
 
@@ -28,6 +29,13 @@ public class BancoCentralTest {
 		System.out.println("ANTES -> " + porDefecto.getCoeficienteCaja());
 		porDefecto.setCoeficienteCaja(8);
 		System.out.println("DESPUES -> " + porDefecto.getCoeficienteCaja());
+		
+		System.out.println("-----------------------------------------------------");
+		
+		CuentaImpl cu_origen = new CuentaImpl(conParametros.getID(), "12XXXXXXX", 15000000);
+		CuentaImpl cu_destino = new CuentaImpl(conParametros.getID(), "10XXXXXXX", 15000000);
+		
+		conParametros.realizarIngreso(cu_origen, cu_destino, 15000000.50);
 		
 		System.out.println("-----------------------------------------------------");
 		
