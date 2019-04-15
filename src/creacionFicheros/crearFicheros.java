@@ -6,6 +6,7 @@
                     UN fichero con los bancos comerciales(clientes) que gestiona
                     UN fichero con las cuentas (de esos bancos) que gestiona
                             fichero con los movimientos de cada cuenta (un fichero x cada cuenta)
+
 	BancoComercial -> tiene una carpeta de "ficheros de banco comercial" (una carpeta x cada banco)
                     UN fichero con las cuentas (de clientes) que gestiona (sí, UN fichero con todas las cuentas de ese banco)
                             fichero con los movimientos de cada cuenta (un fichero x cada cuenta)
@@ -273,3 +274,4 @@ public class crearFicheros {
 
         }//cierre del main
     }
+
