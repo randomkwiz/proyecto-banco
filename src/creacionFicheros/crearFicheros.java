@@ -94,9 +94,9 @@ public class crearFicheros {
 
         File listadoCuentas_BancoCentral = new File(carpetaBancoCentral, "Cuentas_BancoCentral.txt");
         CuentaImpl cuentas[] = new CuentaImpl[3];
-        cuentas[0] = new CuentaImpl("CAIXESBBXXX", "XXXXXXXXX", 5000000000.0);
-        cuentas[1] = new CuentaImpl("BSCHESMMXXX", "XXXXXXXXX", 5000000000.0);
-        cuentas[2] = new CuentaImpl("INGDESMMXXX", "XXXXXXXXX", 5000000000.0);
+        cuentas[0] = new CuentaImpl("ESP", "12XXXXXXX", 500.0);
+        cuentas[1] = new CuentaImpl("ESP", "13XXXXXXX", 500.0);
+        cuentas[2] = new CuentaImpl("ESP", "14XXXXXXX", 500.0);
         try{
             escribir = new FileWriter(listadoCuentas_BancoCentral);
             bw = new BufferedWriter(escribir);
@@ -137,7 +137,7 @@ public class crearFicheros {
                 while (br.ready()) {
                     registro = br.readLine();
                     campos = registro.split(",");
-                    nombreArchivo = "Movimientos_" + campos[0]+".txt";
+                    nombreArchivo = "Movimientos_" + campos[1]+".txt";
                     File f_movimientos_BancoCentral = new File(carpetaMovimientos_BancoCentral, nombreArchivo);
                     if(f_movimientos_BancoCentral.createNewFile()){
                         System.out.println(nombreArchivo+" creado con éxito.");

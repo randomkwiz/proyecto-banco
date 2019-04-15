@@ -104,7 +104,7 @@ public class BancoCentral implements Cloneable, Serializable
         	salidaFichero = new FileWriter(ficheroCuentaOrigen,true);
         	writer = new BufferedWriter(salidaFichero);
         	
-        	writer.write(cu_origen.getIBAN() + "," + cu_destino.getIBAN() + "," + cantidad + ",R");
+        	writer.write(cu_origen.getIBAN() + "," + cu_destino.getIBAN() + "," + cantidad + ",R");		//"R" indica Retirada de dinero
         	writer.newLine();
         	
         }
@@ -134,7 +134,7 @@ public class BancoCentral implements Cloneable, Serializable
         	salidaFichero = new FileWriter(ficheroCuentaDestino,true);
         	writer = new BufferedWriter(salidaFichero);
         	
-        	writer.write(cu_origen.getIBAN() + "," + cu_destino.getIBAN() + "," + cantidad + ",D");
+        	writer.write(cu_origen.getIBAN() + "," + cu_destino.getIBAN() + "," + cantidad + ",D");		//"D" indica Depósito de dinero
         	writer.newLine();
         	
         }
@@ -156,11 +156,90 @@ public class BancoCentral implements Cloneable, Serializable
             }
         }
         
-        //TODO Falta que se modifique el dinero en el fichero de las cuentas del banco
+        //TODO El campo del dinero en los registros de las cuentas debería ser de longitud fija (para que no sobreescriba)
         
         //Abrir fichero de las cuentas del banco
-        
-        //Modificar el dinero de las cuentas de origen y destino
+        try
+        {
+        	ficheroCuentas = new File("./Files/BancoCentral/Cuentas_BancoCentral.txt");
+        	randAccessFile = new RandomAccessFile(ficheroCuentas, "rw");
+        	
+        	//Leer registro cuenta de origen
+        	String linea = randAccessFile.readLine();
+        	long puntero = 0;
+        	CuentaImpl cuenta = null;
+        	boolean encontrado = false;
+        	String[] campos = null;
+        	
+        	while(linea != null && encontrado == false)
+        	{
+        		//Dividir el registro en campos separados por coma
+        		campos = linea.split(",");
+        		
+        		//Si el campo del IBAN es igual al IBAN de la cuenta de origen
+        		if(campos[1].equals(cu_origen.getIBAN()))
+        		{
+        			randAccessFile.seek(puntero);
+        			
+        			//Modificar la cuenta, restandole el dinero
+        			cuenta = new CuentaImpl(campos[0], campos[1], Double.parseDouble(campos[2]));
+        			cuenta.setCantidadDinero(cuenta.getCantidadDinero() - cantidad);
+        			
+        			linea = cuenta.toString();
+        			
+        			//Sobreescribir el registro
+        			randAccessFile.writeBytes(linea);
+        			encontrado = true;
+        		}
+        		
+        		puntero = randAccessFile.getFilePointer();	//guarda la posicion del puntero
+        		linea = randAccessFile.readLine();			//Lee el siguiente registro
+        	}
+        	
+        	randAccessFile.seek(0);						//reinicia el puntero al principio del fichero
+        	linea = randAccessFile.readLine();			//Lee el primer registro
+        	encontrado = false;	
+        	
+        	while(linea != null && encontrado == false)
+        	{
+        		campos = linea.split(",");
+        		
+        		//Si el campo del IBAN es igual al IBAN de la cuenta de destino
+        		if(campos[1].equals(cu_destino.getIBAN()))
+        		{
+        			randAccessFile.seek(puntero);
+        			
+        			//Modificar la cuenta, sumandole el dinero
+        			cuenta = new CuentaImpl(campos[0], campos[1], Double.parseDouble(campos[2]));
+        			cuenta.setCantidadDinero(cuenta.getCantidadDinero() + cantidad);
+        			
+        			linea = cuenta.toString();
+        			
+        			//Sobreescribir el registro
+        			randAccessFile.writeBytes(linea);
+        			encontrado = true;
+        		}
+        		
+        		puntero = randAccessFile.getFilePointer();
+        		linea = randAccessFile.readLine();
+        	}
+        		
+        }
+        catch(IOException e)
+        {
+        	e.printStackTrace();
+        }
+        finally
+        {
+        	try
+            {
+            	randAccessFile.close();
+            }
+            catch(IOException e)
+            {
+            	e.printStackTrace();
+            }
+        }
 
         return false;
     }
