@@ -87,6 +87,7 @@ public class BancoCentral implements Cloneable, Serializable
      * 	Modificar el dinero de las cuentas de origen y destino
      * Fin
      */
+    @Deprecated
     public boolean realizarIngreso (CuentaImpl cu_origen, CuentaImpl cu_destino, double cantidad)
     {
     	File ficheroCuentaOrigen = null;

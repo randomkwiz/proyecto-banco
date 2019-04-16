@@ -19,7 +19,7 @@
 *       finSi
 *   mientras(opcion no sea salir)
 * fin
-* */
+*/
 package main;
 public class ProgramaCliente {
     public static void main(String[] args) {
