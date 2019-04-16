@@ -19,8 +19,10 @@ public class GestionBancoComercialTest {
 
         //gestion.ordenarMovimientosPorFecha("LaCaixa","AAAAAAAAAAA");
 
-        gestion.realizarMovimiento("LaCaixa","AAAAAAAAAAA", "LaCaixa","EEEEEEEEEEE", "Transferencia de prueba22",12300000,16,4,2019 );
+        //gestion.realizarMovimiento("LaCaixa","AAAAAAAAAAA", "LaCaixa","EEEEEEEEEEE", "Transferencia de prueba22",12300000,16,4,2019 );
 
+        System.out.println(gestion.obtenerClientePorIBAN("LaCaixa", "XXXXXXXXXXX"));
+        System.out.println(gestion.obtenerIBANPorCliente("LaCaixa", "28835488-C"));
 
     }
 }
