@@ -9,8 +9,72 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GestionBancoComercial {
+    /*
+     * INTERFAZ
+     * Signatura: public String obtenerClientePorIBAN(String nombre_banco, String iban_cuenta)
+     * Comentario: dado el nombre del banco y el iban de la cuenta, te devuelve el cliente al que pertenece la cuenta
+     * Precondiciones: se pasan el nombre del banco y el iban de la cuenta
+     * Entrada: String nombre_banco, String iban_cuenta
+     * Salida: String que es el dni del cliente
+     * Entrada/Salida:
+     * Postcondiciones: Asociado al nombre se devuelve el DNI del cliente al que pertenece la cuenta
+     * */
+    public String obtenerClientePorIBAN(String nombre_banco, String iban_cuenta){
+        File fichero_clientes_cuentas = new File("./Files/BancosComerciales/"+nombre_banco+"/Clientes_Cuentas_"+nombre_banco+".txt");
+        FileReader fr = null;
+        BufferedReader br = null;
+        String registro = " ";
+        String dni_cliente = " ";
 
+        try{
+            fr = new FileReader(fichero_clientes_cuentas);
+            br = new BufferedReader(fr);
+            while (br.ready()){
+                registro = br.readLine();
 
+                if (registro.split(",")[1].equals(iban_cuenta)){
+                    dni_cliente = registro.split(",")[0];
+                }
+            }
+            br.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return dni_cliente;
+    }
+    /*
+     * INTERFAZ
+     * Signatura: public String obtenerIBANPorCliente(String nombre_banco, String dni_cliente)
+     * Comentario: dado el nombre del banco y el dni del propietario de la cuenta, te devuelve el IBAN de la cuenta
+     * Precondiciones: se pasan el nombre del banco y el dni del propietario
+     * Entrada: String nombre_banco, String dni_cliente
+     * Salida: String que es el IBAN de la cuenta
+     * Entrada/Salida:
+     * Postcondiciones: Asociado al nombre se devuelve el IBAN de la cuenta que pertenece a dicho cliente
+     * */
+    public String obtenerIBANPorCliente(String nombre_banco, String dni_cliente){
+        File fichero_clientes_cuentas = new File("./Files/BancosComerciales/"+nombre_banco+"/Clientes_Cuentas_"+nombre_banco+".txt");
+        FileReader fr = null;
+        BufferedReader br = null;
+        String registro = " ";
+        String iban_cuenta = " ";
+
+        try{
+            fr = new FileReader(fichero_clientes_cuentas);
+            br = new BufferedReader(fr);
+            while (br.ready()){
+                registro = br.readLine();
+
+                if (registro.split(",")[0].equals(dni_cliente)){
+                    iban_cuenta = registro.split(",")[1];
+                }
+            }
+            br.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return iban_cuenta;
+    }
 
 
 
