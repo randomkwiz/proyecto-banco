@@ -26,12 +26,6 @@ public class ValidacionesProgramaBancoComercial
 		
 		do
 		{
-			System.out.print("BIC: ");
-			BIC = teclado.next();
-		}while(gestion.BICRegistrado(BIC));
-		
-		do
-		{
 			System.out.print("IBAN: ");
 			IBAN = teclado.next();
 		}while(gestion.IBANRegistrado(IBAN));
