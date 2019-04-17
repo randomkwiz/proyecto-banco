@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class GestionBancoCentral 
@@ -149,5 +150,52 @@ public class GestionBancoCentral
 	{
 		insertarMovimientoEnFicheroMovimientos(nombre_banco, ID_Cuenta, true, concepto, cantidad, dia, mes, anyo);
         modificarSaldoEnFicheroCuentas(nombre_banco, ID_Cuenta, true, cantidad);
+	}
+	
+	/* INTERFAZ
+	 * Comentario: Accede al fichero de cuentas y busca una cuenta por su IBAN para leer sus datos
+	 * Prototipo: public String datosCuenta(String IBAN)
+	 * Precondiciones: No hay
+	 * Entrada: el IBAN de la cuenta
+	 * Salida: un String con los datos de la cuenta
+	 * Postcondiciones: Asociado al nombre devuelve un String con los datos de la cuenta
+	 */
+	public String datosCuenta(String IBAN)
+	{
+		String cuenta = null;
+		
+		System.out.println("datosCuenta en resguardo");
+		
+		return cuenta;
+	}
+	
+	/* INTERFAZ
+	 * Comentario: muestra los movimientos de una cuenta en una determinada fecha
+	 * Prototipo: public void mostrarMovmientosPorFecha(GregorianCalendar fecha, String IBAN)
+	 * Precondiciones: No hay
+	 * Entrada: un GregorianCalendar con la fecha y un String con el IBAN de la cuenta
+	 * Salida: No hay.
+	 * Postcondiciones: No hay. solo imprime en pantalla.
+	 */
+	public void mostrarMovimientosPorFecha(GregorianCalendar fecha, String IBAN)
+	{
+		System.out.println("mostrarMovimientosPorFecha en resguardo");
+	}
+	
+	/* INTERFAZ
+	 * Comentario: Comprueba si existe un cliente(DNI) registrado en el banco
+	 * Prototipo: public boolean DNIRegistrado(String DNI, String BIC)
+	 * Entrada: un String con el DNI del clente a comprobar y un String con el BIC del banco
+	 * Precondiciones: No hay
+	 * Salida: un boolean indicando si el DNI esta registrado ya o no
+	 * Postcondiciones: Asociado al nombre devuelve true si el DNI está ya registrado en el banco o false de lo contrario.
+	 */
+	public boolean DNIRegistrado(String DNI, String BIC)
+	{
+		boolean registrado = false;
+		
+		System.out.println("DNIRegistrado en resguardo");
+		
+		return registrado;
 	}
 }
