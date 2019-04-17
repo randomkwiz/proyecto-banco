@@ -32,10 +32,24 @@ public class BancoComercial {
     private String BIC;
     private String nombre;
 
+    public BancoComercial()
+    {
+    	this.ID_BancoCentral = "ESP";
+    	this.BIC = "000000MMXXX";
+    	this.nombre = " ";
+    }
+    
     public BancoComercial(String ID_BancoCentral,String BIC, String nombre) {
         this.ID_BancoCentral = ID_BancoCentral;
         this.BIC = BIC;
         this.nombre = nombre;
+    }
+    
+    public BancoComercial(BancoComercial otro)
+    {
+    	this.ID_BancoCentral = otro.ID_BancoCentral;
+    	this.BIC = otro.BIC;
+    	this.nombre = otro.nombre;
     }
 
     //setters y getters
@@ -70,6 +84,7 @@ public class BancoComercial {
      * Salidas: boolean
      * Postcondiciones: se modifica el fichero y asociado al nombre se devuelve true si la operación se ha realizado con éxito y false si no.
      * */
+    @Deprecated
     public boolean realizarIngreso (ClienteImpl cl_origen, CuentaImpl cu_origen, ClienteImpl cl_destino, CuentaImpl cu_destino, double cantidad){
         System.out.println("En construcción");
     return false;
@@ -84,6 +99,7 @@ public class BancoComercial {
      * Salidas: boolean
      * Postcondiciones: se modifica el fichero y asociado al nombre se devuelve true si la operación se ha realizado con éxito y false si no.
      * */
+    @Deprecated
     public boolean aplicarComisionDescubierto(ClienteImpl cliente, CuentaImpl cuenta, double cantidad){
         System.out.println("En construcción");
         return false;

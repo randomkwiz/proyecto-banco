@@ -22,11 +22,10 @@ public class GestionBancoCentral
      * Entrada/Salida:
      * Postcondiciones: Se modificarán los ficheros de cuentas y de movimientos correspondientes.
      * */
-	public void realizarMovimiento(String nombre_banco_origen,String cuenta_origen,String nombre_banco_destino, String cuenta_destino, String concepto,double cantidad, int dia, int mes, int anyo)
-	{
-		sacarDinero(nombre_banco_origen, cuenta_origen, concepto, cantidad, dia, mes, anyo);
-        ingresarDinero(nombre_banco_destino, cuenta_destino, concepto, cantidad, dia, mes, anyo);
-	}
+	public void realizarMovimiento(String IBANOrigen,String IBANDestino, String concepto,double cantidad, int dia, int mes, int anyo){
+        sacarDinero(IBANOrigen, concepto, cantidad, dia, mes, anyo);
+        ingresarDinero(IBANDestino, concepto, cantidad, dia, mes, anyo);
+    }
 	
 	/*INTERFAZ
      * Signatura: public void sacarDinero(String nombre_banco, String ID_Cuenta, String concepto,double cantidad, int dia, int mes, int anyo)
@@ -37,11 +36,11 @@ public class GestionBancoCentral
      * Entrada/Salida:
      * Postcondiciones: Se modificarán los ficheros de Cuentas modificando el saldo y de movimientos, añadiendo el movimiento correspondiente.
      * */
-	public void sacarDinero(String nombre_banco, String ID_Cuenta,String concepto, double cantidad, int dia, int mes, int anyo)
-	{
-		insertarMovimientoEnFicheroMovimientos(nombre_banco, ID_Cuenta, false, concepto, cantidad, dia, mes, anyo);
-        modificarSaldoEnFicheroCuentas(nombre_banco, ID_Cuenta, false, cantidad);
-	}
+	public void sacarDinero(String IBAN,String concepto, double cantidad, int dia, int mes, int anyo){
+        insertarMovimientoEnFicheroMovimientos(IBAN, false, concepto, cantidad, dia, mes, anyo);
+        modificarSaldoEnFicheroCuentas(IBAN, false, cantidad);
+
+    }
 	
 	/* INTERFAZ
      * Signatura: public void modificarSaldoEnFicheroCuentas(String nombre_banco,String iban_cuenta, boolean sumaOresta,double cantidad)
@@ -52,15 +51,17 @@ public class GestionBancoCentral
      * Entrada/Salida:
      * Postcondiciones: Se modifica el fichero de Cuentas y se actualiza el saldo pertinente.
      * */
-	public void modificarSaldoEnFicheroCuentas(String nombre_banco,String iban_cuenta, boolean sumaOresta,double cantidad)
+	public void modificarSaldoEnFicheroCuentas(String IBAN, boolean sumaOresta,double cantidad)
 	{
-		File ficheroCuentas = new File ("./Files/BancoCentral/Cuentas_"+nombre_banco+".txt");
+		//String nombreBanco = obtenerNombreBancoComercialPorIBAN(IBAN);
+		
+		File ficheroCuentas = new File ("./Files/BancoCentral/Cuentas_BancoCentral.txt");
         FileReader leer = null;
         BufferedReader br = null;
         FileWriter fw = null;
         BufferedWriter bw = null;
         String campos[] = null;
-        List<String> registros = new ArrayList<String>();   //toma ya usando arraylist ¯\_(ツ)_/¯
+        List<String> registros = new ArrayList<String>();
         String registro = " ";
 
         try 
@@ -73,12 +74,12 @@ public class GestionBancoCentral
                 registro = br.readLine();
                 campos = registro.split(",");
 
-                if(campos[1].equals(iban_cuenta))
+                if(campos[0].equals(IBAN))
                 {
                     if(sumaOresta)
-                        registro = registro.replace(campos[2], Double.toString(cantidad+Double.parseDouble(campos[2])));
+                        registro = registro.replace(campos[1], Double.toString(cantidad+Double.parseDouble(campos[1])));
                     else
-                        registro = registro.replace(campos[2], Double.toString(Double.parseDouble(campos[2])-cantidad));
+                        registro = registro.replace(campos[1], Double.toString(Double.parseDouble(campos[1])-cantidad));
                 }
 
                 registros.add(registro);
@@ -111,9 +112,9 @@ public class GestionBancoCentral
      * Entrada/Salida:
      * Postcondiciones: Se modifica el fichero de movimientos de cuentas, añadiendo un movimiento nuevo.
      * */
-	public void insertarMovimientoEnFicheroMovimientos(String nombre_banco,String ID_Cuenta,boolean isIngresoOrRetirada, String concepto, double cantidad,int dia, int mes, int anyo)
+	public void insertarMovimientoEnFicheroMovimientos(String IBAN,boolean isIngresoOrRetirada, String concepto, double cantidad,int dia, int mes, int anyo)
 	{
-		File ficheroCuentas = new File ("./Files/BancoCentral/MovimientosCuentas/Movimientos_"+ID_Cuenta+".txt");
+		File ficheroCuentas = new File ("./Files/BancoCentral/MovimientosCuentas/Movimientos_"+IBAN+".txt");
         FileWriter fw = null;
         BufferedWriter bw = null;
         String signo = "RETIRADA,-";
@@ -146,11 +147,11 @@ public class GestionBancoCentral
      * Entrada/Salida:
      * Postcondiciones: Se modificarán los ficheros de Cuentas modificando el saldo y de movimientos, añadiendo el movimiento correspondiente.
      * */
-	public void ingresarDinero(String nombre_banco,String ID_Cuenta,String concepto, double cantidad, int dia, int mes, int anyo)
-	{
-		insertarMovimientoEnFicheroMovimientos(nombre_banco, ID_Cuenta, true, concepto, cantidad, dia, mes, anyo);
-        modificarSaldoEnFicheroCuentas(nombre_banco, ID_Cuenta, true, cantidad);
-	}
+	public void ingresarDinero(String IBAN,String concepto, double cantidad, int dia, int mes, int anyo){
+        insertarMovimientoEnFicheroMovimientos(IBAN, true, concepto, cantidad, dia, mes, anyo);
+        modificarSaldoEnFicheroCuentas(IBAN, true, cantidad);
+
+    }
 	
 	/* INTERFAZ
 	 * Comentario: Accede al fichero de cuentas y busca una cuenta por su IBAN para leer sus datos
@@ -198,4 +199,55 @@ public class GestionBancoCentral
 		
 		return registrado;
 	}
+	
+	/*
+     * INTERFAZ
+     * Signatura: public String obtenerNombreBancoComercialPorIBAN(String iban_cuenta)
+     * Comentario: devuelve el nombre de un banco dado el IBAN de una cuenta
+     * Precondiciones: por referencia se pasa un string
+     * Entrada: String iban_cuenta
+     * Salida: String nombre
+     * Entrada/Salida:
+     * Postcondiciones: Asociado al nombre se devuelve un String
+     * */
+    public String obtenerNombreBancoComercialPorIBAN(String iban_cuenta){
+
+        return obtenerNombrePorBIC(iban_cuenta.substring(3,13));
+    }
+    
+    /*
+     * INTERFAZ
+     * Signatura: public String obtenerNombrePorBIC(String BIC)
+     * Comentario: devuelve el nombre de un banco dando su BIC
+     * Precondiciones: por referencia se pasa un string
+     * Entrada: String BIC
+     * Salida: String nombre
+     * Entrada/Salida:
+     * Postcondiciones: Asociado al nombre se devuelve un String
+     * */
+    public String obtenerNombrePorBIC(String bic){
+        File clientesBancoCentral = new File("./Files/BancoCentral/Clientes_BancoCentral.txt");
+        FileReader leer = null;
+        BufferedReader br = null;
+        String registro = " ";
+        String campos[] = null;
+        String nombre = " ";
+        try{
+            leer = new FileReader(clientesBancoCentral);
+            br = new BufferedReader(leer);
+            while(br.ready()){
+                registro = br.readLine();
+                campos = registro.split(",");
+
+                if ( campos[0].substring(3,13).equals(bic)){
+                    nombre = campos[1];
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+
+        return nombre;
+    }
 }

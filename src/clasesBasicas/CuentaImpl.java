@@ -31,24 +31,36 @@ public class CuentaImpl implements Cuenta {
     private String IBAN;
     private double cantidadDinero;
 
+    public CuentaImpl()
+    {
+    	this.IBAN = "ESPBSCHESMMXXXXXXXXXXXX";
+    	this.cantidadDinero = 0.0;
+    }
+    
     public CuentaImpl(String IBAN){
 
         this.IBAN = IBAN;
         this.cantidadDinero = 0.0;
     }
+    
     public CuentaImpl(String IBAN, double cantidadDinero){
 
         this.IBAN = IBAN;
         this.cantidadDinero = cantidadDinero;
     }
 
+    public CuentaImpl(CuentaImpl otra)
+    {
+    	this.IBAN = otra.IBAN;
+    	this.cantidadDinero = otra.cantidadDinero;
+    }
 
     public String getCodigoBancoCentral() {
-        String cod_bancoCentral = this.IBAN.substring(0,2);
+        String cod_bancoCentral = this.IBAN.substring(0,3);
         return cod_bancoCentral;
     }
     public String getCodigoBancoComercial() {
-        String cod_bancoComercial = this.IBAN.substring(3,13);
+        String cod_bancoComercial = this.IBAN.substring(3,14);
         return cod_bancoComercial;
     }
 

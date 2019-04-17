@@ -34,6 +34,12 @@ public class ClienteImpl implements Cliente{
     private String DNI;
     private double ingresoMensual;
 
+    public ClienteImpl()
+    {
+    	this.BIC_Banco = "000000MMXXX";
+    	this.DNI = "00000000A";
+    	this.ingresoMensual = 0;
+    }
 
     public ClienteImpl(String BIC_Banco, String DNI, double ingresoMensual) {
         this.BIC_Banco = BIC_Banco;
@@ -73,6 +79,7 @@ public class ClienteImpl implements Cliente{
     * Salidas:
     * Postcondiciones: se modifica el fichero.
     * */
+    @Deprecated
     public void sacarDinero(Cuenta cuenta, double cantidad){
         System.out.println("En construcción");
     }
@@ -86,6 +93,7 @@ public class ClienteImpl implements Cliente{
      * Salidas:
      * Postcondiciones: se modifica el fichero.
      * */
+    @Deprecated
     public void ingresarDinero(Cuenta cuenta, double cantidad){
         System.out.println("En construcción");
     }
@@ -100,6 +108,7 @@ public class ClienteImpl implements Cliente{
      * Salidas:
      * Postcondiciones: se modifica el fichero.
      * */
+    @Deprecated
     public void realizarTransferencia(Cuenta origen, Cuenta destino, double cantidad){
         System.out.println("En construcción");
     }
@@ -113,6 +122,7 @@ public class ClienteImpl implements Cliente{
      * Salidas:
      * Postcondiciones: imprime en pantalla
      * */
+    @Deprecated
     public void verHistorialTransferencias(Cuenta cuenta){
         System.out.println("En construcción");
     }
