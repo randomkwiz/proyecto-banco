@@ -98,9 +98,9 @@ public class crearFicheros {
 
         File listadoCuentas_BancoCentral = new File(carpetaBancoCentral, "Cuentas_BancoCentral.txt");
         CuentaImpl cuentas[] = new CuentaImpl[3];
-        cuentas[0] = new CuentaImpl("ESP", "12XXXXXXX", 500.0);
-        cuentas[1] = new CuentaImpl("ESP", "13XXXXXXX", 500.0);
-        cuentas[2] = new CuentaImpl("ESP", "14XXXXXXX", 500.0);
+        cuentas[0] = new CuentaImpl("ESPCAIXESBBXXX12XXXXXXX", 500.0);
+        cuentas[1] = new CuentaImpl("ESPBSCHESMMXXX13XXXXXXX", 500.0);
+        cuentas[2] = new CuentaImpl("ESPINGDESMMXXX14XXXXXXX", 500.0);
         try{
             escribir = new FileWriter(listadoCuentas_BancoCentral);
             bw = new BufferedWriter(escribir);
@@ -160,7 +160,7 @@ public class crearFicheros {
         carpetaMovimientos_BancoCentral.mkdir();
 
         String registro=" ";
-        String[] campos = new String[3];
+        String[] campos = null;
         String nombreArchivo= " ";
 
             try {
@@ -171,7 +171,7 @@ public class crearFicheros {
                 while (br.ready()) {
                     registro = br.readLine();
                     campos = registro.split(",");
-                    nombreArchivo = "Movimientos_" + campos[1]+".txt";
+                    nombreArchivo = "Movimientos_" + campos[0]+".txt";
                     File f_movimientos_BancoCentral = new File(carpetaMovimientos_BancoCentral, nombreArchivo);
                     if(f_movimientos_BancoCentral.createNewFile()){
                         System.out.println(nombreArchivo+" creado con éxito.");
@@ -199,7 +199,7 @@ public class crearFicheros {
             while (br.ready()) {
                 registro = br.readLine();
                 campos = registro.split(",");
-                nombreArchivo = campos[2];
+                nombreArchivo = campos[1];
                 File carpetaBancoComercial = new File(carpetaBancosComerciales, nombreArchivo);
                 carpetaBancoComercial.mkdir();
             }
@@ -237,8 +237,8 @@ public class crearFicheros {
                         registro = br.readLine();
                         campos = registro.split(",");
 
-                        if (campos[2].equals(nombre_carpeta_banco_comercial[i])) {
-                            bancoComercial = campos[1];
+                        if (campos[1].equals(nombre_carpeta_banco_comercial[i])) {
+                            bancoComercial = campos[0];
                         }
                     }
                     br.close();
@@ -250,11 +250,11 @@ public class crearFicheros {
             try {
                 escribir = new FileWriter(archivo_Cuentas_BancosComerciales);
                 bw = new BufferedWriter(escribir);
-                bw.write(new CuentaImpl(bancoComercial, "XXXXXXXXXXX", Math.random() * 8502).toString());
+                bw.write(new CuentaImpl(bancoComercial+"0000001", Math.random() * 8502).toString());
                 bw.newLine();
-                bw.write(new CuentaImpl(bancoComercial, "AAAAAAAAAAA", Math.random() * 8502).toString());
+                bw.write(new CuentaImpl(bancoComercial+"0000002", Math.random() * 8502).toString());
                 bw.newLine();
-                bw.write(new CuentaImpl(bancoComercial, "EEEEEEEEEEE", Math.random() * 8502).toString());
+                bw.write(new CuentaImpl(bancoComercial+"0000003", Math.random() * 8502).toString());
                 bw.newLine();
                 bw.close();
             } catch (IOException e) {
@@ -294,8 +294,8 @@ public class crearFicheros {
                     registro = br.readLine();
                     campos = registro.split(",");
 
-                    if ( campos[2].equals(carpetaSuperior.getName())){
-                        bic = campos[1];
+                    if ( campos[1].equals(carpetaSuperior.getName())){
+                        bic = campos[0].substring(3,13);
                     }
                 }
             }catch (IOException e){
@@ -361,7 +361,7 @@ public class crearFicheros {
                 br = new BufferedReader(leer);
 
                 while(br.ready()){
-                    iban_cuenta = br.readLine().split(",")[1];
+                    iban_cuenta = br.readLine().split(",")[0];
                     iban_cuentas.add(iban_cuenta);
                 }
                 br.close();
@@ -436,7 +436,7 @@ public class crearFicheros {
                 while (br.ready()) {
                     registro = br.readLine();
                     campos = registro.split(",");
-                    iban_cuenta = campos[1];
+                    iban_cuenta = campos[0];
                     file_movimientos_iban = new File(carpetaMovimientos, "Movimientos_Cuenta_" + iban_cuenta+".txt");
                     if (file_movimientos_iban.createNewFile()) {
                         System.out.println("Exito al crear el archivo " + file_movimientos_iban.getName());

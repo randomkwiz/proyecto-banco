@@ -9,7 +9,7 @@ public class GestionBancoCentralTest
 	{
 		GestionBancoCentral gestion = new GestionBancoCentral();
 
-		gestion.realizarMovimiento("BancoCentral", "13XXXXXXX", "BancoCentral", "12XXXXXXX", "Hola", 291248, 2, 3, 1996);
+		gestion.realizarMovimiento("ESPCAIXESBBXXX12XXXXXXX", "ESPBSCHESMMXXX13XXXXXXX", "Ingreso de prueba", 291248, 2, 3, 1996);
 		
 	}
 
