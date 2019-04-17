@@ -87,7 +87,6 @@ public class BancoCentral implements Cloneable, Serializable
      * 	Modificar el dinero de las cuentas de origen y destino
      * Fin
      */
-    @Deprecated
     public boolean realizarIngreso (CuentaImpl cu_origen, CuentaImpl cu_destino, double cantidad)
     {
     	File ficheroCuentaOrigen = null;
@@ -183,7 +182,7 @@ public class BancoCentral implements Cloneable, Serializable
         			randAccessFile.seek(puntero);
         			
         			//Modificar la cuenta, restandole el dinero
-        			cuenta = new CuentaImpl(campos[0], campos[1], Double.parseDouble(campos[2]));
+        			//cuenta = new CuentaImpl(campos[0], campos[1], Double.parseDouble(campos[2]));
         			cuenta.setCantidadDinero(cuenta.getCantidadDinero() - cantidad);
         			
         			linea = cuenta.toString();
@@ -211,7 +210,7 @@ public class BancoCentral implements Cloneable, Serializable
         			randAccessFile.seek(puntero);
         			
         			//Modificar la cuenta, sumandole el dinero
-        			cuenta = new CuentaImpl(campos[0], campos[1], Double.parseDouble(campos[2]));
+        			//cuenta = new CuentaImpl(campos[0], campos[1], Double.parseDouble(campos[2]));
         			cuenta.setCantidadDinero(cuenta.getCantidadDinero() + cantidad);
         			
         			linea = cuenta.toString();

@@ -21,6 +21,37 @@ public class ResguardoGestionBancoComercial {
 
     /*
      * INTERFAZ
+     * Signatura: public String obtenerClientePorIBAN(String nombre_banco, String iban_cuenta)
+     * Comentario: dado el nombre del banco y el iban de la cuenta, te devuelve el cliente al que pertenece la cuenta
+     * Precondiciones: se pasan el nombre del banco y el iban de la cuenta
+     * Entrada: String nombre_banco, String iban_cuenta
+     * Salida: String que es el dni del cliente
+     * Entrada/Salida:
+     * Postcondiciones: Asociado al nombre se devuelve el DNI del cliente al que pertenece la cuenta
+     * */
+    public String obtenerClientePorIBAN(String nombre_banco, String iban_cuenta){
+        System.out.println("Metodo obtener cliente por IBAN en resguardo");
+        return " ";
+    }
+    /*
+     * INTERFAZ
+     * Signatura: public String obtenerIBANPorCliente(String nombre_banco, String dni_cliente)
+     * Comentario: dado el nombre del banco y el dni del propietario de la cuenta, te devuelve el IBAN de la cuenta
+     * Precondiciones: se pasan el nombre del banco y el dni del propietario
+     * Entrada: String nombre_banco, String dni_cliente
+     * Salida: String que es el IBAN de la cuenta
+     * Entrada/Salida:
+     * Postcondiciones: Asociado al nombre se devuelve el IBAN de la cuenta que pertenece a dicho cliente
+     * */
+    public String obtenerIBANPorCliente(String nombre_banco, String dni_cliente){
+        System.out.println("Metodo obtener IBAN por cliente en resguardo");
+        return " ";
+    }
+
+
+
+    /*
+     * INTERFAZ
      * Signatura: public void aplicarComisionDescubierto(String ID_Cuenta, double comision)
      * Comentario: Aplica una comisión por descubierto a una cuenta indicada
      * Precondiciones: Este método no controla que la cuenta a la que se le va a aplicar la comisión esté realmente descubierta
