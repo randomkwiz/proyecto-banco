@@ -58,20 +58,28 @@ import java.util.Scanner;
 import gestion.GestionBancoCentral;
 import gestion.GestionBancoComercial;
 
+import utilidades.ValidacionesProgramaBancoComercial;
+
 public class ProgramaBancoComercial 
 {
-    public static void main(String[] args) 
+    private static int DAY_OF_MONTH;
+	private static int MONTH;
+	private static int YEAR;
+
+	public static void main(String[] args)
     {
     	Scanner teclado = new Scanner(System.in);
+    	ValidacionesProgramaBancoComercial validaciones = new ValidacionesProgramaBancoComercial();
     	double cantidad, ingresosMensuales;
     	int opcionElegida;
     	GestionBancoComercial gestionComercial = new GestionBancoComercial();
     	GestionBancoCentral gestionCentral = new GestionBancoCentral();
-    	String cuentaDestino, IBAN, DNI;
+    	String cuentaDestino, IBAN, DNI, BIC, concepto;
     	GregorianCalendar fecha;
+    	int dia, mes, anyo;
     	
 	 	//Leer y validar inicio de sesion
-    	validaciones.iniciarSesion();
+    	IBAN = validaciones.iniciarSesion();
     	
 	  	//Mostrar menu y validar opcion elegida
     	opcionElegida = validaciones.mostrarMenuYValidarOpcionElegida();
@@ -84,9 +92,19 @@ public class ProgramaBancoComercial
 		  			//realizar transferencia bancaria
 		  			cuentaDestino = validaciones.leerYValidarCuentaDestino();
 		  			
+		  			System.out.println("Cantidad: ");
 		  			cantidad = teclado.nextDouble();
 		  			
-		  			//gestionComercial.realizarMovimiento(nombre_banco_origen, IBANOrigen, nombre_banco_destino, IBANDestino, concepto, cantidad, dia, mes, anyo);
+		  			System.out.print("Concepto: ");
+		  			concepto = teclado.next();
+		  			
+		  			GregorianCalendar fechaActual = new GregorianCalendar();
+		  			dia = fechaActual.get(DAY_OF_MONTH);	// <-     No se si esto esta bien
+		  			mes = fechaActual.get(MONTH);			// <-     No se si esto esta bien
+		  			anyo = fechaActual.get(YEAR);			//TODO <- No se si esto esta bien
+		  			
+		  			//TODO En este metodo faltaria que se hiciera tambien el movimiento en el banco central cuando es una transferencia entre dos clientes de distintos bancos.
+		  			gestionComercial.realizarMovimiento(IBAN, cuentaDestino, concepto, cantidad, dia, mes, anyo);
 		  			
 		  			break;
 		  		case 2: 
@@ -101,11 +119,11 @@ public class ProgramaBancoComercial
 		  			break;
 		  		case 4: 
 		  			//cliente nuevo
-		  			DNI = validaciones.leerYValidarDNI();
+		  			//DNI = validaciones.leerYValidarDNI(BIC);		//TODO Hay que sacar el BIC a partir del IBAN ingresado para iniciar sesion
 		  			
-		  			ingresosMensuales = validaciones.leerYValdiarIngresosMensuales();
+		  			ingresosMensuales = validaciones.leerYValidarIngresosMensuales();
 		  			
-		  			gestionComercial.insertarCliente(String DNI, double ingresosMensuales);
+		  			//gestionComercial.insertarCliente(BIC, DNI,ingresosMensuales);
 		  			break;
 		  		case 5: 
 		  			//gestionar una cuenta determinada

@@ -32,10 +32,10 @@ public class BancoCentralTest {
 		
 		System.out.println("-----------------------------------------------------");
 		
-		CuentaImpl cu_origen = new CuentaImpl(conParametros.getID(), "12XXXXXXX", 150);
-		CuentaImpl cu_destino = new CuentaImpl(conParametros.getID(), "13XXXXXXX", 150);
+		/*CuentaImpl cu_origen = new CuentaImpl("ESPCAIXESBBXXX12XXXXXXX", 150);
+		CuentaImpl cu_destino = new CuentaImpl("ESPBSCHESMMXXX13XXXXXXX", 150);
 		
-		conParametros.realizarIngreso(cu_origen, cu_destino, 20);
+		conParametros.realizarIngreso(cu_origen, cu_destino, 20);*/
 		
 		System.out.println("-----------------------------------------------------");
 		
