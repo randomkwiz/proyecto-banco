@@ -418,11 +418,11 @@ public class GestionBancoComercial {
                 registro = br.readLine();
                 campos = registro.split(",");
 
-                if(campos[1].equals(iban_cuenta)){
+                if(campos[0].equals(iban_cuenta)){
                     if(sumaOresta){
-                        registro = registro.replace(campos[2], Double.toString(cantidad+Double.parseDouble(campos[2])));
+                        registro = registro.replace(campos[1], Double.toString(cantidad+Double.parseDouble(campos[1])));
                     }else{
-                        registro = registro.replace(campos[2], Double.toString(Double.parseDouble(campos[2])-cantidad));
+                        registro = registro.replace(campos[1], Double.toString(Double.parseDouble(campos[1])-cantidad));
                     }
 
                 }
@@ -538,4 +538,16 @@ public class GestionBancoComercial {
 
 
 
+    /* INTERFAZ
+     * Comentario: A partir de un IBAN, obtiene el BIC del banco comercial que gestiona la cuenta
+     * Prototipo: public String obtenerBICporIBAN(String IBAN)
+     * Entrada: Un String con el IBAN
+     * Precondiciones: No hay
+     * Salida: Un string con el BIC del banco que gestiona la cuenta
+     * Postcondiciones: Asociado al nombre devuelve un strnig con el BIC del banco que gestiona la cuenta
+     */
+    public String obtenerBICporIBAN(String IBAN)
+    {
+    	return IBAN.substring(3, 9);
+    }
 }
