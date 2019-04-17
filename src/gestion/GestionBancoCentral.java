@@ -267,4 +267,17 @@ public class GestionBancoCentral
 
         return nombre;
     }
+    
+    /* INTERFAZ
+     * Comentario: A partir de un IBAN, obtiene el BIC del banco central al que pertenece el banco que gestiona la cuenta
+     * Prototipo: public String obtenerBICporIBAN(String IBAN)
+     * Entrada: Un String con el IBAN
+     * Precondiciones: No hay
+     * Salida: Un string con el BIC del banco central al que pertenece el banco que gestiona la cuenta
+     * Postcondiciones: Asociado al nombre devuelve un strnig con el BIC del banco central al que pertenece el banco que gestiona la cuenta
+     */
+    public String obtenerBICporIBAN(String IBAN)
+    {
+    	return IBAN.substring(3, 9);
+    }
 }

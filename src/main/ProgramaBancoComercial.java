@@ -80,7 +80,7 @@ public class ProgramaBancoComercial
     	
 	 	//Leer y validar inicio de sesion
     	IBAN = validaciones.iniciarSesion();
-    	
+    	BIC = gestionCentral.obtenerBICporIBAN(IBAN);
 	  	//Mostrar menu y validar opcion elegida
     	opcionElegida = validaciones.mostrarMenuYValidarOpcionElegida();
     	
@@ -102,9 +102,8 @@ public class ProgramaBancoComercial
 		  			dia = fechaActual.get(DAY_OF_MONTH);	// <-     No se si esto esta bien
 		  			mes = fechaActual.get(MONTH);			// <-     No se si esto esta bien
 		  			anyo = fechaActual.get(YEAR);			//TODO <- No se si esto esta bien
-		  			
-		  			//TODO En este metodo faltaria que se hiciera tambien el movimiento en el banco central cuando es una transferencia entre dos clientes de distintos bancos.
-		  			gestionComercial.realizarMovimiento(IBAN, cuentaDestino, concepto, cantidad, dia, mes, anyo);
+
+		  			gestionCentral.realizarMovimiento(IBAN, cuentaDestino, concepto, cantidad, dia, mes, anyo);
 		  			
 		  			break;
 		  		case 2: 
@@ -119,11 +118,11 @@ public class ProgramaBancoComercial
 		  			break;
 		  		case 4: 
 		  			//cliente nuevo
-		  			//DNI = validaciones.leerYValidarDNI(BIC);		//TODO Hay que sacar el BIC a partir del IBAN ingresado para iniciar sesion
+		  			DNI = validaciones.leerYValidarDNI(BIC);		//TODO Hay que sacar el BIC a partir del IBAN ingresado para iniciar sesion
 		  			
 		  			ingresosMensuales = validaciones.leerYValidarIngresosMensuales();
 		  			
-		  			//gestionComercial.insertarCliente(BIC, DNI,ingresosMensuales);
+		  			gestionComercial.insertarCliente(BIC, DNI,ingresosMensuales);
 		  			break;
 		  		case 5: 
 		  			//gestionar una cuenta determinada
