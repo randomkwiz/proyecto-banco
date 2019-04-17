@@ -389,5 +389,44 @@ public class GestionBancoComercial {
 
         return obtenerNombrePorBIC(iban_cuenta.substring(3,13));
     }
+    
+    /* INTERFAZ
+	 * Comentario: Comprueba si existe un cliente(DNI) registrado en un banco comercial
+	 * Prototipo: public boolean DNIRegistrado(String DNI, String BIC)
+	 * Entrada: un String con el DNI del cliente a comprobar y un String con el BIC del banco
+	 * Precondiciones: No hay
+	 * Salida: un boolean indicando si el DNI esta registrado ya o no
+	 * Postcondiciones: Asociado al nombre devuelve true si el DNI está ya registrado en el banco o false de lo contrario.
+	 */
+    public boolean DNIRegistrado(String DNI, String BIC)
+    {
+    	boolean registrado = false;
+    	
+    	System.out.println("DNIRegistrado en construccion");
+    	
+    	return registrado;
+    }
+    
+    /* INTERFAZ
+     * Comentario: Introduce un nuevo cliente en los ficheros de un banco comercial
+     * Prototipo: public boolean insertarCliente(String BIC, String DNI, double ingresosMensuales)
+     * Entrada:
+     * 		- Un String para el BIC del banco donde se insertara el cliente
+     * 		- Un String con el DNI del cliente
+     * 		- Un double con los ingresos mensuales del cliente
+     * Precondiciones: El BIC debe ser de un banco existente, y el DNI no puede estar ya registrado
+     * Salida: un boolean indicando si se insertó satisfactoriamente o no
+     * Postcondiciones: Asociado al nombre devuelve:
+     * 					- true si se insertó correctamente el cliente.
+     * 					- false si no se insertó correctamente el cliente.
+     */
+    public boolean insertarCliente(String BIC, String DNI, double ingresosMensuales)
+    {
+    	boolean insertado = false;
+    	
+    	System.out.println("insertarCliente en construccion");
+    	
+    	return insertado;
+    }
 
 }

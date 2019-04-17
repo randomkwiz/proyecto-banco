@@ -184,18 +184,35 @@ public class GestionBancoCentral
 	}
 	
 	/* INTERFAZ
-	 * Comentario: Comprueba si existe un cliente(DNI) registrado en el banco
-	 * Prototipo: public boolean DNIRegistrado(String DNI, String BIC)
-	 * Entrada: un String con el DNI del clente a comprobar y un String con el BIC del banco
+	 * Comentario: Comprueba si existe un cliente(BIC) registrado en el banco central
+	 * Prototipo: public boolean BICRegistrado(String BIC)
+	 * Entrada: un String con el BIC del clente a comprobar
 	 * Precondiciones: No hay
-	 * Salida: un boolean indicando si el DNI esta registrado ya o no
-	 * Postcondiciones: Asociado al nombre devuelve true si el DNI está ya registrado en el banco o false de lo contrario.
+	 * Salida: un boolean indicando si el BIC esta registrado ya o no
+	 * Postcondiciones: Asociado al nombre devuelve true si el BIC está ya registrado en el banco o false de lo contrario.
 	 */
-	public boolean DNIRegistrado(String DNI, String BIC)
+	public boolean BICRegistrado(String BIC)
 	{
 		boolean registrado = false;
 		
-		System.out.println("DNIRegistrado en resguardo");
+		System.out.println("BICRegistrado en resguardo");
+		
+		return registrado;
+	}
+	
+	/* INTERFAZ
+	 * Comentario: Comprueba si existe una cuenta(IBAN) registrada en el banco central
+	 * Prototipo: public boolean IBANRegistrado(String IBAN)
+	 * Entrada: un String con el IBAN de la cuenta a comprobar
+	 * Precondiciones: No hay
+	 * Salida: un boolean indicando si el IBAN esta registrado ya o no
+	 * Postcondiciones: Asociado al nombre devuelve true si el IBAN está ya registrado en el banco o false de lo contrario.
+	 */
+	public boolean IBANRegistrado(String IBAN)
+	{
+		boolean registrado = false;
+		
+		System.out.println("IBANRegistrado en resguardo");
 		
 		return registrado;
 	}
