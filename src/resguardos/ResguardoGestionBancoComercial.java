@@ -19,6 +19,63 @@ public class ResguardoGestionBancoComercial {
     * Postcondiciones:
     * */
 
+
+    /*
+     * INTERFAZ
+     * Signatura: public void imprimirUltimosDiezMovimientos(String iban_cuenta)
+     * Comentario:imprime en pantalla los ultimos diez movimientos de la cuenta
+     * Precondiciones: Se pasa un iban
+     * Entrada: String iban
+     * Salida: nada, imprime en pantalla
+     * Entrada/Salida:
+     * Postcondiciones: imprime en pantalla
+     * */
+    public void imprimirUltimosDiezMovimientos(String iban_cuenta){
+        System.out.println("imprimir ultimos diez movimientos en resguardo");
+    }
+
+    /*
+     * INTERFAZ
+     * Signatura: public boolean isDNIvalido(String nombre_banco,String dni_cliente)
+     * Comentario: Dado un DNI, devuelve true si este pertenece a un cliente existente del banco y false si no
+     * Precondiciones: Se pasa el nombre del banco y el dni del cliente
+     * Entrada: String nombre_banco y String dni_cliente
+     * Salida: boolean
+     * Entrada/Salida:
+     * Postcondiciones: asociado al nombre se devuelve un boolean que devuelve true si este pertenece a un cliente existente del banco y false si no
+     * */
+    public boolean isDNIvalido(String nombre_banco,String dni_cliente){
+        return false;
+    }
+
+    /*
+     * INTERFAZ
+     * Signatura: public boolean isIBANvalido(String iban_cuenta)
+     * Comentario: Dado un iban devuelve true si este existe o false si no
+     * Precondiciones: Se pasa el iban de la cuenta
+     * Entrada: String iban_cuenta
+     * Salida: boolean
+     * Entrada/Salida:
+     * Postcondiciones: asociado al nombre se devuelve un boolean que devuelve true si existe y false si no
+     * */
+    public boolean isIBANvalido(String iban_cuenta){
+        return false;
+    }
+
+    /*
+     * INTERFAZ
+     * Signatura: public boolean isPropietario(String dni_cliente, String iban_cuenta)
+     * Comentario: Dado un iban y un dni de cliente, devuelve true si este iban pertenece a este cliente o false si no
+     * Precondiciones: Se pasa el iban de la cuenta
+     * Entrada: String dni_cliente, String iban_cuenta
+     * Salida: boolean
+     * Entrada/Salida:
+     * Postcondiciones: asociado al nombre se devuelve true si este iban pertenece a este cliente o false si no
+     * */
+    public boolean isPropietario(String dni_cliente, String iban_cuenta){
+        return false;
+    }
+
     /*
      * INTERFAZ
      * Signatura: public String obtenerClientePorIBAN(String nombre_banco, String iban_cuenta)
