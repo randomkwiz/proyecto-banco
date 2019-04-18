@@ -5,7 +5,7 @@ import gestion.GestionBancoComercial;
 public class GestionBancoComercialTest {
     public static void main(String[] args) {
         GestionBancoComercial gestion = new GestionBancoComercial();
-
+/*
         System.out.println(gestion.obtenerBICporNombre("LaCaixa"));
         System.out.println(gestion.obtenerNombrePorBIC("CAIXESBBXXX"));
 
@@ -25,6 +25,19 @@ public class GestionBancoComercialTest {
         System.out.println(gestion.obtenerIBANPorCliente("LaCaixa", "28835488-C"));
 
         System.out.println(gestion.obtenerNombreBancoComercialPorIBAN("ESPCAIXESBBXXX0000001"));
+*/
+/*
+        System.out.println("Este dni en este banco: "+gestion.isDNIvalido("LaCaixa","28835488-C"));
+        System.out.println("Este IBAN existe: "+gestion.isIBANvalido("ESPINGDESMMXXX0000001"));
+        System.out.println("Este dni es propietario de esta cuenta: "+gestion.isPropietario("28835488-C", "ESPINGDESMMXXX0000001"));
+        System.out.println(gestion.isDNIvalido("Santander","55555"));
+        System.out.println(gestion.isIBANvalido("555555555"));  //nota: el IBAN debe tener al menos 13 caracteres o peta
+        System.out.println(gestion.isPropietario("28835488-C","ESPINGDESMMXXX0000003"));
+        */
 
+
+        //gestion.ordenarMovimientosPorFecha("ESPCAIXESBBXXX0000001");    //funciona bien tras el cambio a GregorianCalendar
+
+        gestion.imprimirUltimosDiezMovimientos("ESPCAIXESBBXXX0000001");
     }
 }

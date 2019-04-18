@@ -98,9 +98,9 @@ public class crearFicheros {
 
         File listadoCuentas_BancoCentral = new File(carpetaBancoCentral, "Cuentas_BancoCentral.txt");
         CuentaImpl cuentas[] = new CuentaImpl[3];
-        cuentas[0] = new CuentaImpl("ESPCAIXESBBXXX12XXXXXXX", 500.0);
-        cuentas[1] = new CuentaImpl("ESPBSCHESMMXXX13XXXXXXX", 500.0);
-        cuentas[2] = new CuentaImpl("ESPINGDESMMXXX14XXXXXXX", 500.0);
+        cuentas[0] = new CuentaImpl("ESPCAIXESBBXXX0000000", 5000000.0);
+        cuentas[1] = new CuentaImpl("ESPBSCHESMMXXX0000000", 5000000.0);
+        cuentas[2] = new CuentaImpl("ESPINGDESMMXXX0000000", 5000000.0);
         try{
             escribir = new FileWriter(listadoCuentas_BancoCentral);
             bw = new BufferedWriter(escribir);
