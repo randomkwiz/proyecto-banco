@@ -1,7 +1,7 @@
 /*
-*  Voy a codificar aquí los métodos que he puesto en "ResguardoGestionBancoComercial"
-*   a pesar de que creo que irían en la clase básica "BancoComercial" pero por tenerlos separados.
-* Si luego vemos que son de BancoComercial, los cambio a allí.
+*  Voy a codificar aquÃ­ los mÃ©todos que he puesto en "ResguardoGestionBancoComercial"
+*   a pesar de que creo que irÃ­an en la clase bÃ¡sica "BancoComercial" pero por tenerlos separados.
+* Si luego vemos que son de BancoComercial, los cambio a allÃ­.
 * */
 package gestion;
 import java.io.*;
@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import clasesBasicas.ClienteImpl;
+import clasesBasicas.CuentaImpl;
 
 public class GestionBancoComercial {
 
@@ -229,7 +232,7 @@ public class GestionBancoComercial {
      * Entrada: String ID_Cuenta, double cantidad, GregorianCalendar fecha
      * Salida:
      * Entrada/Salida:
-     * Postcondiciones: Se modificarán los ficheros de Cuentas modificando el saldo y de movimientos, añadiendo el movimiento correspondiente.
+     * Postcondiciones: Se modificarÃ¡n los ficheros de Cuentas modificando el saldo y de movimientos, aÃ±adiendo el movimiento correspondiente.
      * */
     public void sacarDinero(String ID_Cuenta, String concepto, double cantidad, GregorianCalendar fecha){
         insertarMovimientoEnFicheroMovimientos(ID_Cuenta, false, concepto, cantidad, fecha);
@@ -245,7 +248,7 @@ public class GestionBancoComercial {
      * Entrada: String ID_Cuenta, double cantidad, GregorianCalendar fecha
      * Salida:
      * Entrada/Salida:
-     * Postcondiciones: Se modificarán los ficheros de Cuentas modificando el saldo y de movimientos, añadiendo el movimiento correspondiente.
+     * Postcondiciones: Se modificarÃ¡n los ficheros de Cuentas modificando el saldo y de movimientos, aÃ±adiendo el movimiento correspondiente.
      * */
     public void ingresarDinero(String ID_Cuenta,String concepto, double cantidad, GregorianCalendar fecha){
         insertarMovimientoEnFicheroMovimientos(ID_Cuenta, true, concepto, cantidad, fecha);
@@ -256,13 +259,13 @@ public class GestionBancoComercial {
     /*
      * INTERFAZ
      * Signatura: public void realizarMovimiento(String cuenta_origen,String cuenta_destino, String concepto,double cantidad, GregorianCalendar fecha)
-     * Comentario: Realiza un movimiento bancario, sacando una cantidad de la cuenta de origen e ingresándola en la cuenta destino.
-     *              Llama a los métodos sacarDinero e ingresarDinero.
+     * Comentario: Realiza un movimiento bancario, sacando una cantidad de la cuenta de origen e ingresÃ¡ndola en la cuenta destino.
+     *              Llama a los mÃ©todos sacarDinero e ingresarDinero.
      * Precondiciones: Por referencia se pasan las ID de las cuentas por valor se pasa la cantidad. Tambien se pasa por referencia el concepto y objeto fecha
      * Entrada: (String cuenta_origen,String cuenta_destino, String concepto,double cantidad, GregorianCalendar fecha)
      * Salida:
      * Entrada/Salida:
-     * Postcondiciones: Se modificarán los ficheros de cuentas y de movimientos correspondientes.
+     * Postcondiciones: Se modificarÃ¡n los ficheros de cuentas y de movimientos correspondientes.
      * */
     public void realizarMovimiento(String cuenta_origen,String cuenta_destino, String concepto,double cantidad, GregorianCalendar fecha){
         sacarDinero(cuenta_origen, concepto, cantidad, fecha);
@@ -273,7 +276,7 @@ public class GestionBancoComercial {
     /*
      * INTERFAZ
      * Signatura: public void ordenarMovimientosPorFecha(String iban)
-     * Comentario: Ordena un fichero de movimientos de una cuenta en base a las fechas, deja primero los más recientes.
+     * Comentario: Ordena un fichero de movimientos de una cuenta en base a las fechas, deja primero los mÃ¡s recientes.
      * Precondiciones: Se le pasa por referencia el IBAN de la cuenta
      * Entrada: String IBAN
      * Salida:
@@ -290,7 +293,7 @@ public class GestionBancoComercial {
         BufferedWriter bw = null;
         List<String> registros = new ArrayList<String>();    //arraylist - considerar cambiar a array
         String registro = " ";
-        String aux=" "; //para el bubblesort de más abajo
+        String aux=" "; //para el bubblesort de mÃ¡s abajo
 
 
         try{
@@ -311,7 +314,7 @@ public class GestionBancoComercial {
         for (int i = 0; i < registros.size()-1;i++){
             for (int j = registros.size()-1; j>i; j--){
 
-            /*SÉ QUE ESTO NO SE DEBE PONER ASÍ PERO NO SÉ CÓMO PONERLO DE OTRA MANERA*/
+            /*SÃ‰ QUE ESTO NO SE DEBE PONER ASÃ� PERO NO SÃ‰ CÃ“MO PONERLO DE OTRA MANERA*/
                 /*HAY QUE CAMBIARLO*/
 
                 boolean anyoEsMasPequenyo = (Integer.parseInt(registros.get(j).split(",")[3].split("/")[2]) < Integer.parseInt(registros.get(j-1).split(",")[3].split("/")[2] )  ) ;
@@ -320,7 +323,7 @@ public class GestionBancoComercial {
                 boolean mesEsIgual = (Integer.parseInt(registros.get(j).split(",")[3].split("/")[1]) == Integer.parseInt(registros.get(j-1).split(",")[3].split("/")[1] )  ) ;
                 boolean diaEsMasPequenyo = (Integer.parseInt(registros.get(j).split(",")[3].split("/")[0]) < Integer.parseInt(registros.get(j-1).split(",")[3].split("/")[0] )  ) ;
 
-                /*ADEMÁS AUNQUE NO LE GUSTE ASÍ A ASUN, QUEDA MÁS LEGIBLE LA CONDICIÓN DEL IF ¯\_(ツ)_/¯*/
+                /*ADEMÃ�S AUNQUE NO LE GUSTE ASÃ� A ASUN, QUEDA MÃ�S LEGIBLE LA CONDICIÃ“N DEL IF Â¯\_(ãƒ„)_/Â¯*/
 
                 if ( anyoEsMasPequenyo || anyoEsIgual && mesEsMasPequenyo || anyoEsIgual && mesEsIgual && diaEsMasPequenyo ) {
                     //se produce el intercambio de elementos
@@ -355,13 +358,13 @@ public class GestionBancoComercial {
     /*
      * INTERFAZ
      * Signatura: public void insertarMovimientoEnFicheroMovimientos(String ID_Cuenta,boolean isIngresoOrRetirada, String concepto, double cantidad,GregorianCalendar fecha)
-     * Comentario: Este método se encarga de modificar en el fichero de movimientos de la cuenta, añade un nuevo movimiento.
+     * Comentario: Este mÃ©todo se encarga de modificar en el fichero de movimientos de la cuenta, aÃ±ade un nuevo movimiento.
      * Precondiciones: Se pasa por referencia el ID de la cuenta y por valor la cantidad de dinero a mover. Se pasa
      *                  un boolean que es true si el movimiento es un ingreso o false si es una retirada de dinero. Tambien se pasa la fecha
      * Entrada: (String ID_Cuenta,boolean isIngresoOrRetirada, double cantidad,GregorianCalendar fecha)
      * Salida:
      * Entrada/Salida:
-     * Postcondiciones: Se modifica el fichero de movimientos de cuentas, añadiendo un movimiento nuevo.
+     * Postcondiciones: Se modifica el fichero de movimientos de cuentas, aÃ±adiendo un movimiento nuevo.
      * */
     public void insertarMovimientoEnFicheroMovimientos(String ID_Cuenta,boolean isIngresoOrRetirada, String concepto, double cantidad,GregorianCalendar fecha){
         String nombre_banco = obtenerNombreBancoComercialPorIBAN(ID_Cuenta);
@@ -391,8 +394,8 @@ public class GestionBancoComercial {
     /*
      * INTERFAZ
      * Signatura: public void modificarSaldoEnFicheroCuentas(String iban_cuenta, boolean sumaOresta,double cantidad)
-     * Comentario: Este método se encarga de modificar en el fichero de Cuentas, el registro del saldo total (campo 2).
-     * Precondiciones: Se pasa por referencia el ID de la cuenta a modificar y por valor la cantidad a añadir o substraer. Se pasa boolean que es true si añade la cantidad o false si la resta
+     * Comentario: Este mÃ©todo se encarga de modificar en el fichero de Cuentas, el registro del saldo total (campo 2).
+     * Precondiciones: Se pasa por referencia el ID de la cuenta a modificar y por valor la cantidad a aÃ±adir o substraer. Se pasa boolean que es true si aÃ±ade la cantidad o false si la resta
      * Entrada: String ID_Cuenta, boolean sumaOresta, double cantidad
      * Salida:
      * Entrada/Salida:
@@ -406,7 +409,7 @@ public class GestionBancoComercial {
         FileWriter fw = null;
         BufferedWriter bw = null;
         String campos[] = null;
-        List<String> registros = new ArrayList<String>();   //toma ya usando arraylist ¯\_(ツ)_/¯
+        List<String> registros = new ArrayList<String>();   //toma ya usando arraylist Â¯\_(ãƒ„)_/Â¯
         String registro = " ";
 
 
@@ -432,7 +435,7 @@ public class GestionBancoComercial {
             br.close();
 
 
-            /*Sí, aquí lo escribe de nuevo ¯\_(ツ)_/¯ */
+            /*SÃ­, aquÃ­ lo escribe de nuevo Â¯\_(ãƒ„)_/Â¯ */
             fw = new FileWriter(ficheroCuentas);
             bw = new BufferedWriter(fw);
             for(String s : registros) {
@@ -473,7 +476,7 @@ public class GestionBancoComercial {
                 campos = registro.split(",");
 
                 if ( campos[1].equals(nombre_banco)){
-                    bic = campos[0].substring(3,13);
+                    bic = campos[0].substring(3,14);
                 }
             }
         }catch (IOException e){
@@ -509,7 +512,7 @@ public class GestionBancoComercial {
                 registro = br.readLine();
                 campos = registro.split(",");
 
-                if ( campos[0].substring(3,13).equals(bic)){
+                if ( campos[0].substring(3,14).equals(bic)){
                     nombre = campos[1];
                 }
             }
@@ -533,10 +536,8 @@ public class GestionBancoComercial {
      * */
     public String obtenerNombreBancoComercialPorIBAN(String iban_cuenta){
 
-        return obtenerNombrePorBIC(iban_cuenta.substring(3,13));
+        return obtenerNombrePorBIC(iban_cuenta.substring(3,14));
     }
-
-
 
     /* INTERFAZ
      * Comentario: A partir de un IBAN, obtiene el BIC del banco comercial que gestiona la cuenta
@@ -544,10 +545,169 @@ public class GestionBancoComercial {
      * Entrada: Un String con el IBAN
      * Precondiciones: No hay
      * Salida: Un string con el BIC del banco que gestiona la cuenta
-     * Postcondiciones: Asociado al nombre devuelve un strnig con el BIC del banco que gestiona la cuenta
+     * Postcondiciones: Asociado al nombre devuelve un string con el BIC del banco que gestiona la cuenta
      */
     public String obtenerBICporIBAN(String IBAN)
     {
     	return IBAN.substring(3, 9);
+    }
+    
+    /* INTERFAZ
+     * Comentario: Comprueba si un cliente (DNI) está registrado en un banco(BIC)
+     * Prototipo: public boolean DNIRegistrado(String DNI, String BIC)
+     * Entrada: Un string con el DNI a comprobar, y un String con el BIC del banco donde se quiere comprobar
+     * Precondiciones: No hay
+     * Salida: Un boolean indicando si el DNI está registrado en el banco o no
+     * Postcondiciones: Asociado al nombre deuvelve true si el DNI está registrado en el banco (BIC), o false si no lo está.
+     */
+    public boolean DNIRegistrado(String DNI, String BIC)
+    {
+    	boolean registrado = false;
+    	String nombreBanco = this.obtenerNombrePorBIC(BIC);
+    	File ficheroClientes = new File ("./Files/BancosComerciales/"+nombreBanco+"/Clientes_"+nombreBanco+".txt");
+		FileReader leer = null;
+	    BufferedReader br = null;
+	    String campos[] = null;
+	    String registro = null;
+	    
+	    try 
+        {
+            leer = new FileReader(ficheroClientes);
+            br = new BufferedReader(leer);
+
+            while(br.ready())
+            {
+                registro = br.readLine();
+                campos = registro.split(",");
+                
+                if(campos[1].equals(DNI))
+                	registrado = true;
+            }
+            
+            br.close();
+        }
+        catch (IOException e)
+        {
+        	e.printStackTrace();
+        }
+    	
+    	return registrado;
+    }
+    
+    /* INTERFAZ
+     * Comentario: crea un nuevo cliente y una cuenta asociada a él en un banco determinado.
+     * Prototipo: public boolean insertarCliente(String BIC, String DNI, double ingresosMensuales)
+     * Entrada:
+     * 		-> Un string con el BIC del banco donde se insertará el nuevo cliente
+     * 		-> un String con el DNI del cliente
+     * 		-> un double con los ingresos mensuales del cliente
+     * Precondiciones: El BIC debe ser de un banco existente.
+     * Salida: Un String indicando el IBAN de la cuenta asociada al cliente nuevo creado.
+     * Postcondiciones: Asociado al nombre devuelve un String, que será el IBAN de la cuenta asociada al cliente nuevo, o null
+     * 					Si no se creó correctamente.
+     */
+    public String insertarCliente(String BIC, String DNI, double ingresosMensuales)
+    {
+    	String IBAN = null;
+    	
+    	if(this.DNIRegistrado(DNI, BIC) == false && DNI.length() == 10)
+    	{
+    		String nombreBanco = this.obtenerNombrePorBIC(BIC);
+    		File ficheroClientes = new File("./Files/BancosComerciales/"+nombreBanco+"/Clientes_"+nombreBanco+".txt");
+    		File ficheroCuentas = new File("./Files/BancosComerciales/"+nombreBanco+"/Cuentas_"+nombreBanco+".txt");
+    		FileWriter fw = null;
+    		BufferedWriter bw = null;
+    		
+    		FileReader fr = null;
+    		BufferedReader br = null;
+    		String registro = null;
+    		String[] campos = null;
+    		String IBANUltimaCuenta = null;
+    		String numeroCuentaUltima = null;
+    		
+    		//Insertar registro en el fichero de clientes del banco
+    		try
+    		{
+    			fw = new FileWriter(ficheroClientes, true);
+    			bw = new BufferedWriter(fw);
+    			
+    			bw.write("\n" + new ClienteImpl(BIC, DNI,ingresosMensuales).toString());
+    			
+    			bw.close();
+    		}
+    		catch(IOException e)
+    		{
+    			e.printStackTrace();
+    		}
+    		
+    		//Crear una cuenta
+    		
+    		//Leer cual es la ultima cuenta registrada, para 
+    		try
+    		{
+    			fr = new FileReader(ficheroCuentas);
+    			br = new BufferedReader(fr);
+    			
+    			while(br.ready())
+    			{
+    				registro = br.readLine();
+    				
+    				if(br.ready() == false)
+    				{
+    					campos = registro.split(",");
+    					IBANUltimaCuenta = campos[0];
+    				}
+    			}
+    			
+    			br.close();
+    			fr.close();
+    		}
+    		catch(IOException e)
+    		{
+    			e.printStackTrace();
+    		}
+    		
+    		numeroCuentaUltima = this.obtenerNumCuentaPorIBAN(IBANUltimaCuenta);
+
+    		String numeroCuenta = String.valueOf((Integer.parseInt(numeroCuentaUltima) + 1));
+    		while(numeroCuenta.length() < 7)
+    		{
+    			numeroCuenta = "0" + numeroCuenta;
+    		}
+    		
+    		IBAN = "ESP"+BIC+numeroCuenta;
+    		
+    		CuentaImpl cuenta = new CuentaImpl(IBAN);
+    		
+    		//Añadir cuenta al fichero de cuentas
+    		try
+    		{
+    			fw = new FileWriter(ficheroCuentas, true);
+    			bw = new BufferedWriter(fw);
+    			
+    			bw.write("\n" + cuenta.toString());
+    			
+    			bw.close();
+    		}
+    		catch(IOException e)
+    		{
+    			e.printStackTrace();
+    		}
+    	}
+    	
+    	return IBAN;
+    }
+    
+    /* INTERFAZ
+     * Comentario: Obtiene el numero de cuenta de un IBAN
+     * Prototipo: public String obtenerNumCuentaPorIBAN(String IBAN)
+     * Entrada: Un String con el IBAN del que se quiere obtener su numero de cuenta
+     * Precondiciones: No hay
+     * Salida: Un String con el numero de cuenta del IBAN especificado
+     * Postcondiciones: Asociado al nombre devuelve un String con el numero de cuenta del IBAN especificado
+     */
+    public String obtenerNumCuentaPorIBAN(String IBAN)
+    {
+    	return IBAN.substring(14, 21);
     }
 }

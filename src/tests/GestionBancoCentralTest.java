@@ -1,5 +1,7 @@
 package tests;
 
+import java.util.GregorianCalendar;
+
 import gestion.GestionBancoCentral;
 
 public class GestionBancoCentralTest 
@@ -9,8 +11,56 @@ public class GestionBancoCentralTest
 	{
 		GestionBancoCentral gestion = new GestionBancoCentral();
 
-		gestion.realizarMovimiento("ESPCAIXESBBXXX12XXXXXXX", "ESPBSCHESMMXXX13XXXXXXX", "Ingreso de prueba", 291248, 2, 3, 1996);
+		System.out.println("gestion.BICRegistrado(\"CAIXESBBXXX\"): " + gestion.BICRegistrado("CAIXESBBXXX"));
 		
+		System.out.println("gestion.datosCuenta(\"ESPCAIXESBBXXX0000001\"): " + gestion.datosCuenta("ESPCAIXESBBXXX0000001"));
+		
+		System.out.println("gestion.IBANRegistrado(\"ESPBSCHESMMXXX13XXXXXXX\"): " + gestion.IBANRegistrado("ESPBSCHESMMXXX13XXXXXXX"));
+		
+		System.out.println("-------------------------------------------");
+		
+		System.out.println("gestion.mostrarMovimientosPorFecha(fechaActual, \"ESPINGDESMMXXX14XXXXXXX\"):");
+		gestion.mostrarMovimientosPorFecha(new GregorianCalendar(), "ESPINGDESMMXXX14XXXXXXX");
+		
+		System.out.println("-------------------------------------------");
+		
+		System.out.println("gestion.obtenerBICporIBAN(\"ESPCAIXESBBXXX12XXXXXXX\"): " + gestion.obtenerBICporIBAN("ESPCAIXESBBXXX12XXXXXXX"));
+		
+		System.out.println("gestion.obtenerNombreBancoComercialPorIBAN(\"ESPCAIXESBBXXX12XXXXXXX\"): " + gestion.obtenerNombreBancoComercialPorIBAN("ESPCAIXESBBXXX12XXXXXXX"));
+		
+		System.out.println("gestion.obtenerNombrePorBIC(\"BSCHESMMXXX\"): " + gestion.obtenerNombrePorBIC("BSCHESMMXXX"));
+		
+		System.out.println("-------------------------------------------");
+		
+		System.out.println("gestion.ingresarDinero(\"ESPCAIXESBBXXX12XXXXXXX\", \"Concepto\", 25000, 10, 4, 2019)");
+		System.out.println("ANTES -> " + gestion.datosCuenta("ESPCAIXESBBXXX12XXXXXXX"));
+		gestion.ingresarDinero("ESPCAIXESBBXXX12XXXXXXX", "Concepto", 25000, 10, 4, 2019);
+		System.out.println("DESPUES -> " + gestion.datosCuenta("ESPCAIXESBBXXX12XXXXXXX"));
+		
+		System.out.println("-------------------------------------------");
+		
+		System.out.println("gestion.modificarSaldoEnFicheroCuentas(\"ESPCAIXESBBXXX12XXXXXXX\", true, 500)");
+		System.out.println("ANTES -> " + gestion.datosCuenta("ESPCAIXESBBXXX12XXXXXXX"));
+		gestion.modificarSaldoEnFicheroCuentas("ESPCAIXESBBXXX12XXXXXXX", true, 500);
+		System.out.println("DESPUES -> " + gestion.datosCuenta("ESPCAIXESBBXXX12XXXXXXX"));
+		
+		System.out.println("-------------------------------------------");
+		
+		System.out.println("gestion.realizarMovimiento(\"ESPINGDESMMXXX14XXXXXXX\", \"ESPBSCHESMMXXX13XXXXXXX\", \"test_realizarMovimiento\", 200, 17, 11, 2016)");
+		System.out.println("ANTES:");
+		System.out.println("CUENTA 1 -> " + gestion.datosCuenta("ESPINGDESMMXXX14XXXXXXX"));
+		System.out.println("CUENTA 2 -> " + gestion.datosCuenta("ESPBSCHESMMXXX13XXXXXXX"));
+		gestion.realizarMovimiento("ESPINGDESMMXXX14XXXXXXX", "ESPBSCHESMMXXX13XXXXXXX", "test_realizarMovimiento", 200, 17, 11, 2016);
+		System.out.println("DESPUES:");
+		System.out.println("CUENTA 1 -> " + gestion.datosCuenta("ESPINGDESMMXXX14XXXXXXX"));
+		System.out.println("CUENTA 2 -> " + gestion.datosCuenta("ESPBSCHESMMXXX13XXXXXXX"));
+		
+		System.out.println("-------------------------------------------");
+		
+		System.out.println("gestion.sacarDinero(\"ESPCAIXESBBXXX12XXXXXXX\", \"Concepto\", 25000, 10, 4, 2019)");
+		System.out.println("ANTES -> " + gestion.datosCuenta("ESPCAIXESBBXXX12XXXXXXX"));
+		gestion.sacarDinero("ESPCAIXESBBXXX12XXXXXXX", "Concepto", 25000, 10, 4, 2019);
+		System.out.println("DESPUES -> " + gestion.datosCuenta("ESPCAIXESBBXXX12XXXXXXX"));
 	}
 
 }

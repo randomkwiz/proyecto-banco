@@ -38,6 +38,12 @@ public class GestionBancoComercialTest {
 
         //gestion.ordenarMovimientosPorFecha("ESPCAIXESBBXXX0000001");    //funciona bien tras el cambio a GregorianCalendar
 
-        gestion.imprimirUltimosDiezMovimientos("ESPCAIXESBBXXX0000001");
+        //gestion.imprimirUltimosDiezMovimientos("ESPCAIXESBBXXX0000001");
+        
+        //System.out.println(gestion.DNIRegistrado("98835488-C", "CAIXESBBXX"));
+        String IBAN = gestion.insertarCliente("CAIXESBBXXX", "30216092-X", 415.23);
+        System.out.println(IBAN);
+        
+        //System.out.println(gestion.obtenerNumCuentaPorIBAN("ESPCAIXESBBXXX0000001"));
     }
 }
