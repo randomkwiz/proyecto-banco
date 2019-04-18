@@ -62,10 +62,6 @@ import utilidades.ValidacionesProgramaBancoComercial;
 
 public class ProgramaBancoComercial 
 {
-    private static int DAY_OF_MONTH;
-	private static int MONTH;
-	private static int YEAR;
-
 	public static void main(String[] args)
     {
     	Scanner teclado = new Scanner(System.in);
@@ -74,7 +70,7 @@ public class ProgramaBancoComercial
     	int opcionElegida;
     	GestionBancoComercial gestionComercial = new GestionBancoComercial();
     	GestionBancoCentral gestionCentral = new GestionBancoCentral();
-    	String cuentaDestino, IBAN, DNI, BIC, concepto;
+    	String cuentaDestino, IBAN, DNI, BIC, concepto, IBANNuevoCliente;
     	GregorianCalendar fecha;
     	int dia, mes, anyo;
     	
@@ -99,11 +95,11 @@ public class ProgramaBancoComercial
 		  			concepto = teclado.next();
 		  			
 		  			GregorianCalendar fechaActual = new GregorianCalendar();
-		  			dia = fechaActual.get(DAY_OF_MONTH);	// <-     No se si esto esta bien
-		  			mes = fechaActual.get(MONTH);			// <-     No se si esto esta bien
-		  			anyo = fechaActual.get(YEAR);			//TODO <- No se si esto esta bien
+		  			dia = fechaActual.get(GregorianCalendar.DAY_OF_MONTH);
+		  			mes = fechaActual.get(GregorianCalendar.MONTH + 1);
+		  			anyo = fechaActual.get(GregorianCalendar.YEAR);
 
-		  			gestionCentral.realizarMovimiento(IBAN, cuentaDestino, concepto, cantidad, dia, mes, anyo);
+		  			gestionCentral.realizarMovimiento(IBAN, cuentaDestino, concepto, cantidad, dia, mes, anyo); //TODO Aqui pondría que devolviera un boolean para saber si se realizo el movimiento bien o no.
 		  			
 		  			break;
 		  		case 2: 
@@ -118,11 +114,15 @@ public class ProgramaBancoComercial
 		  			break;
 		  		case 4: 
 		  			//cliente nuevo
-		  			DNI = validaciones.leerYValidarDNI(BIC);		//TODO Hay que sacar el BIC a partir del IBAN ingresado para iniciar sesion
+		  			DNI = validaciones.leerYValidarDNI(BIC);		
 		  			
 		  			ingresosMensuales = validaciones.leerYValidarIngresosMensuales();
 		  			
-		  			gestionComercial.insertarCliente(BIC, DNI,ingresosMensuales);
+		  			IBANNuevoCliente = gestionComercial.insertarCliente(BIC, DNI,ingresosMensuales);
+		  			if(IBANNuevoCliente != null)
+		  				System.out.println("Nuevo cliente creado, apunta el IBAN de su cuenta: " + IBANNuevoCliente);
+		  			else
+		  				System.out.println("El cliente no ha podido crearse, inténtalo de nuevo");
 		  			break;
 		  		case 5: 
 		  			//gestionar una cuenta determinada

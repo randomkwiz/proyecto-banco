@@ -53,7 +53,7 @@ public class ValidacionesProgramaBancoComercial
 		System.out.println("2) Ver datos de la cuenta en el banco central");
 		System.out.println("3) Buscar movimientos de la cuenta en el banco central");
 		System.out.println("4) Cliente nuevo");
-		System.out.println("5) Gestionar una cuenta determinar");
+		System.out.println("5) Gestionar una cuenta determinada");
 		System.out.println("0) Salir del programa");
 		
 		do
@@ -133,7 +133,7 @@ public class ValidacionesProgramaBancoComercial
 		{
 			System.out.print("Introduce DNI: ");
 			DNI = teclado.next();
-		}while(gestion.DNIRegistrado(DNI, BIC) == false);
+		}while(gestion.DNIRegistrado(DNI, BIC));
 		
 		return DNI;
 	}
