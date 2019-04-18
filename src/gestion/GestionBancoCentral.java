@@ -164,8 +164,32 @@ public class GestionBancoCentral
 	public String datosCuenta(String IBAN)
 	{
 		String cuenta = null;
+		File ficheroCuentas = new File("./Files/BancoCentral/Cuentas_BancoCentral.txt");
+		FileReader fr = null;
+		BufferedReader br = null;
+		String registro;
+		String[] campos;
 		
-		System.out.println("datosCuenta en resguardo");
+		try
+		{
+			fr = new FileReader(ficheroCuentas);
+			br = new BufferedReader(fr);
+			
+			while(br.ready())
+			{
+				//buscar la cuenta y guardarla en el String que se devuelve
+				registro = br.readLine();
+				campos = registro.split(",");
+				
+				if(campos[0].equals(IBAN))
+					cuenta = registro;
+			}
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+		//System.out.println("datosCuenta en resguardo");
 		
 		return cuenta;
 	}
@@ -195,7 +219,35 @@ public class GestionBancoCentral
 	{
 		boolean registrado = false;
 		
-		System.out.println("BICRegistrado en resguardo");
+		File ficheroClientes = new File ("./Files/BancoCentral/Clientes_BancoCentral.txt");
+        FileReader leer = null;
+        BufferedReader br = null;
+        
+        String campos[] = null;
+        String registro = " ";
+
+        try 
+        {
+            leer = new FileReader(ficheroClientes);
+            br = new BufferedReader(leer);
+
+            while(br.ready())
+            {
+                registro = br.readLine();
+                campos = registro.split(",");
+                
+                //campos[0] = campos[0].substring(3, campos[0].length());
+                
+                if(campos[0].equals("ESP"+BIC))
+                	registrado = true;
+            }
+            
+            br.close();
+        }
+        catch (IOException e)
+        {
+        	e.printStackTrace();
+        }
 		
 		return registrado;
 	}
@@ -211,8 +263,36 @@ public class GestionBancoCentral
 	public boolean IBANRegistrado(String IBAN)
 	{
 		boolean registrado = false;
-		
-		System.out.println("IBANRegistrado en resguardo");
+		//System.out.println("IBANRegistrado en resguardo");
+		File ficheroCuentas = new File ("./Files/BancoCentral/Cuentas_BancoCentral.txt");
+        FileReader leer = null;
+        BufferedReader br = null;
+        //FileWriter fw = null;
+        //BufferedWriter bw = null;
+        String campos[] = null;
+        //List<String> registros = new ArrayList<String>();
+        String registro = " ";
+
+        try 
+        {
+            leer = new FileReader(ficheroCuentas);
+            br = new BufferedReader(leer);
+
+            while(br.ready())
+            {
+                registro = br.readLine();
+                campos = registro.split(",");
+                
+                if(campos[0].equals(IBAN))
+                	registrado = true;
+            }
+            
+            br.close();
+        }
+        catch (IOException e)
+        {
+        	e.printStackTrace();
+        }
 		
 		return registrado;
 	}
@@ -229,7 +309,7 @@ public class GestionBancoCentral
      * */
     public String obtenerNombreBancoComercialPorIBAN(String iban_cuenta){
 
-        return obtenerNombrePorBIC(iban_cuenta.substring(3,13));
+        return obtenerNombrePorBIC(iban_cuenta.substring(3,14));
     }
     
     /*
@@ -256,7 +336,7 @@ public class GestionBancoCentral
                 registro = br.readLine();
                 campos = registro.split(",");
 
-                if ( campos[0].substring(3,13).equals(bic)){
+                if ( campos[0].substring(3,14).equals(bic)){
                     nombre = campos[1];
                 }
             }
@@ -278,6 +358,6 @@ public class GestionBancoCentral
      */
     public String obtenerBICporIBAN(String IBAN)
     {
-    	return IBAN.substring(3, 9);
+    	return IBAN.substring(3, 14);
     }
 }
