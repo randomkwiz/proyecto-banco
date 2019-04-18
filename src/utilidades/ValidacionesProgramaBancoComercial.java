@@ -28,7 +28,7 @@ public class ValidacionesProgramaBancoComercial
 		{
 			System.out.print("IBAN: ");
 			IBAN = teclado.next();
-		}while(gestion.IBANRegistrado(IBAN));
+		}while(gestion.IBANRegistrado(IBAN) == false);		//OK
 		
 		System.out.println("Inicio de sesion correcto en la cuenta " + IBAN);
 		
@@ -83,7 +83,7 @@ public class ValidacionesProgramaBancoComercial
 		{
 			System.out.print("Introduce IBAN de destino: ");
 			cuentaDestino = teclado.next();
-		}while(gestion.IBANRegistrado(cuentaDestino));
+		}while(gestion.IBANRegistrado(cuentaDestino) == false); 	//OK
 		
 		return cuentaDestino;
 	}
