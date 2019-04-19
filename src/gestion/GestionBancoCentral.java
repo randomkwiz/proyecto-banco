@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class GestionBancoCentral 
+public class GestionBancoCentral extends GestionBanco
 {
 	/* INTERFAZ
      * Signatura: public void realizarMovimiento(String nombre_banco_origen,String cuenta_origen,String nombre_banco_destino, String cuenta_destino, String concepto,double cantidad, int dia, int mes, int anyo)
@@ -359,5 +359,55 @@ public class GestionBancoCentral
     public String obtenerBICporIBAN(String IBAN)
     {
     	return IBAN.substring(3, 14);
+    }
+
+
+    /*
+     * INTERFAZ
+     * Signatura: public String obtenerBICporNombre(String nombre_banco)
+     * Comentario: devuelve el BIC de un banco dando su nombre
+     * Precondiciones: por referencia se pasa un string
+     * Entrada: String nombre
+     * Salida: String BIC
+     * Entrada/Salida:
+     * Postcondiciones: Asociado al nombre se devuelve un String
+     * */
+    public String obtenerBICporNombre(String nombre_banco){
+        File clientesBancoCentral = new File("./Files/BancoCentral/Clientes_BancoCentral.txt");
+        FileReader leer = null;
+        BufferedReader br = null;
+        String registro = " ";
+        String campos[] = null;
+        String bic = " ";
+        try{
+            leer = new FileReader(clientesBancoCentral);
+            br = new BufferedReader(leer);
+            while(br.ready()){
+                registro = br.readLine();
+                campos = registro.split(",");
+
+                if ( campos[1].equals(nombre_banco)){
+                    bic = campos[0].substring(3,14);
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+
+        return bic;
+    }
+
+    /* INTERFAZ
+     * Comentario: Obtiene el numero de cuenta de un IBAN
+     * Prototipo: public String obtenerNumCuentaPorIBAN(String IBAN)
+     * Entrada: Un String con el IBAN del que se quiere obtener su numero de cuenta
+     * Precondiciones: No hay
+     * Salida: Un String con el numero de cuenta del IBAN especificado
+     * Postcondiciones: Asociado al nombre devuelve un String con el numero de cuenta del IBAN especificado
+     */
+    public String obtenerNumCuentaPorIBAN(String IBAN)
+    {
+        return IBAN.substring(14, 21);
     }
 }

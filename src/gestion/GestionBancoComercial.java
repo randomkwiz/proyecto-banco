@@ -12,8 +12,7 @@ import java.util.*;
 import clasesBasicas.ClienteImpl;
 import clasesBasicas.CuentaImpl;
 
-public class GestionBancoComercial {
-
+public class GestionBancoComercial extends GestionBanco{
 
     /*
      * INTERFAZ
