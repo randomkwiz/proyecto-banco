@@ -95,11 +95,8 @@ public class ProgramaBancoComercial
 		  			concepto = teclado.next();
 		  			
 		  			GregorianCalendar fechaActual = new GregorianCalendar();
-		  			dia = fechaActual.get(GregorianCalendar.DAY_OF_MONTH);
-		  			mes = fechaActual.get(GregorianCalendar.MONTH + 1);
-		  			anyo = fechaActual.get(GregorianCalendar.YEAR);
 
-		  			gestionCentral.realizarMovimiento(IBAN, cuentaDestino, concepto, cantidad, dia, mes, anyo); //TODO Aqui pondría que devolviera un boolean para saber si se realizo el movimiento bien o no.
+		  			gestionCentral.realizarMovimiento(IBAN, cuentaDestino, concepto, cantidad, fechaActual); //TODO Aqui pondría que devolviera un boolean para saber si se realizo el movimiento bien o no.
 		  			
 		  			break;
 		  		case 2: 
