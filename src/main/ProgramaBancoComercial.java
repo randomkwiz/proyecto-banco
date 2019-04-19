@@ -52,29 +52,27 @@
 
 package main;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 import gestion.GestionBancoCentral;
 import gestion.GestionBancoComercial;
-
+import utilidades.Utilidades;
 import utilidades.ValidacionesProgramaBancoComercial;
 
 public class ProgramaBancoComercial 
 {
-    private static int DAY_OF_MONTH;
-	private static int MONTH;
-	private static int YEAR;
-
 	public static void main(String[] args)
     {
     	Scanner teclado = new Scanner(System.in);
     	ValidacionesProgramaBancoComercial validaciones = new ValidacionesProgramaBancoComercial();
+    	Utilidades utils = new Utilidades();
     	double cantidad, ingresosMensuales;
     	int opcionElegida;
     	GestionBancoComercial gestionComercial = new GestionBancoComercial();
     	GestionBancoCentral gestionCentral = new GestionBancoCentral();
-    	String cuentaDestino, IBAN, DNI, BIC, concepto;
+    	String cuentaDestino, IBAN, DNI, BIC, concepto, IBANNuevoCliente;
     	GregorianCalendar fecha;
     	int dia, mes, anyo;
     	
@@ -95,38 +93,41 @@ public class ProgramaBancoComercial
 		  			System.out.println("Cantidad: ");
 		  			cantidad = teclado.nextDouble();
 		  			
+		  			teclado.nextLine();
 		  			System.out.print("Concepto: ");
-		  			concepto = teclado.next();
+		  			concepto = teclado.nextLine();
 		  			
 		  			GregorianCalendar fechaActual = new GregorianCalendar();
-		  			dia = fechaActual.get(DAY_OF_MONTH);	// <-     No se si esto esta bien
-		  			mes = fechaActual.get(MONTH);			// <-     No se si esto esta bien
-		  			anyo = fechaActual.get(YEAR);			//TODO <- No se si esto esta bien
 
-		  			gestionCentral.realizarMovimiento(IBAN, cuentaDestino, concepto, cantidad, dia, mes, anyo);
+		  			gestionCentral.realizarMovimiento(IBAN, cuentaDestino, concepto, cantidad, fechaActual); //TODO Aqui pondría que devolviera un boolean para saber si se realizo el movimiento bien o no.
 		  			
 		  			break;
 		  		case 2: 
 		  			//ver datos de la cuenta en el banco central
-		  			System.out.println(gestionCentral.datosCuenta(IBAN));
+		  			utils.imprimirDatosCuenta(gestionCentral.datosCuenta(IBAN));		//TODO Estaría bien hacerle un pretty print en la clase de utilidad a este metodo
 		  			break;
 		  		case 3:
 		  			//buscar movimientos por fecha de la cuenta en el banco central
 		  			fecha = validaciones.leerYValidarFecha();
 		  			
-		  			gestionCentral.mostrarMovimientosPorFecha(fecha, IBAN);
+		  			System.out.println("Movimientos del " + fecha.getTime());
+		  			utils.imprimirMovimientos(gestionCentral.buscarMovimientosPorFecha(IBAN, fecha.get(Calendar.DAY_OF_MONTH), fecha.get(Calendar.MONTH), fecha.get(Calendar.YEAR)));		//TODO posible pretty print
 		  			break;
 		  		case 4: 
 		  			//cliente nuevo
-		  			DNI = validaciones.leerYValidarDNI(BIC);		//TODO Hay que sacar el BIC a partir del IBAN ingresado para iniciar sesion
+		  			DNI = validaciones.leerYValidarDNI(BIC);		
 		  			
 		  			ingresosMensuales = validaciones.leerYValidarIngresosMensuales();
 		  			
-		  			gestionComercial.insertarCliente(BIC, DNI,ingresosMensuales);
+		  			IBANNuevoCliente = gestionComercial.insertarCliente(BIC, DNI,ingresosMensuales);
+		  			if(IBANNuevoCliente != null)
+		  				System.out.println("Nuevo cliente creado, apunta el IBAN de su cuenta: " + IBANNuevoCliente);
+		  			else
+		  				System.out.println("El cliente no ha podido crearse, inténtalo de nuevo");
 		  			break;
 		  		case 5: 
 		  			//gestionar una cuenta determinada
-		  			break;
+		  			break;	//TODO Modulo de gestionar una cuenta determinada
     		}
 	  		
 	  		//Mostrar menu y validar opcion elegida

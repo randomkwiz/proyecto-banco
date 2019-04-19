@@ -6,42 +6,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 public class GestionBancoCentral extends GestionBanco
 {
-	/* INTERFAZ
-     * Signatura: public void realizarMovimiento(String nombre_banco_origen,String cuenta_origen,String nombre_banco_destino, String cuenta_destino, String concepto,double cantidad, int dia, int mes, int anyo)
-     * Comentario: Realiza un movimiento bancario, sacando una cantidad de la cuenta de origen e ingresándola en la cuenta destino.
-     *              Llama a los métodos sacarDinero e ingresarDinero.
-     * Precondiciones: Por referencia se pasan las ID de las cuentas y los nombres de los bancos de origen y destino, por valor se pasa la cantidad y dia mes y anyo. Tambien se pasa por referencia el concepto
-     * Entrada: (String nombre_banco_origen,String cuenta_origen,String nombre_banco_destino, String cuenta_destino, String concepto,double cantidad, int dia, int mes, int anyo)
-     * Salida:
-     * Entrada/Salida:
-     * Postcondiciones: Se modificarán los ficheros de cuentas y de movimientos correspondientes.
-     * */
-	public void realizarMovimiento(String IBANOrigen,String IBANDestino, String concepto,double cantidad, int dia, int mes, int anyo){
-        sacarDinero(IBANOrigen, concepto, cantidad, dia, mes, anyo);
-        ingresarDinero(IBANDestino, concepto, cantidad, dia, mes, anyo);
-    }
-	
-	/*INTERFAZ
-     * Signatura: public void sacarDinero(String nombre_banco, String ID_Cuenta, String concepto,double cantidad, int dia, int mes, int anyo)
-     * Comentario: saca una cantidad dada de una cuenta
-     * Precondiciones: Por valor se pasa una cantidad, por referencia la ID de una cuenta y el nombre del banco. Se pasa por valor dia mes y año
-     * Entrada: String nombre_banco, String ID_Cuenta, double cantidad, int dia, int mes, int anyo
-     * Salida:
-     * Entrada/Salida:
-     * Postcondiciones: Se modificarán los ficheros de Cuentas modificando el saldo y de movimientos, añadiendo el movimiento correspondiente.
-     * */
-	public void sacarDinero(String IBAN,String concepto, double cantidad, int dia, int mes, int anyo){
-        insertarMovimientoEnFicheroMovimientos(IBAN, false, concepto, cantidad, dia, mes, anyo);
-        modificarSaldoEnFicheroCuentas(IBAN, false, cantidad);
-
-    }
-	
 	/* INTERFAZ
      * Signatura: public void modificarSaldoEnFicheroCuentas(String nombre_banco,String iban_cuenta, boolean sumaOresta,double cantidad)
      * Comentario: Este método se encarga de modificar en el fichero de Cuentas, el registro del saldo total (campo 2).
@@ -112,12 +84,16 @@ public class GestionBancoCentral extends GestionBanco
      * Entrada/Salida:
      * Postcondiciones: Se modifica el fichero de movimientos de cuentas, añadiendo un movimiento nuevo.
      * */
-	public void insertarMovimientoEnFicheroMovimientos(String IBAN,boolean isIngresoOrRetirada, String concepto, double cantidad,int dia, int mes, int anyo)
+	public void insertarMovimientoEnFicheroMovimientos(String IBAN,boolean isIngresoOrRetirada, String concepto, double cantidad, GregorianCalendar fecha)
 	{
 		File ficheroCuentas = new File ("./Files/BancoCentral/MovimientosCuentas/Movimientos_"+IBAN+".txt");
         FileWriter fw = null;
         BufferedWriter bw = null;
         String signo = "RETIRADA,-";
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setCalendar(fecha);
+        String fechaformateada = sdf.format(fecha.getTime());
+        
         try 
         {
             fw = new FileWriter(ficheroCuentas,true);
@@ -126,7 +102,7 @@ public class GestionBancoCentral extends GestionBanco
             	
                 signo = "INGRESO,+";
             
-            bw.write(concepto+","+signo+Double.toString(cantidad)+","+Integer.toString(dia)+"/"+Integer.toString(mes)+"/"+Integer.toString(anyo));
+            bw.write(concepto+","+signo+Double.toString(cantidad)+","+fechaformateada);
             bw.newLine();
             bw.close();
             
@@ -137,21 +113,6 @@ public class GestionBancoCentral extends GestionBanco
         }
 
 	}
-	
-	/* INTERFAZ
-     * Signatura: public void ingresarDinero(String nombre_banco, String ID_Cuenta,String concepto, double cantidad, int dia, int mes, int anyo)
-     * Comentario: ingresa una cantidad dada de una cuenta
-     * Precondiciones: Por valor se pasa una cantidad, por referencia la ID de una cuenta y el nombre del banco. Por valor se pasa dia, mes y año
-     * Entrada: String nombre_banco, String ID_Cuenta, double cantidad, int dia, int mes, int anyo
-     * Salida:
-     * Entrada/Salida:
-     * Postcondiciones: Se modificarán los ficheros de Cuentas modificando el saldo y de movimientos, añadiendo el movimiento correspondiente.
-     * */
-	public void ingresarDinero(String IBAN,String concepto, double cantidad, int dia, int mes, int anyo){
-        insertarMovimientoEnFicheroMovimientos(IBAN, true, concepto, cantidad, dia, mes, anyo);
-        modificarSaldoEnFicheroCuentas(IBAN, true, cantidad);
-
-    }
 	
 	/* INTERFAZ
 	 * Comentario: Accede al fichero de cuentas y busca una cuenta por su IBAN para leer sus datos
@@ -192,19 +153,6 @@ public class GestionBancoCentral extends GestionBanco
 		//System.out.println("datosCuenta en resguardo");
 		
 		return cuenta;
-	}
-	
-	/* INTERFAZ
-	 * Comentario: muestra los movimientos de una cuenta en una determinada fecha
-	 * Prototipo: public void mostrarMovmientosPorFecha(GregorianCalendar fecha, String IBAN)
-	 * Precondiciones: No hay
-	 * Entrada: un GregorianCalendar con la fecha y un String con el IBAN de la cuenta
-	 * Salida: No hay.
-	 * Postcondiciones: No hay. solo imprime en pantalla.
-	 */
-	public void mostrarMovimientosPorFecha(GregorianCalendar fecha, String IBAN)
-	{
-		System.out.println("mostrarMovimientosPorFecha en resguardo");
 	}
 	
 	/* INTERFAZ
@@ -299,115 +247,368 @@ public class GestionBancoCentral extends GestionBanco
 	
 	/*
      * INTERFAZ
-     * Signatura: public String obtenerNombreBancoComercialPorIBAN(String iban_cuenta)
-     * Comentario: devuelve el nombre de un banco dado el IBAN de una cuenta
-     * Precondiciones: por referencia se pasa un string
-     * Entrada: String iban_cuenta
-     * Salida: String nombre
+     * Signatura: public ArrayList<String> buscarMovimientosPorFecha(String iban_cuenta, int anyo_buscado)
+     * Comentario: busca los movimientos que se hicieron en una cuenta en la fecha dada
+     * Precondiciones: Se pasa un iban y un int
+     * Entrada: String iban, int anyo_buscado
+     * Salida: arraylist de cadenas con el / los movimientos requeridos
      * Entrada/Salida:
-     * Postcondiciones: Asociado al nombre se devuelve un String
+     * Postcondiciones: asociado al nombre devuelve un arraylist
      * */
-    public String obtenerNombreBancoComercialPorIBAN(String iban_cuenta){
-
-        return obtenerNombrePorBIC(iban_cuenta.substring(3,14));
-    }
-    
-    /*
-     * INTERFAZ
-     * Signatura: public String obtenerNombrePorBIC(String BIC)
-     * Comentario: devuelve el nombre de un banco dando su BIC
-     * Precondiciones: por referencia se pasa un string
-     * Entrada: String BIC
-     * Salida: String nombre
-     * Entrada/Salida:
-     * Postcondiciones: Asociado al nombre se devuelve un String
-     * */
-    public String obtenerNombrePorBIC(String bic){
-        File clientesBancoCentral = new File("./Files/BancoCentral/Clientes_BancoCentral.txt");
-        FileReader leer = null;
+    public List<String> buscarMovimientosPorFecha(String IBAN, int anyo){
+        File file_movimientos = new File("./Files/BancoCentral/MovimientosCuentas/Movimientos_"+IBAN+".txt");
+        FileReader fr = null;
         BufferedReader br = null;
-        String registro = " ";
-        String campos[] = null;
-        String nombre = " ";
-        try{
-            leer = new FileReader(clientesBancoCentral);
-            br = new BufferedReader(leer);
-            while(br.ready()){
-                registro = br.readLine();
-                campos = registro.split(",");
+        GregorianCalendar fecha = new GregorianCalendar();
+        List<String> registros_buscados = new ArrayList<String>();
+        String registro= " ";
 
-                if ( campos[0].substring(3,14).equals(bic)){
-                    nombre = campos[1];
+
+        try{
+            fr = new FileReader(file_movimientos);
+            br = new BufferedReader(fr);
+
+            while (br.ready()){
+                registro = br.readLine();
+                fecha.set(Calendar.YEAR, Integer.parseInt(registro.split(",")[3].split("/")[2]));
+                fecha.set(Calendar.MONTH, Integer.parseInt(registro.split(",")[3].split("/")[1]));
+                fecha.set(Calendar.DAY_OF_MONTH, Integer.parseInt(registro.split(",")[3].split("/")[0]));
+                if (fecha.get(Calendar.YEAR) ==  anyo ){
+                    registros_buscados.add(registro);
                 }
             }
+            br.close();
         }catch (IOException e){
             e.printStackTrace();
         }
 
-
-        return nombre;
+        return registros_buscados;
     }
     
-    /* INTERFAZ
-     * Comentario: A partir de un IBAN, obtiene el BIC del banco central al que pertenece el banco que gestiona la cuenta
-     * Prototipo: public String obtenerBICporIBAN(String IBAN)
-     * Entrada: Un String con el IBAN
-     * Precondiciones: No hay
-     * Salida: Un string con el BIC del banco central al que pertenece el banco que gestiona la cuenta
-     * Postcondiciones: Asociado al nombre devuelve un strnig con el BIC del banco central al que pertenece el banco que gestiona la cuenta
-     */
-    public String obtenerBICporIBAN(String IBAN)
-    {
-    	return IBAN.substring(3, 14);
-    }
-
-
     /*
      * INTERFAZ
-     * Signatura: public String obtenerBICporNombre(String nombre_banco)
-     * Comentario: devuelve el BIC de un banco dando su nombre
-     * Precondiciones: por referencia se pasa un string
-     * Entrada: String nombre
-     * Salida: String BIC
+     * Signatura: public ArrayList<String> buscarMovimientosPorFecha(String iban_cuenta, int mes_buscado, int anyo_buscado)
+     * Comentario: busca los movimientos que se hicieron en una cuenta en la fecha dada
+     * Precondiciones: Se pasa un iban y dos int
+     * Entrada: String iban, int mes_buscado, int anyo_buscado
+     * Salida: arraylist de cadenas con el / los movimientos requeridos
      * Entrada/Salida:
-     * Postcondiciones: Asociado al nombre se devuelve un String
+     * Postcondiciones: asociado al nombre devuelve un arraylist
      * */
-    public String obtenerBICporNombre(String nombre_banco){
-        File clientesBancoCentral = new File("./Files/BancoCentral/Clientes_BancoCentral.txt");
-        FileReader leer = null;
+    public List<String> buscarMovimientosPorFecha(String IBAN, int mes, int anyo){
+        File file_movimientos = new File("./Files/BancoCentral/MovimientosCuentas/Movimientos_"+IBAN+".txt");
+        FileReader fr = null;
         BufferedReader br = null;
-        String registro = " ";
-        String campos[] = null;
-        String bic = " ";
-        try{
-            leer = new FileReader(clientesBancoCentral);
-            br = new BufferedReader(leer);
-            while(br.ready()){
-                registro = br.readLine();
-                campos = registro.split(",");
+        GregorianCalendar fecha = new GregorianCalendar();
+        List<String> registros_buscados = new ArrayList<String>();
+        String registro= " ";
 
-                if ( campos[1].equals(nombre_banco)){
-                    bic = campos[0].substring(3,14);
+
+        try{
+            fr = new FileReader(file_movimientos);
+            br = new BufferedReader(fr);
+
+            while (br.ready()){
+                registro = br.readLine();
+                fecha.set(Calendar.YEAR, Integer.parseInt(registro.split(",")[3].split("/")[2]));
+                fecha.set(Calendar.MONTH, Integer.parseInt(registro.split(",")[3].split("/")[1]));
+                fecha.set(Calendar.DAY_OF_MONTH, Integer.parseInt(registro.split(",")[3].split("/")[0]));
+                if (fecha.get(Calendar.YEAR) ==  anyo && fecha.get(Calendar.MONTH) == mes ){
+                    registros_buscados.add(registro);
                 }
             }
+            br.close();
         }catch (IOException e){
             e.printStackTrace();
         }
 
-
-        return bic;
+        return registros_buscados;
     }
+    
+    /*
+     * INTERFAZ
+     * Signatura: public ArrayList<String> buscarMovimientosPorFecha(String iban_cuenta,int dia_buscado, int mes_buscado, int anyo_buscado)
+     * Comentario: busca los movimientos que se hicieron en una cuenta en la fecha dada
+     * Precondiciones: Se pasa un iban y tres int
+     * Entrada: String iban,int dia_buscado, int mes_buscado, int anyo_buscado
+     * Salida: arraylist de cadenas con el / los movimientos requeridos
+     * Entrada/Salida:
+     * Postcondiciones: asociado al nombre devuelve un arraylist
+     * */
+    public List<String> buscarMovimientosPorFecha(String IBAN, int dia,int mes,int anyo){
+    	File file_movimientos = new File("./Files/BancoCentral/MovimientosCuentas/Movimientos_"+IBAN+".txt");
+        FileReader fr = null;
+        BufferedReader br = null;
+        GregorianCalendar fecha = new GregorianCalendar();
+        List<String> registros_buscados = new ArrayList<String>();
+        String registro= " ";
 
-    /* INTERFAZ
-     * Comentario: Obtiene el numero de cuenta de un IBAN
-     * Prototipo: public String obtenerNumCuentaPorIBAN(String IBAN)
-     * Entrada: Un String con el IBAN del que se quiere obtener su numero de cuenta
+
+        try{
+            fr = new FileReader(file_movimientos);
+            br = new BufferedReader(fr);
+
+            while (br.ready()){
+                registro = br.readLine();
+                fecha.set(Calendar.YEAR, Integer.parseInt(registro.split(",")[3].split("/")[2]));
+                fecha.set(Calendar.MONTH, Integer.parseInt(registro.split(",")[3].split("/")[1]));
+                fecha.set(Calendar.DAY_OF_MONTH, Integer.parseInt(registro.split(",")[3].split("/")[0]));
+                if (fecha.get(Calendar.YEAR) ==  anyo && fecha.get(Calendar.MONTH) == mes && fecha.get(Calendar.DAY_OF_MONTH) == dia ){
+                    registros_buscados.add(registro);
+                }
+            }
+            br.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        return registros_buscados;
+    }
+    
+    /*
+     * INTERFAZ
+     * Signatura: public boolean isCuentaBorrada(String iban)
+     * Comentario: Comprueba si el iban pertenece a una cuenta del fichero CuentasBorradas
+     * Precondiciones: Se pasa un iban
+     * Entrada: String iban
+     * Salida: boolean
+     * Entrada/Salida:
+     * Postcondiciones: asociado al nombre devuelve true si el iban corresponde a una cuenta del fichero CuentasBorradas y false si no
+     * */
+    public boolean isCuentaBorrada(String iban){
+        File f_cuentasBorradas = new File("./Files/BancoCentral/CuentasBorradas_BancoCentral.txt");
+        FileReader fr = null;
+        BufferedReader br = null;
+        boolean isBorrada = false;
+
+        try{
+            fr = new FileReader(f_cuentasBorradas);
+            br = new BufferedReader(fr);
+
+            while (br.ready()){
+                if(br.readLine().equals(iban)){
+                    isBorrada = true;
+                }
+            }
+            br.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return isBorrada;
+    }
+    
+    /*
+     * INTERFAZ
+     * Signatura: public void marcarCuentaComoBorrada(String iban_cuenta)
+     * Comentario: Escribe en el fichero CuentasBorradas la cuenta indicada
+     * Precondiciones: Se pasa un iban
+     * Entrada: String iban
+     * Salida:
+     * Entrada/Salida:
+     * Postcondiciones: modifica el fichero de cuentas borradas
+     * */
+    public void marcarCuentaComoBorrada(String iban_cuenta){
+        File f_cuentasBorradas = new File("./Files/BancoCentral/CuentasBorradas_BancoCentral.txt");
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+
+        try{
+            fw = new FileWriter(f_cuentasBorradas,true);
+            bw = new BufferedWriter(fw);
+
+            bw.write(iban_cuenta);
+            bw.newLine();
+
+            bw.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    
+    /*
+     * INTERFAZ
+     * Signatura: public void eliminarCuentasBorradasDefinitivamente(String bic)
+     * Comentario: Elimina definitivamente el rastro de las cuentas marcadas como borradas en el fichero CuentasBorradas.
+     *              (borra la cuenta del fichero de cuentas, borra su historial de movimientos, borra al cliente ya que de momento cada cliente solo puede tener una cuenta, borra del fichero cuentas-clientes...)
      * Precondiciones: No hay
-     * Salida: Un String con el numero de cuenta del IBAN especificado
-     * Postcondiciones: Asociado al nombre devuelve un String con el numero de cuenta del IBAN especificado
-     */
-    public String obtenerNumCuentaPorIBAN(String IBAN)
-    {
-        return IBAN.substring(14, 21);
+     * Entrada: String bic
+     * Salida:
+     * Entrada/Salida:
+     * Postcondiciones: modifica varios ficheros
+     * */
+    public void eliminarCuentasBorradasDefinitivamente() {
+        File carpetaBanco = new File("./Files/BancoCentral");
+        File cuentas = new File(carpetaBanco, "Cuentas_BancoCentral.txt");
+        File clientes = new File(carpetaBanco, "Clientes_BancoCentral.txt");
+        File clientes_cuentas = new File(carpetaBanco, "Clientes_Cuentas_BancoCentral.txt");
+        File cuentasBorradas = new File(carpetaBanco, "CuentasBorradas_BancoCentral.txt");
+        File carpetaMovimientos = new File(carpetaBanco, "MovimientosCuentas");
+        File archivoMovimientosCuenta[] = carpetaMovimientos.listFiles();
+        List<String> cuentasABorrar = new ArrayList<String>();
+        List<String> registrosMantenidos = new ArrayList<String>();
+        FileReader fr = null;
+        BufferedReader br = null;
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        String registro = " ";
+        String dniABorrar = " ";
+
+        if(carpetaBanco.exists() && cuentas.exists() && clientes.exists() && clientes_cuentas.exists() && cuentasBorradas.exists() && carpetaMovimientos.exists()){
+        try {
+            fr = new FileReader(cuentasBorradas);
+            br = new BufferedReader(fr);
+            while (br.ready()) {
+                registro = br.readLine();
+                cuentasABorrar.add(registro);
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < cuentasABorrar.size(); i++) {
+            /*Comprobación y eliminación del fichero de Cuentas*/
+            try {
+                fr = new FileReader(cuentas);
+                br = new BufferedReader(fr);
+                while (br.ready()) {
+                    registro = br.readLine();
+
+                    if (!cuentasABorrar.get(i).equals(registro.split(",")[0])) {
+                        registrosMantenidos.add(registro);
+                    }
+                }
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                fw = new FileWriter(cuentas);
+                bw = new BufferedWriter(fw);
+                for (String element : registrosMantenidos) {
+                    bw.write(element);
+                    bw.newLine();
+                }
+                bw.close();
+                registrosMantenidos.clear();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /*Comprobación y eliminación del fichero de Clientes_Cuentas_ */
+            try {
+                fr = new FileReader(clientes_cuentas);
+                br = new BufferedReader(fr);
+                while (br.ready()) {
+                    registro = br.readLine();
+
+                    if (!this.obtenerNombreBancoComercialPorIBAN(cuentasABorrar.get(i)).equals(registro.split(",")[0])) {
+                        registrosMantenidos.add(registro);
+                    } else {
+                        dniABorrar = registro.split(",")[0];
+                    }
+                }
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                fw = new FileWriter(clientes_cuentas);
+                bw = new BufferedWriter(fw);
+                for (String element : registrosMantenidos) {
+                    bw.write(element);
+                    bw.newLine();
+                }
+                bw.close();
+                registrosMantenidos.clear();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /*Comprobación y eliminación del fichero de Clientes */
+            try {
+                fr = new FileReader(clientes);
+                br = new BufferedReader(fr);
+                while (br.ready()) {
+                    registro = br.readLine();
+
+                    if (!dniABorrar.equals(registro.split(",")[1])) {
+                        registrosMantenidos.add(registro);
+                    }
+                }
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                fw = new FileWriter(clientes);
+                bw = new BufferedWriter(fw);
+                for (String element : registrosMantenidos) {
+                    bw.write(element);
+                    bw.newLine();
+                }
+                bw.close();
+                registrosMantenidos.clear();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /*Borrar los ficheros de movimientos de las cuentas borradas*/
+            for (int j = 0; j < archivoMovimientosCuenta.length; j++) {
+                if (archivoMovimientosCuenta[j].getName().split("_")[1].equals(cuentasABorrar.get(i)+".txt")) {
+                    archivoMovimientosCuenta[j].delete();
+                }
+            }
+
+        }
+
+        /*Eliminar el contenido del fichero de cuentasBorradas*/
+        try {
+            fw = new FileWriter(cuentasBorradas);
+            bw = new BufferedWriter(fw);
+            bw.write("");
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        }//cierra el if
     }
+    
+    /*
+     * INTERFAZ
+     * Signatura: public List<String> ultimosDiezMovimientos(String iban_cuenta)
+     * Comentario: devuelve los ultimos diez movimientos de la cuenta
+     * Precondiciones: Se pasa un iban
+     * Entrada: String iban
+     * Salida: una lista de String
+     * Entrada/Salida:
+     * Postcondiciones: asociado al nombre devuelve una lista de String
+     * */
+    public List<String> ultimosDiezMovimientos(String iban_cuenta){
+        String nombre_banco = obtenerNombreBancoComercialPorIBAN(iban_cuenta);
+        File f_cuentas = new File("./Files/BancoCentral/MovimientosCuentas/Movimientos_" + iban_cuenta + ".txt");
+        FileReader fr = null;
+        BufferedReader br = null;
+        List<String> registros = new ArrayList<String>();
+        String registro = " ";
+        int lineas=0;
+
+
+            if (f_cuentas.exists()){
+                try {
+                    fr = new FileReader(f_cuentas);
+                    br = new BufferedReader(fr);
+                    while (br.ready() && lineas < 10) {
+                        registro = br.readLine();
+                        registros.add(registro);
+                        lineas++;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return registros;
+    }
+    
 }

@@ -70,11 +70,11 @@ public class ProgramaCliente {
                     mes = validar.mes();
                     anyo = validar.anyo();
                     if(mes == 0 && dia == 0){
-                       movimientos = gestion.buscarMovimientosPorAnyo(iban_cuenta,anyo);
+                       movimientos = gestion.buscarMovimientosPorFecha(iban_cuenta,anyo);
                     }else if (mes != 0 && dia == 0){
-                        movimientos = gestion.buscarMovimientosPorMesYAnyo(iban_cuenta, mes,anyo);
+                        movimientos = gestion.buscarMovimientosPorFecha(iban_cuenta, mes,anyo);
                     }else{
-                        movimientos = gestion.buscarMovimientosPorDiaMesYAnyo(iban_cuenta,dia,mes,anyo);
+                        movimientos = gestion.buscarMovimientosPorFecha(iban_cuenta,dia,mes,anyo);
                     }
 
                     if(movimientos.size() > 0 ){

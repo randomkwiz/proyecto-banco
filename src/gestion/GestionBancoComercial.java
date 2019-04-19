@@ -228,7 +228,7 @@ public class GestionBancoComercial extends GestionBanco{
 
     /*
      * INTERFAZ
-     * Signatura: public ArrayList<String> buscarMovimientosPorAnyo(String iban_cuenta, int anyo_buscado)
+     * Signatura: public ArrayList<String> buscarMovimientosPorFecha(String iban_cuenta, int anyo_buscado)
      * Comentario: busca los movimientos que se hicieron en una cuenta en la fecha dada
      * Precondiciones: Se pasa un iban y un int
      * Entrada: String iban, int anyo_buscado
@@ -236,7 +236,7 @@ public class GestionBancoComercial extends GestionBanco{
      * Entrada/Salida:
      * Postcondiciones: asociado al nombre devuelve un arraylist
      * */
-    public List<String> buscarMovimientosPorAnyo(String iban_cuenta, int anyo_buscado){
+    public List<String> buscarMovimientosPorFecha(String iban_cuenta, int anyo_buscado){
         File file_movimientos = new File("./Files/BancosComerciales/"+obtenerNombreBancoComercialPorIBAN(iban_cuenta)+"/Movimientos/Movimientos_Cuenta_"+iban_cuenta+".txt");
         FileReader fr = null;
         BufferedReader br = null;
@@ -268,7 +268,7 @@ public class GestionBancoComercial extends GestionBanco{
 
     /*
      * INTERFAZ
-     * Signatura: public ArrayList<String> buscarMovimientosPorMesYAnyo(String iban_cuenta, int mes_buscado, int anyo_buscado)
+     * Signatura: public ArrayList<String> buscarMovimientosPorFecha(String iban_cuenta, int mes_buscado, int anyo_buscado)
      * Comentario: busca los movimientos que se hicieron en una cuenta en la fecha dada
      * Precondiciones: Se pasa un iban y dos int
      * Entrada: String iban, int mes_buscado, int anyo_buscado
@@ -276,7 +276,7 @@ public class GestionBancoComercial extends GestionBanco{
      * Entrada/Salida:
      * Postcondiciones: asociado al nombre devuelve un arraylist
      * */
-    public List<String> buscarMovimientosPorMesYAnyo(String iban_cuenta, int mes_buscado,int anyo_buscado){
+    public List<String> buscarMovimientosPorFecha(String iban_cuenta, int mes_buscado,int anyo_buscado){
         File file_movimientos = new File("./Files/BancosComerciales/"+obtenerNombreBancoComercialPorIBAN(iban_cuenta)+"/Movimientos/Movimientos_Cuenta_"+iban_cuenta+".txt");
         FileReader fr = null;
         BufferedReader br = null;
@@ -306,11 +306,9 @@ public class GestionBancoComercial extends GestionBanco{
         return registros_buscados;
     }
 
-
-
     /*
      * INTERFAZ
-     * Signatura: public ArrayList<String> buscarMovimientosPorDiaMesYAnyo(String iban_cuenta,int dia_buscado, int mes_buscado, int anyo_buscado)
+     * Signatura: public ArrayList<String> buscarMovimientosPorFecha(String iban_cuenta,int dia_buscado, int mes_buscado, int anyo_buscado)
      * Comentario: busca los movimientos que se hicieron en una cuenta en la fecha dada
      * Precondiciones: Se pasa un iban y tres int
      * Entrada: String iban,int dia_buscado, int mes_buscado, int anyo_buscado
@@ -318,7 +316,7 @@ public class GestionBancoComercial extends GestionBanco{
      * Entrada/Salida:
      * Postcondiciones: asociado al nombre devuelve un arraylist
      * */
-    public List<String> buscarMovimientosPorDiaMesYAnyo(String iban_cuenta, int dia_buscado,int mes_buscado,int anyo_buscado){
+    public List<String> buscarMovimientosPorFecha(String iban_cuenta, int dia_buscado,int mes_buscado,int anyo_buscado){
         File file_movimientos = new File("./Files/BancosComerciales/"+obtenerNombreBancoComercialPorIBAN(iban_cuenta)+"/Movimientos/Movimientos_Cuenta_"+iban_cuenta+".txt");
         FileReader fr = null;
         BufferedReader br = null;
@@ -558,58 +556,7 @@ public class GestionBancoComercial extends GestionBanco{
         }
         return iban_cuenta;
     }
-
-
-
-    /*
-     * INTERFAZ
-     * Signatura: public void sacarDinero(String ID_Cuenta, String concepto,double cantidad, GregorianCalendar fecha)
-     * Comentario: saca una cantidad dada de una cuenta
-     * Precondiciones: Por valor se pasa una cantidad, por referencia la ID de una cuenta(IBAN) y un objeto fecha
-     * Entrada: String ID_Cuenta, double cantidad, GregorianCalendar fecha
-     * Salida:
-     * Entrada/Salida:
-     * Postcondiciones: Se modificarÃ¡n los ficheros de Cuentas modificando el saldo y de movimientos, aÃ±adiendo el movimiento correspondiente.
-     * */
-    public void sacarDinero(String ID_Cuenta, String concepto, double cantidad, GregorianCalendar fecha){
-        insertarMovimientoEnFicheroMovimientos(ID_Cuenta, false, concepto, cantidad, fecha);
-        modificarSaldoEnFicheroCuentas(ID_Cuenta, false, cantidad);
-
-    }
-
-    /*
-     * INTERFAZ
-     * Signatura: public void ingresarDinero(String ID_Cuenta,String concepto, double cantidad, GregorianCalendar fecha)
-     * Comentario: ingresa una cantidad dada de una cuenta
-     * Precondiciones: Por valor se pasa una cantidad, por referencia la ID de una cuenta y objeto fecha
-     * Entrada: String ID_Cuenta, double cantidad, GregorianCalendar fecha
-     * Salida:
-     * Entrada/Salida:
-     * Postcondiciones: Se modificarÃ¡n los ficheros de Cuentas modificando el saldo y de movimientos, aÃ±adiendo el movimiento correspondiente.
-     * */
-    public void ingresarDinero(String ID_Cuenta,String concepto, double cantidad, GregorianCalendar fecha){
-        insertarMovimientoEnFicheroMovimientos(ID_Cuenta, true, concepto, cantidad, fecha);
-        modificarSaldoEnFicheroCuentas(ID_Cuenta, true, cantidad);
-
-    }
-
-    /*
-     * INTERFAZ
-     * Signatura: public void realizarMovimiento(String cuenta_origen,String cuenta_destino, String concepto,double cantidad, GregorianCalendar fecha)
-     * Comentario: Realiza un movimiento bancario, sacando una cantidad de la cuenta de origen e ingresÃ¡ndola en la cuenta destino.
-     *              Llama a los mÃ©todos sacarDinero e ingresarDinero.
-     * Precondiciones: Por referencia se pasan las ID de las cuentas por valor se pasa la cantidad. Tambien se pasa por referencia el concepto y objeto fecha
-     * Entrada: (String cuenta_origen,String cuenta_destino, String concepto,double cantidad, GregorianCalendar fecha)
-     * Salida:
-     * Entrada/Salida:
-     * Postcondiciones: Se modificarÃ¡n los ficheros de cuentas y de movimientos correspondientes.
-     * */
-    public void realizarMovimiento(String cuenta_origen,String cuenta_destino, String concepto,double cantidad, GregorianCalendar fecha){
-        sacarDinero(cuenta_origen, concepto, cantidad, fecha);
-        ingresarDinero(cuenta_destino, concepto, cantidad, fecha);
-    }
-
-
+    
     /*
      * INTERFAZ
      * Signatura: public void ordenarMovimientosPorFecha(String iban)
@@ -777,108 +724,6 @@ public class GestionBancoComercial extends GestionBanco{
 
 
     }
-
-
-    /*
-     * INTERFAZ
-     * Signatura: public String obtenerBICporNombre(String nombre_banco)
-     * Comentario: devuelve el BIC de un banco dando su nombre
-     * Precondiciones: por referencia se pasa un string
-     * Entrada: String nombre
-     * Salida: String BIC
-     * Entrada/Salida:
-     * Postcondiciones: Asociado al nombre se devuelve un String
-     * */
-    public String obtenerBICporNombre(String nombre_banco){
-        File clientesBancoCentral = new File("./Files/BancoCentral/Clientes_BancoCentral.txt");
-        FileReader leer = null;
-        BufferedReader br = null;
-        String registro = " ";
-        String campos[] = null;
-        String bic = " ";
-        try{
-            leer = new FileReader(clientesBancoCentral);
-            br = new BufferedReader(leer);
-            while(br.ready()){
-                registro = br.readLine();
-                campos = registro.split(",");
-
-                if ( campos[1].equals(nombre_banco)){
-                    bic = campos[0].substring(3,14);
-                }
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-
-
-        return bic;
-    }
-
-    /*
-     * INTERFAZ
-     * Signatura: public String obtenerNombrePorBIC(String BIC)
-     * Comentario: devuelve el nombre de un banco dando su BIC
-     * Precondiciones: por referencia se pasa un string
-     * Entrada: String BIC
-     * Salida: String nombre
-     * Entrada/Salida:
-     * Postcondiciones: Asociado al nombre se devuelve un String
-     * */
-
-    public String obtenerNombrePorBIC(String bic){
-        File clientesBancoCentral = new File("./Files/BancoCentral/Clientes_BancoCentral.txt");
-        FileReader leer = null;
-        BufferedReader br = null;
-        String registro = " ";
-        String campos[] = null;
-        String nombre = " ";
-        try{
-            leer = new FileReader(clientesBancoCentral);
-            br = new BufferedReader(leer);
-            while(br.ready()){
-                registro = br.readLine();
-                campos = registro.split(",");
-
-                if ( campos[0].substring(3,14).equals(bic)){
-                    nombre = campos[1];
-                }
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-
-
-        return nombre;
-    }
-
-    /*
-     * INTERFAZ
-     * Signatura: public String obtenerNombreBancoComercialPorIBAN(String iban_cuenta)
-     * Comentario: devuelve el nombre de un banco dado el IBAN de una cuenta
-     * Precondiciones: por referencia se pasa un string
-     * Entrada: String iban_cuenta
-     * Salida: String nombre
-     * Entrada/Salida:
-     * Postcondiciones: Asociado al nombre se devuelve un String
-     * */
-    public String obtenerNombreBancoComercialPorIBAN(String iban_cuenta){
-
-        return obtenerNombrePorBIC(iban_cuenta.substring(3,14));
-    }
-
-    /* INTERFAZ
-     * Comentario: A partir de un IBAN, obtiene el BIC del banco comercial que gestiona la cuenta
-     * Prototipo: public String obtenerBICporIBAN(String IBAN)
-     * Entrada: Un String con el IBAN
-     * Precondiciones: No hay
-     * Salida: Un string con el BIC del banco que gestiona la cuenta
-     * Postcondiciones: Asociado al nombre devuelve un string con el BIC del banco que gestiona la cuenta
-     */
-    public String obtenerBICporIBAN(String IBAN)
-    {
-    	return IBAN.substring(3, 14);
-    }
     
     /* INTERFAZ
      * Comentario: Comprueba si un cliente (DNI) está registrado en un banco(BIC)
@@ -1027,15 +872,44 @@ public class GestionBancoComercial extends GestionBanco{
     }
     
     /* INTERFAZ
-     * Comentario: Obtiene el numero de cuenta de un IBAN
-     * Prototipo: public String obtenerNumCuentaPorIBAN(String IBAN)
-     * Entrada: Un String con el IBAN del que se quiere obtener su numero de cuenta
-     * Precondiciones: No hay
-     * Salida: Un String con el numero de cuenta del IBAN especificado
-     * Postcondiciones: Asociado al nombre devuelve un String con el numero de cuenta del IBAN especificado
-     */
-    public String obtenerNumCuentaPorIBAN(String IBAN)
-    {
-    	return IBAN.substring(14, 21);
-    }
+	 * Comentario: Accede al fichero de cuentas y busca una cuenta por su IBAN para leer sus datos
+	 * Prototipo: public String datosCuenta(String IBAN)
+	 * Precondiciones: No hay
+	 * Entrada: el IBAN de la cuenta.
+	 * Salida: un String con los datos de la cuenta
+	 * Postcondiciones: Asociado al nombre devuelve un String con los datos de la cuenta
+	 */
+	public String datosCuenta(String IBAN)
+	{
+		String cuenta = null;
+		String nombreBanco = this.obtenerNombreBancoComercialPorIBAN(IBAN);
+		File ficheroCuentas = new File("./Files/BancosComerciales/"+nombreBanco+"/Cuentas_"+nombreBanco+".txt");
+		FileReader fr = null;
+		BufferedReader br = null;
+		String registro;
+		String[] campos;
+		
+		try
+		{
+			fr = new FileReader(ficheroCuentas);
+			br = new BufferedReader(fr);
+			
+			while(br.ready())
+			{
+				//buscar la cuenta y guardarla en el String que se devuelve
+				registro = br.readLine();
+				campos = registro.split(",");
+				
+				if(campos[0].equals(IBAN))
+					cuenta = registro;
+			}
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+		//System.out.println("datosCuenta en resguardo");
+		
+		return cuenta;
+	}
 }
