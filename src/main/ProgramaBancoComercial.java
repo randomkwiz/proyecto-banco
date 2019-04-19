@@ -52,12 +52,13 @@
 
 package main;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 import gestion.GestionBancoCentral;
 import gestion.GestionBancoComercial;
-
+import utilidades.Utilidades;
 import utilidades.ValidacionesProgramaBancoComercial;
 
 public class ProgramaBancoComercial 
@@ -66,6 +67,7 @@ public class ProgramaBancoComercial
     {
     	Scanner teclado = new Scanner(System.in);
     	ValidacionesProgramaBancoComercial validaciones = new ValidacionesProgramaBancoComercial();
+    	Utilidades utils = new Utilidades();
     	double cantidad, ingresosMensuales;
     	int opcionElegida;
     	GestionBancoComercial gestionComercial = new GestionBancoComercial();
@@ -91,8 +93,9 @@ public class ProgramaBancoComercial
 		  			System.out.println("Cantidad: ");
 		  			cantidad = teclado.nextDouble();
 		  			
+		  			teclado.nextLine();
 		  			System.out.print("Concepto: ");
-		  			concepto = teclado.next();
+		  			concepto = teclado.nextLine();
 		  			
 		  			GregorianCalendar fechaActual = new GregorianCalendar();
 
@@ -101,13 +104,14 @@ public class ProgramaBancoComercial
 		  			break;
 		  		case 2: 
 		  			//ver datos de la cuenta en el banco central
-		  			System.out.println(gestionCentral.datosCuenta(IBAN));
+		  			utils.imprimirDatosCuenta(gestionCentral.datosCuenta(IBAN));		//TODO Estaría bien hacerle un pretty print en la clase de utilidad a este metodo
 		  			break;
 		  		case 3:
 		  			//buscar movimientos por fecha de la cuenta en el banco central
 		  			fecha = validaciones.leerYValidarFecha();
 		  			
-		  			gestionCentral.mostrarMovimientosPorFecha(fecha, IBAN);
+		  			System.out.println("Movimientos del " + fecha.getTime());
+		  			utils.imprimirMovimientos(gestionCentral.buscarMovimientosPorFecha(IBAN, fecha.get(Calendar.DAY_OF_MONTH), fecha.get(Calendar.MONTH), fecha.get(Calendar.YEAR)));		//TODO posible pretty print
 		  			break;
 		  		case 4: 
 		  			//cliente nuevo
@@ -123,7 +127,7 @@ public class ProgramaBancoComercial
 		  			break;
 		  		case 5: 
 		  			//gestionar una cuenta determinada
-		  			break;
+		  			break;	//TODO Modulo de gestionar una cuenta determinada
     		}
 	  		
 	  		//Mostrar menu y validar opcion elegida

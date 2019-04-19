@@ -19,11 +19,6 @@ public class GestionBancoCentralTest
 		
 		System.out.println("-------------------------------------------");
 		
-		System.out.println("gestion.mostrarMovimientosPorFecha(fechaActual, \"ESPINGDESMMXXX14XXXXXXX\"):");
-		gestion.mostrarMovimientosPorFecha(new GregorianCalendar(), "ESPINGDESMMXXX14XXXXXXX");
-		
-		System.out.println("-------------------------------------------");
-		
 		System.out.println("gestion.obtenerBICporIBAN(\"ESPCAIXESBBXXX12XXXXXXX\"): " + gestion.obtenerBICporIBAN("ESPCAIXESBBXXX12XXXXXXX"));
 		
 		System.out.println("gestion.obtenerNombreBancoComercialPorIBAN(\"ESPCAIXESBBXXX12XXXXXXX\"): " + gestion.obtenerNombreBancoComercialPorIBAN("ESPCAIXESBBXXX12XXXXXXX"));

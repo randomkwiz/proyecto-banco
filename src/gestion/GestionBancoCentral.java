@@ -156,19 +156,6 @@ public class GestionBancoCentral extends GestionBanco
 	}
 	
 	/* INTERFAZ
-	 * Comentario: muestra los movimientos de una cuenta en una determinada fecha
-	 * Prototipo: public void mostrarMovmientosPorFecha(GregorianCalendar fecha, String IBAN)
-	 * Precondiciones: No hay
-	 * Entrada: un GregorianCalendar con la fecha y un String con el IBAN de la cuenta
-	 * Salida: No hay.
-	 * Postcondiciones: No hay. solo imprime en pantalla.
-	 */
-	public void mostrarMovimientosPorFecha(GregorianCalendar fecha, String IBAN)
-	{
-		System.out.println("mostrarMovimientosPorFecha en resguardo");
-	}
-	
-	/* INTERFAZ
 	 * Comentario: Comprueba si existe un cliente(BIC) registrado en el banco central
 	 * Prototipo: public boolean BICRegistrado(String BIC)
 	 * Entrada: un String con el BIC del clente a comprobar
@@ -588,5 +575,40 @@ public class GestionBancoCentral extends GestionBanco
         }//cierra el if
     }
     
+    /*
+     * INTERFAZ
+     * Signatura: public List<String> ultimosDiezMovimientos(String iban_cuenta)
+     * Comentario: devuelve los ultimos diez movimientos de la cuenta
+     * Precondiciones: Se pasa un iban
+     * Entrada: String iban
+     * Salida: una lista de String
+     * Entrada/Salida:
+     * Postcondiciones: asociado al nombre devuelve una lista de String
+     * */
+    public List<String> ultimosDiezMovimientos(String iban_cuenta){
+        String nombre_banco = obtenerNombreBancoComercialPorIBAN(iban_cuenta);
+        File f_cuentas = new File("./Files/BancoCentral/MovimientosCuentas/Movimientos_" + iban_cuenta + ".txt");
+        FileReader fr = null;
+        BufferedReader br = null;
+        List<String> registros = new ArrayList<String>();
+        String registro = " ";
+        int lineas=0;
+
+
+            if (f_cuentas.exists()){
+                try {
+                    fr = new FileReader(f_cuentas);
+                    br = new BufferedReader(fr);
+                    while (br.ready() && lineas < 10) {
+                        registro = br.readLine();
+                        registros.add(registro);
+                        lineas++;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return registros;
+    }
     
 }

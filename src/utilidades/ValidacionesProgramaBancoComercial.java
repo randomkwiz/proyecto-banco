@@ -107,10 +107,10 @@ public class ValidacionesProgramaBancoComercial
 		dia = teclado.nextInt();
 		
 		System.out.print("Mes: ");
-		dia = teclado.nextInt();
+		mes = teclado.nextInt();
 		
 		System.out.print("Anho: ");
-		dia = teclado.nextInt();
+		anho = teclado.nextInt();
 		
 		return new GregorianCalendar(anho, mes, dia);
 	}
