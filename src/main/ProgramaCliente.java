@@ -22,19 +22,25 @@ package main;
 
 import gestion.GestionBancoComercial;
 import resguardos.ResguardoGestionBancoComercial;
+import utilidades.Utilidades;
 import utilidades.ValidacionProgramaCliente;
 
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 public class ProgramaCliente {
     public static void main(String[] args) {
         ValidacionProgramaCliente validar = new ValidacionProgramaCliente();
         ResguardoGestionBancoComercial resguardo = new ResguardoGestionBancoComercial();
+        Utilidades utilidad = new Utilidades();
         GestionBancoComercial gestion = new GestionBancoComercial();
         GregorianCalendar fecha = null;
-        int opcion;
+        int opcion, dia, mes, anyo;
         double cantidad;
         String iban_cuenta, iban_destino,concepto;
+        List<String> movimientos = new ArrayList<String>();
+
         //pedirValidarInicioSesion
         iban_cuenta = validar.inicioSesion();
         do{
@@ -54,14 +60,39 @@ public class ProgramaCliente {
                 case 2:
                     //ver datos de la cuenta propia
                     System.out.println("Últimos diez movimientos de la cuenta:");
-                    gestion.imprimirUltimosDiezMovimientos(iban_cuenta);
+                    gestion.ordenarMovimientosPorFecha(iban_cuenta);
+                    utilidad.imprimirMovimientos(gestion.ultimosDiezMovimientos(iban_cuenta));
 
                     break;
                 case 3:
                     //buscar movimientos
+                    dia = validar.dia();
+                    mes = validar.mes();
+                    anyo = validar.anyo();
+                    if(mes == 0 && dia == 0){
+                       movimientos = gestion.buscarMovimientosPorAnyo(iban_cuenta,anyo);
+                    }else if (mes != 0 && dia == 0){
+                        movimientos = gestion.buscarMovimientosPorMesYAnyo(iban_cuenta, mes,anyo);
+                    }else{
+                        movimientos = gestion.buscarMovimientosPorDiaMesYAnyo(iban_cuenta,dia,mes,anyo);
+                    }
+
+                    if(movimientos.size() > 0 ){
+                        utilidad.imprimirMovimientos(movimientos);
+                    }else{
+                        System.out.println("No existen movimientos con esas características.");
+                    }
                     break;
                 case 4:
                     //cancelar cuenta
+                    if(validar.borrarCuenta()){
+                        gestion.marcarCuentaComoBorrada(iban_cuenta);
+                        System.out.println("Su cuenta ha sido borrada.");
+                        System.out.println("Se le forzará el cierre de sesión.");
+                        opcion = 0;
+                    }else{
+                        System.out.println("No se borrará su cuenta.");
+                    }
                     break;
 
             }
