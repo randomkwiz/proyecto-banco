@@ -37,15 +37,13 @@ public class ValidacionProgramaCliente {
         String dni, iban_cuenta;
     do {
         System.out.println("Inicio de sesión: ");
-        do {
-            System.out.println("Introduce el IBAN de la cuenta: ");
-            iban_cuenta = sc.next().toUpperCase();
-        } while (!gbc.isIBANvalido(iban_cuenta));
+        System.out.println("Introduce el IBAN de la cuenta:");
+        iban_cuenta = this.iban();
 
         do {
             System.out.println("Introduce el DNI asociado a la cuenta: ");
             dni = sc.next().toUpperCase();
-        } while (!gbc.isDNIvalido(gbc.obtenerNombreBancoComercialPorIBAN(iban_cuenta), dni));
+        } while (!gbc.DNIRegistrado(dni,gbc.obtenerBICporIBAN(iban_cuenta)));
 
     }while (!gbc.isPropietario(dni,iban_cuenta));
         System.out.println("Sesión iniciada correctamente");
@@ -69,9 +67,9 @@ public class ValidacionProgramaCliente {
         GestionBancoComercial gbc = new GestionBancoComercial();
         String iban_cuenta;
             do {
-                System.out.println("IBAN de la cuenta destino: ");
+                System.out.println("IBAN: ");
                 iban_cuenta = sc.next().toUpperCase();
-            } while (!gbc.isIBANvalido(iban_cuenta));
+            } while (!gbc.isIBANvalido(iban_cuenta) || gbc.isCuentaBorrada(iban_cuenta));
 
         return iban_cuenta;
     }
@@ -115,5 +113,90 @@ public class ValidacionProgramaCliente {
 
         return cantidad;
     }
+
+    /*
+     * INTERFAZ
+     * Signatura: public int anyo()
+     * Comentario: pide y valida un año
+     * Precondiciones:
+     * Entradas:
+     * Salidas: int
+     * Postcondiciones: asociado al nombre se devuelve un año
+     * */
+    public int anyo(){
+        Scanner sc = new Scanner(System.in);
+        int anyo_buscado = 1582;
+        do {
+            System.out.println("Introduce el año de el o los movimiento(s) a buscar: ");
+            anyo_buscado = sc.nextInt();
+        }while(anyo_buscado < 1582);
+
+        return anyo_buscado;
+    }
+
+    /*
+     * INTERFAZ
+     * Signatura: public int mes()
+     * Comentario: pide y valida un mes. El mes 0 significa que el usuario no desea tener en cuenta el mes en la búsqueda.
+     * Precondiciones:
+     * Entradas:
+     * Salidas: int
+     * Postcondiciones: asociado al nombre se devuelve un mes
+     * */
+    public int mes(){
+        Scanner sc = new Scanner(System.in);
+        int mes_buscado ;
+        do {
+            System.out.println("Introduce el mes de el o los movimiento(s) a buscar. Escribe 0 si no deseas tener en cuenta el mes: ");
+            mes_buscado = sc.nextInt();
+        }while(mes_buscado < 0 || mes_buscado > 12);
+
+        return mes_buscado;
+    }
+
+    /*
+     * INTERFAZ
+     * Signatura: public int dia()
+     * Comentario: pide y valida un dia. El dia 0 significa que el usuario no desea tener en cuenta el dia en la búsqueda.
+     * Precondiciones:
+     * Entradas:
+     * Salidas: int
+     * Postcondiciones: asociado al nombre se devuelve un dia
+     * */
+    public int dia(){
+        Scanner sc = new Scanner(System.in);
+        int dia_buscado ;
+        do {
+            System.out.println("Introduce el dia de el o los movimiento(s) a buscar. Escribe 0 si no deseas tener en cuenta el dia: ");
+            dia_buscado = sc.nextInt();
+        }while(dia_buscado < 0 || dia_buscado > 31);
+
+        return dia_buscado;
+    }
+
+    /*
+     * INTERFAZ
+     * Signatura: public boolean borrarCuenta()
+     * Comentario: pide y valida si el usuario desea realmente eliminar su cuenta bancaria.
+     * Precondiciones:
+     * Entradas:
+     * Salidas: boolean
+     * Postcondiciones: asociado al nombre se devuelve un boolean que será true si el usuario efectivamente desea eliminar su cuenta y false si no
+     * */
+    public boolean borrarCuenta(){
+        Scanner sc = new Scanner(System.in);
+        boolean seguro = false;
+        String respuesta=" ";
+        do {
+            System.out.println("¿Estás seguro de que deseas eliminar tu cuenta bancaria? SI/NO");
+            respuesta = sc.nextLine().toUpperCase();
+        }while(!respuesta.equals("SI") && !respuesta.equals("NO"));
+
+        if (respuesta.equals("SI")){
+            seguro = true;
+        }
+        return seguro;
+    }
+
 
 }
