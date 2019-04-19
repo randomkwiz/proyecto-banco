@@ -94,13 +94,25 @@ public class crearFicheros {
         }
         //FIN fichero con datos del banco central
 
-        //Fichero del banco central que contiene las cuentas que gestiona (una cuenta por cada banco comercial)
+        //Fichero del banco central que contiene las cuentas que gestiona (una cuenta por cada banco comercial). Y fichero de cuentas borradas
 
         File listadoCuentas_BancoCentral = new File(carpetaBancoCentral, "Cuentas_BancoCentral.txt");
+        File listadoCuentasBorradas_BancoCentral = new File(carpetaBancoCentral, "CuentasBorradas_BancoCentral.txt");
         CuentaImpl cuentas[] = new CuentaImpl[3];
         cuentas[0] = new CuentaImpl("ESPCAIXESBBXXX0000000", 5000000.0);
         cuentas[1] = new CuentaImpl("ESPBSCHESMMXXX0000000", 5000000.0);
         cuentas[2] = new CuentaImpl("ESPINGDESMMXXX0000000", 5000000.0);
+        try {
+            if (listadoCuentasBorradas_BancoCentral.createNewFile()) {
+                System.out.println("El archivo "+listadoCuentasBorradas_BancoCentral.getName()+" fue creado exitosamente.");
+
+            }else{
+                System.out.println("Problemas al crear el archivo "+listadoCuentasBorradas_BancoCentral.getName()+" o bien el archivo ya existe.");
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
         try{
             escribir = new FileWriter(listadoCuentas_BancoCentral);
             bw = new BufferedWriter(escribir);
@@ -210,10 +222,11 @@ public class crearFicheros {
 
         //FIN
 
-        //Vamos a crear un archivo de cuentas en cada carpeta de cada banco comercial.
+        //Vamos a crear un archivo de cuentas en cada carpeta de cada banco comercial. Y otro de cuentas_borradas vacío
         String nombre_carpeta_banco_comercial[] = carpetaBancosComerciales.list();
         String bancoComercial=" ";
         File archivo_Cuentas_BancosComerciales = null;
+        File archivo_CuentasBorradas_BancosComerciales = null;
         File carpetaSuperior = null;
 
 
@@ -221,10 +234,16 @@ public class crearFicheros {
             try {
                 carpetaSuperior = new File(carpetaBancosComerciales, nombre_carpeta_banco_comercial[i]);
                 archivo_Cuentas_BancosComerciales = new File(carpetaSuperior, "Cuentas_" + nombre_carpeta_banco_comercial[i] + ".txt");
+                archivo_CuentasBorradas_BancosComerciales = new File(carpetaSuperior, "CuentasBorradas_" + nombre_carpeta_banco_comercial[i] + ".txt");
                 if (archivo_Cuentas_BancosComerciales.createNewFile()) {
                     System.out.println("Exito al crear " + archivo_Cuentas_BancosComerciales.getPath());
                 } else {
                     System.out.println("Error al crear " + archivo_Cuentas_BancosComerciales.getPath() + " o bien el archivo ya existe.");
+                }
+                if (archivo_CuentasBorradas_BancosComerciales.createNewFile()) {
+                    System.out.println("Exito al crear " + archivo_CuentasBorradas_BancosComerciales.getPath());
+                } else {
+                    System.out.println("Error al crear " + archivo_CuentasBorradas_BancosComerciales.getPath() + " o bien el archivo ya existe.");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -295,7 +314,7 @@ public class crearFicheros {
                     campos = registro.split(",");
 
                     if ( campos[1].equals(carpetaSuperior.getName())){
-                        bic = campos[0].substring(3,13);
+                        bic = campos[0].substring(3,14);
                     }
                 }
             }catch (IOException e){
