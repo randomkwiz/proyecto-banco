@@ -2,6 +2,8 @@ package tests;
 
 import gestion.GestionBancoComercial;
 
+import java.util.GregorianCalendar;
+
 public class GestionBancoComercialTest {
     public static void main(String[] args) {
         GestionBancoComercial gestion = new GestionBancoComercial();
@@ -41,9 +43,41 @@ public class GestionBancoComercialTest {
         //gestion.imprimirUltimosDiezMovimientos("ESPCAIXESBBXXX0000001");
         
         //System.out.println(gestion.DNIRegistrado("98835488-C", "CAIXESBBXX"));
-        String IBAN = gestion.insertarCliente("CAIXESBBXXX", "30216092-X", 415.23);
-        System.out.println(IBAN);
-        
-        //System.out.println(gestion.obtenerNumCuentaPorIBAN("ESPCAIXESBBXXX0000001"));
+        //String IBAN = gestion.insertarCliente("CAIXESBBXXX", "30216092-X", 415.23);
+        //System.out.println(IBAN);
+       /*
+        System.out.println(gestion.obtenerNumCuentaPorIBAN("ESPCAIXESBBXXX0000001"));
+        System.out.println(gestion.obtenerNombreBancoComercialPorIBAN("ESPCAIXESBBXXX0000001"));
+        System.out.println(gestion.obtenerNombrePorBIC(gestion.obtenerBICporIBAN("ESPCAIXESBBXXX0000001")));
+        System.out.println(gestion.obtenerNumCuentaPorIBAN("ESPCAIXESBBXXX0000001"));
+        System.out.println(gestion.obtenerNombrePorBIC("CAIXESBBXXX"));
+
+        */
+       //gestion.ordenarMovimientosPorFecha("ESPCAIXESBBXXX0000001");
+
+/*
+        for(String element: gestion.buscarMovimientosPorAnyo("ESPCAIXESBBXXX0000001",2017)){
+            System.out.println(element);
+        }
+
+        for(String element: gestion.buscarMovimientosPorDiaMesYAnyo("ESPCAIXESBBXXX0000001",19,4,2019)){
+            System.out.println(element);
+        }
+
+ */
+/*
+        for(String element: gestion.buscarMovimientosPorMesYAnyo("ESPCAIXESBBXXX0000001",4,2017)){
+            System.out.println(element);
+        }
+*/
+/*
+        System.out.println(gestion.obtenerBICporIBAN("ESPCAIXESBBXXX0000001"));
+        System.out.println(gestion.obtenerNombrePorBIC("CAIXESBBXXX"));
+ */
+        //gestion.marcarCuentaComoBorrada("ESPBSCHESMMXXX0000001");
+        //gestion.marcarCuentaComoBorrada("ESPBSCHESMMXXX0000002");
+        gestion.eliminarCuentasBorradasDefinitivamente("BSCHESMMXXX");
+
+
     }
 }
