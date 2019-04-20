@@ -122,13 +122,13 @@ public abstract class GestionBanco {
         return nombre;
     }
     
-    public abstract void insertarMovimientoEnFicheroMovimientos(String IBAN,boolean isIngresoOrRetirada, String concepto, double cantidad, GregorianCalendar fecha);
-	public abstract void modificarSaldoEnFicheroCuentas(String IBAN, boolean sumaOresta,double cantidad);
+    public abstract boolean insertarMovimientoEnFicheroMovimientos(String IBAN,boolean isIngresoOrRetirada, String concepto, double cantidad, GregorianCalendar fecha);
+	public abstract boolean modificarSaldoEnFicheroCuentas(String IBAN, boolean sumaOresta,double cantidad);
     public abstract String datosCuenta(String IBAN);
     public abstract List<String> buscarMovimientosPorFecha(String IBAN, int anyo);
     public abstract List<String> buscarMovimientosPorFecha(String IBAN, int mes, int anyo);
     public abstract List<String> buscarMovimientosPorFecha(String IBAN, int dia, int mes, int anyo);
-    public abstract void marcarCuentaComoBorrada(String iban_cuenta);
+    public abstract boolean marcarCuentaComoBorrada(String iban_cuenta);
     public abstract boolean isCuentaBorrada(String iban);
 	
     /* INTERFAZ
@@ -140,9 +140,17 @@ public abstract class GestionBanco {
      * Entrada/Salida:
      * Postcondiciones: Se modificarán los ficheros de Cuentas modificando el saldo y de movimientos, añadiendo el movimiento correspondiente.
      * */
-	public void ingresarDinero(String IBAN,String concepto, double cantidad, GregorianCalendar fecha){
-        insertarMovimientoEnFicheroMovimientos(IBAN, true, concepto, cantidad, fecha);
-        modificarSaldoEnFicheroCuentas(IBAN, true, cantidad);
+	public boolean ingresarDinero(String IBAN,String concepto, double cantidad, GregorianCalendar fecha){
+		
+		boolean ingresado = false;
+        
+		boolean insertado = insertarMovimientoEnFicheroMovimientos(IBAN, true, concepto, cantidad, fecha);
+        boolean modificado = modificarSaldoEnFicheroCuentas(IBAN, true, cantidad);
+        
+        if(insertado && modificado)
+        	ingresado = true;
+        
+        return ingresado;
 
 	}
 	
@@ -156,9 +164,17 @@ public abstract class GestionBanco {
      * Entrada/Salida:
      * Postcondiciones: Se modificarán los ficheros de cuentas y de movimientos correspondientes.
      * */
-	public void realizarMovimiento(String IBANOrigen,String IBANDestino, String concepto,double cantidad, GregorianCalendar fecha){
-        sacarDinero(IBANOrigen, concepto, cantidad, fecha);
-        ingresarDinero(IBANDestino, concepto, cantidad, fecha);
+	public boolean realizarMovimiento(String IBANOrigen,String IBANDestino, String concepto,double cantidad, GregorianCalendar fecha){
+        
+		boolean movimientoRealizado = false;
+		
+		boolean sacado = sacarDinero(IBANOrigen, concepto, cantidad, fecha);
+        boolean ingresado = ingresarDinero(IBANDestino, concepto, cantidad, fecha);
+        
+        if(sacado && ingresado)
+        	movimientoRealizado = true;
+        
+        return movimientoRealizado;
     }
 	
 	/*INTERFAZ
@@ -170,10 +186,19 @@ public abstract class GestionBanco {
      * Entrada/Salida:
      * Postcondiciones: Se modificarán los ficheros de Cuentas modificando el saldo y de movimientos, añadiendo el movimiento correspondiente.
      * */
-	public void sacarDinero(String IBAN,String concepto, double cantidad, GregorianCalendar fecha){
-        insertarMovimientoEnFicheroMovimientos(IBAN, false, concepto, cantidad, fecha);
-        modificarSaldoEnFicheroCuentas(IBAN, false, cantidad);
+	public boolean sacarDinero(String IBAN,String concepto, double cantidad, GregorianCalendar fecha){
+		
+		boolean dineroSacado = false;
+		
+        boolean movimientoInsertado = insertarMovimientoEnFicheroMovimientos(IBAN, false, concepto, cantidad, fecha);
+        boolean modificado = modificarSaldoEnFicheroCuentas(IBAN, false, cantidad);
 
+        if (movimientoInsertado && modificado)
+        {
+        	dineroSacado = true;
+        }
+        
+        return dineroSacado;
     }
 
 	

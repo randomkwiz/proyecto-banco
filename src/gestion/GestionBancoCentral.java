@@ -23,7 +23,7 @@ public class GestionBancoCentral extends GestionBanco
      * Entrada/Salida:
      * Postcondiciones: Se modifica el fichero de Cuentas y se actualiza el saldo pertinente.
      * */
-	public void modificarSaldoEnFicheroCuentas(String IBAN, boolean sumaOresta,double cantidad)
+	public boolean modificarSaldoEnFicheroCuentas(String IBAN, boolean sumaOresta,double cantidad)
 	{
 		//String nombreBanco = obtenerNombreBancoComercialPorIBAN(IBAN);
 		
@@ -35,6 +35,7 @@ public class GestionBancoCentral extends GestionBanco
         String campos[] = null;
         List<String> registros = new ArrayList<String>();
         String registro = " ";
+        boolean saldoModificado = false;
 
         try 
         {
@@ -49,9 +50,15 @@ public class GestionBancoCentral extends GestionBanco
                 if(campos[0].equals(IBAN))
                 {
                     if(sumaOresta)
+                    {
                         registro = registro.replace(campos[1], Double.toString(cantidad+Double.parseDouble(campos[1])));
+                   		saldoModificado = true;
+                    }
                     else
+                    {
                         registro = registro.replace(campos[1], Double.toString(Double.parseDouble(campos[1])-cantidad));
+                        saldoModificado = true;
+                    }
                 }
 
                 registros.add(registro);
@@ -72,6 +79,8 @@ public class GestionBancoCentral extends GestionBanco
         {
         	e.printStackTrace();
         }
+        
+        return saldoModificado;
 	}
 	
 	/* INTERFAZ
@@ -84,7 +93,7 @@ public class GestionBancoCentral extends GestionBanco
      * Entrada/Salida:
      * Postcondiciones: Se modifica el fichero de movimientos de cuentas, añadiendo un movimiento nuevo.
      * */
-	public void insertarMovimientoEnFicheroMovimientos(String IBAN,boolean isIngresoOrRetirada, String concepto, double cantidad, GregorianCalendar fecha)
+	public boolean insertarMovimientoEnFicheroMovimientos(String IBAN,boolean isIngresoOrRetirada, String concepto, double cantidad, GregorianCalendar fecha)
 	{
 		File ficheroCuentas = new File ("./Files/BancoCentral/MovimientosCuentas/Movimientos_"+IBAN+".txt");
         FileWriter fw = null;
@@ -93,6 +102,7 @@ public class GestionBancoCentral extends GestionBanco
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         sdf.setCalendar(fecha);
         String fechaformateada = sdf.format(fecha.getTime());
+        boolean movimientoInsertado = false;
         
         try 
         {
@@ -104,6 +114,7 @@ public class GestionBancoCentral extends GestionBanco
             
             bw.write(concepto+","+signo+Double.toString(cantidad)+","+fechaformateada);
             bw.newLine();
+            movimientoInsertado = true;
             bw.close();
             
         }
@@ -111,7 +122,8 @@ public class GestionBancoCentral extends GestionBanco
         {
         	e.printStackTrace();
         }
-
+        
+        return movimientoInsertado;
 	}
 	
 	/* INTERFAZ
@@ -407,22 +419,26 @@ public class GestionBancoCentral extends GestionBanco
      * Entrada/Salida:
      * Postcondiciones: modifica el fichero de cuentas borradas
      * */
-    public void marcarCuentaComoBorrada(String iban_cuenta){
+    public boolean marcarCuentaComoBorrada(String iban_cuenta){
         File f_cuentasBorradas = new File("./Files/BancoCentral/CuentasBorradas_BancoCentral.txt");
         FileWriter fw = null;
         BufferedWriter bw = null;
-
+        boolean borrada = false;
+        
         try{
             fw = new FileWriter(f_cuentasBorradas,true);
             bw = new BufferedWriter(fw);
 
             bw.write(iban_cuenta);
             bw.newLine();
+            borrada = true;
 
             bw.close();
         }catch (IOException e){
             e.printStackTrace();
         }
+        
+        return borrada;
     }
     
     /*

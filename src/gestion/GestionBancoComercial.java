@@ -56,10 +56,11 @@ public class GestionBancoComercial extends GestionBanco{
      * Entrada/Salida:
      * Postcondiciones: modifica el fichero de cuentas borradas
      * */
-    public void marcarCuentaComoBorrada(String iban_cuenta){
+    public boolean marcarCuentaComoBorrada(String iban_cuenta){
         File f_cuentasBorradas = new File("./Files/BancosComerciales/"+obtenerNombreBancoComercialPorIBAN(iban_cuenta)+"/CuentasBorradas_"+obtenerNombreBancoComercialPorIBAN(iban_cuenta)+".txt");
         FileWriter fw = null;
         BufferedWriter bw = null;
+        boolean borrada = false;
 
         try{
             fw = new FileWriter(f_cuentasBorradas,true);
@@ -67,11 +68,14 @@ public class GestionBancoComercial extends GestionBanco{
 
             bw.write(iban_cuenta);
             bw.newLine();
+            borrada = true;
 
             bw.close();
         }catch (IOException e){
             e.printStackTrace();
         }
+        
+        return borrada;
     }
 
     /*
@@ -85,7 +89,7 @@ public class GestionBancoComercial extends GestionBanco{
      * Entrada/Salida:
      * Postcondiciones: modifica varios ficheros
      * */
-    public void eliminarCuentasBorradasDefinitivamente(String bic) {
+    public boolean eliminarCuentasBorradasDefinitivamente(String bic) {
         File carpetaBanco = new File("./Files/BancosComerciales/" + obtenerNombrePorBIC(bic));
         File cuentas = new File(carpetaBanco, "Cuentas_" + obtenerNombrePorBIC(bic) + ".txt");
         File clientes = new File(carpetaBanco, "Clientes_" + obtenerNombrePorBIC(bic) + ".txt");
@@ -101,6 +105,10 @@ public class GestionBancoComercial extends GestionBanco{
         BufferedWriter bw = null;
         String registro = " ";
         String dniABorrar = " ";
+        boolean archivoMovimientosBorrado = false;
+        boolean borrada = false;
+        boolean clienteBorrado = false;
+        boolean cuentaBorrada = false;
 
         if(carpetaBanco.exists() && cuentas.exists() && clientes.exists() && clientes_cuentas.exists() && cuentasBorradas.exists() && carpetaMovimientos.exists()){
         try {
@@ -138,6 +146,7 @@ public class GestionBancoComercial extends GestionBanco{
                     bw.write(element);
                     bw.newLine();
                 }
+                cuentaBorrada = true;
                 bw.close();
                 registrosMantenidos.clear();
             } catch (IOException e) {
@@ -196,6 +205,7 @@ public class GestionBancoComercial extends GestionBanco{
                     bw.write(element);
                     bw.newLine();
                 }
+                clienteBorrado = true;
                 bw.close();
                 registrosMantenidos.clear();
             } catch (IOException e) {
@@ -205,7 +215,7 @@ public class GestionBancoComercial extends GestionBanco{
             /*Borrar los ficheros de movimientos de las cuentas borradas*/
             for (int j = 0; j < archivoMovimientosCuenta.length; j++) {
                 if (archivoMovimientosCuenta[j].getName().split("_")[2].equals(cuentasABorrar.get(i)+".txt")) {
-                    archivoMovimientosCuenta[j].delete();
+                	archivoMovimientosBorrado = archivoMovimientosCuenta[j].delete();
                 }
             }
 
@@ -222,6 +232,11 @@ public class GestionBancoComercial extends GestionBanco{
         }
 
         }//cierra el if
+        
+        if(archivoMovimientosBorrado && clienteBorrado && cuentaBorrada)
+        	borrada = true;
+        
+        return borrada;
     }
 
 
@@ -641,7 +656,7 @@ public class GestionBancoComercial extends GestionBanco{
      * Entrada/Salida:
      * Postcondiciones: Se modifica el fichero de movimientos de cuentas, aÃ±adiendo un movimiento nuevo.
      * */
-    public void insertarMovimientoEnFicheroMovimientos(String ID_Cuenta,boolean isIngresoOrRetirada, String concepto, double cantidad,GregorianCalendar fecha){
+    public boolean insertarMovimientoEnFicheroMovimientos(String ID_Cuenta,boolean isIngresoOrRetirada, String concepto, double cantidad,GregorianCalendar fecha){
         String nombre_banco = obtenerNombreBancoComercialPorIBAN(ID_Cuenta);
         File ficheroCuentas = new File ("./Files/BancosComerciales/"+nombre_banco+"/Movimientos/Movimientos_Cuenta_"+ID_Cuenta+".txt");
         FileWriter fw = null;
@@ -650,6 +665,7 @@ public class GestionBancoComercial extends GestionBanco{
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         sdf.setCalendar(fecha);
         String fechaformateada = sdf.format(fecha.getTime());
+        boolean movimientoInsertado = false;
 
         try {
             fw = new FileWriter(ficheroCuentas,true);
@@ -659,10 +675,11 @@ public class GestionBancoComercial extends GestionBanco{
             }
             bw.write(concepto+","+signo+Double.toString(cantidad)+","+fechaformateada);
             bw.newLine();
+            movimientoInsertado = true;
             bw.close();
         }catch (IOException e){e.printStackTrace();}
 
-
+        return movimientoInsertado;
     }
 
 
@@ -676,7 +693,7 @@ public class GestionBancoComercial extends GestionBanco{
      * Entrada/Salida:
      * Postcondiciones: Se modifica el fichero de Cuentas y se actualiza el saldo pertinente.
      * */
-    public void modificarSaldoEnFicheroCuentas(String iban_cuenta, boolean sumaOresta,double cantidad){
+    public boolean modificarSaldoEnFicheroCuentas(String iban_cuenta, boolean sumaOresta,double cantidad){
         String nombre_banco = obtenerNombreBancoComercialPorIBAN(iban_cuenta);
         File ficheroCuentas = new File ("./Files/BancosComerciales/"+nombre_banco+"/Cuentas_"+nombre_banco+".txt");
         FileReader leer = null;
@@ -686,7 +703,7 @@ public class GestionBancoComercial extends GestionBanco{
         String campos[] = null;
         List<String> registros = new ArrayList<String>();   //toma ya usando arraylist Â¯\_(ãƒ„)_/Â¯
         String registro = " ";
-
+        boolean saldoModificado = false;
 
         try {
             leer = new FileReader(ficheroCuentas);
@@ -699,8 +716,10 @@ public class GestionBancoComercial extends GestionBanco{
                 if(campos[0].equals(iban_cuenta)){
                     if(sumaOresta){
                         registro = registro.replace(campos[1], Double.toString(cantidad+Double.parseDouble(campos[1])));
+                        saldoModificado = true;
                     }else{
                         registro = registro.replace(campos[1], Double.toString(Double.parseDouble(campos[1])-cantidad));
+                        saldoModificado = true;
                     }
 
                 }
@@ -722,7 +741,7 @@ public class GestionBancoComercial extends GestionBanco{
 
         }catch (IOException e){e.printStackTrace();}
 
-
+        return saldoModificado;
     }
     
     /* INTERFAZ
@@ -751,10 +770,13 @@ public class GestionBancoComercial extends GestionBanco{
             while(br.ready())
             {
                 registro = br.readLine();
-                campos = registro.split(",");
                 
-                if(campos[1].equals(DNI))
-                	registrado = true;
+                if(registro != null)
+                {
+	                campos = registro.split(",");
+	                if(campos[1].equals(DNI))
+	                		registrado = true;
+                }
             }
             
             br.close();
@@ -804,7 +826,7 @@ public class GestionBancoComercial extends GestionBanco{
     			fw = new FileWriter(ficheroClientes, true);
     			bw = new BufferedWriter(fw);
     			
-    			bw.write("\n" + new ClienteImpl(BIC, DNI,ingresosMensuales).toString());
+    			bw.write(new ClienteImpl(BIC, DNI,ingresosMensuales).toString());
     			
     			bw.close();
     		}
@@ -828,9 +850,13 @@ public class GestionBancoComercial extends GestionBanco{
     				if(br.ready() == false)
     				{
     					campos = registro.split(",");
-    					IBANUltimaCuenta = campos[0];
+    					if(campos != null)
+    						IBANUltimaCuenta = campos[0];
     				}
     			}
+    			
+    			if(br.ready() == false)
+    				IBANUltimaCuenta = "ESP" + BIC + "0000000";
     			
     			br.close();
     			fr.close();
@@ -858,7 +884,7 @@ public class GestionBancoComercial extends GestionBanco{
     			fw = new FileWriter(ficheroCuentas, true);
     			bw = new BufferedWriter(fw);
     			
-    			bw.write("\n" + cuenta.toString());
+    			bw.write(cuenta.toString());
     			
     			bw.close();
     		}
