@@ -182,7 +182,7 @@ public class ValidacionesProgramaBancoComercial
 			IBAN = teclado.next();
 			BICInsertado = gestion.obtenerBICporIBAN(IBAN);
 			
-		}while(gestion.isIBANvalido(IBAN) == false || BICInsertado.equals(BIC) == false);
+		}while(gestion.isIBANvalido(IBAN) == false || BICInsertado.equals(BIC) == false || gestion.isCuentaBorrada(IBAN));
 		
 		System.out.println("Cuenta de cliente " + IBAN + " correcta.");
 		

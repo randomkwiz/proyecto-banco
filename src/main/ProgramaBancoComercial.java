@@ -66,6 +66,7 @@ public class ProgramaBancoComercial
     	GregorianCalendar fecha, fechaActual;
     	int dia, mes, anyo;
     	char respuestaBorrarCuentas;
+    	boolean cuentaBorrada, borradoDefinitivo, ingresado;
     	
 	 	//Leer y validar inicio de sesion
     	IBAN = validaciones.iniciarSesion();
@@ -103,7 +104,7 @@ public class ProgramaBancoComercial
 		  			fecha = validaciones.leerYValidarFecha();
 		  			
 		  			System.out.println("Movimientos del " + fecha.getTime());
-		  			utils.imprimirMovimientos(gestionCentral.buscarMovimientosPorFecha(IBAN, fecha.get(Calendar.DAY_OF_MONTH), fecha.get(Calendar.MONTH), fecha.get(Calendar.YEAR)));		//TODO posible pretty print
+		  			utils.imprimirMovimientos(gestionCentral.buscarMovimientosPorFecha(IBAN, fecha.get(Calendar.DAY_OF_MONTH), fecha.get(Calendar.MONTH), fecha.get(Calendar.YEAR)));
 		  			break;
 		  		case 4: 
 		  			//cliente nuevo
@@ -152,7 +153,11 @@ public class ProgramaBancoComercial
 	  			  							//Insertar dinero
 	  			  							cantidad = validaciones.leerYValidarCantidadInsertar();
 	  			  							fechaActual = new GregorianCalendar();
-	  			  							gestionComercial.ingresarDinero(IBANCliente, "Ingreso" , cantidad, fechaActual);  //TODO Algun mensaje de ayuda al usuario para que sepa si se realizó bien la operación o no
+	  			  							ingresado = gestionComercial.ingresarDinero(IBANCliente, "Ingreso" , cantidad, fechaActual);
+	  			  							if(ingresado)
+	  			  								System.out.println("Dinero ingresado con exito");
+	  			  							else
+	  			  								System.out.println("No se pudo ingresar el dinero intentelo de nuevo");
 	  			  							break;
 	  			  						case 2:
 	  			  							//Sacar dinero
@@ -168,7 +173,14 @@ public class ProgramaBancoComercial
 	  			  				
 	  			  			case 4: 
 	  			  				//Eliminar cuenta
-	  			  				gestionComercial.marcarCuentaComoBorrada(IBANCliente);	//TODO Algun mensaje de ayuda al usuario para que sepa si se realizó bien la operación o n
+	  			  				cuentaBorrada = gestionComercial.marcarCuentaComoBorrada(IBANCliente);	//TODO Algun mensaje de ayuda al usuario para que sepa si se realizó bien la operación o no
+	  			  				if(cuentaBorrada)
+	  			  				{
+	  			  					System.out.println("Cuenta con IBAN " + IBANCliente + " marcada como borrada");
+	  			  				}
+	  			  				else
+	  			  					System.out.println("La cuenta no pudo marcarse como borrada, vuelva a intentarlo");
+	  			  				
 	  			  				break;
 	  			  				
 		  				}
@@ -186,7 +198,13 @@ public class ProgramaBancoComercial
 	  				}while(respuestaBorrarCuentas != 'S' && respuestaBorrarCuentas != 'N');
 	  				
 	  				if(respuestaBorrarCuentas == 'S')
-	  					gestionComercial.eliminarCuentasBorradasDefinitivamente(BIC); //TODO algun mensaje de ayuda al usuario para que sepa si se borró bien o no
+	  				{
+	  					borradoDefinitivo = gestionComercial.eliminarCuentasBorradasDefinitivamente(BIC); //TODO algun mensaje de ayuda al usuario para que sepa si se borró bien o no
+	  					if(borradoDefinitivo)
+	  						System.out.println("Las cuentas del banco han sido borradas permanentemente");
+	  					else
+	  						System.out.println("No se ha podido borrar permanententemente las cuentas, intentelo de nuevo");
+	  				}
 	  				break;
     		}
 	  		
