@@ -54,6 +54,7 @@ public class ValidacionesProgramaBancoComercial
 		System.out.println("3) Buscar movimientos de la cuenta en el banco central");
 		System.out.println("4) Cliente nuevo");
 		System.out.println("5) Gestionar una cuenta determinada");
+		System.out.println("6) Eliminar permanentemente las cuentas marcadas");
 		System.out.println("0) Salir del programa");
 		
 		do
@@ -158,5 +159,120 @@ public class ValidacionesProgramaBancoComercial
 		}while(ingresosMensuales < 0);
 		
 		return ingresosMensuales;
+	}
+	
+	/* INTERFAZ
+	 * Comentario: Lee y valida un IBAN de un banco comercial.
+	 * Prototipo: public void LeerYValidarIBANCliente()
+	 * Entrada: un String con el BIC del banco donde se quiere comprobar el IBAN
+	 * Precondiciones: el BIC debe ser de un banco existente
+	 * Salida: Un String con el IBAN de la cuenta
+	 * Postcondiciones: Asociado al nombre devuelve un String con el IBAN de la cuenta
+	 */
+	public String LeerYValidarIBANCliente(String BIC)
+	{
+		//GestionBancoCentral gestion = new GestionBancoCentral();
+		GestionBancoComercial gestion = new GestionBancoComercial();
+		Scanner teclado = new Scanner(System.in);
+		String IBAN, BICInsertado;
+		
+		do
+		{
+			System.out.print("IBAN Cliente: ");
+			IBAN = teclado.next();
+			BICInsertado = gestion.obtenerBICporIBAN(IBAN);
+			
+		}while(gestion.isIBANvalido(IBAN) == false || BICInsertado.equals(BIC) == false);
+		
+		System.out.println("Cuenta de cliente " + IBAN + " correcta.");
+		
+		return IBAN;
+	}
+	
+	/* INTERFAZ
+	 * Comentario: Lee y valida una cantidad de dinero a insertar en una cuenta cliente
+	 * Prototipo: public double leerYValidarCantidadInsertar()
+	 * Entrada: No hay
+	 * Precondiciones: No hay
+	 * Salida: Un double con la cantidad validad
+	 * Postcondiciones: Asociado al nombre devuelve un double con la cantidad de dinero a insertar validada
+	 */
+	public double leerYValidarCantidadInsertar()
+	{
+		double cantidad;
+		Scanner teclado = new Scanner(System.in);
+		
+		do
+		{
+			System.out.println("Introduce cantidad a insertar: ");
+			cantidad = teclado.nextDouble();
+		}while(cantidad <= 0);
+		
+		return cantidad;
+	}
+	
+	/* INTERFAZ
+	 * Comentario: Lee y valida una cantidad de dinero a sacar de una cuenta cliente
+	 * Prototipo: public double leerYValidarCantidadSacar(String IBAN)
+	 * Entrada: un String con el IBAN del cliente
+	 * Precondiciones: No hay
+	 * Salida: Un double con la cantidad validada
+	 * Postcondiciones: Asociado al nombre devuelve un double con la cantidad de dinero a sacar validada
+	 */
+	public double leerYValidarCantidadSacar(String IBAN)
+	{
+		double cantidad;
+		Scanner teclado = new Scanner(System.in);
+		
+		GestionBancoComercial gestion = new GestionBancoComercial();
+		String cuenta = gestion.datosCuenta(IBAN);
+		double saldo = Double.parseDouble(cuenta.split(",")[1]);
+		
+		do
+		{
+			System.out.println("Introduce cantidad a sacar: ");
+			cantidad = teclado.nextDouble();
+		}while(cantidad <= 0);
+		
+		return cantidad;
+	}
+	
+	public int leerYValidarOpcionModificarDinero()
+	{
+		int opcionModificarDinero;
+		Scanner teclado = new Scanner(System.in);
+		
+		System.out.println("1) Insertar dinero");
+		System.out.println("2) Sacar dinero");
+		System.out.println("0) Volver");
+	
+		do
+			{
+				System.out.println("Elige una opcion: ");
+				opcionModificarDinero = teclado.nextInt();
+			}while(opcionModificarDinero < 0 || opcionModificarDinero > 2);
+		
+		return opcionModificarDinero;
+	}
+	
+	public int mostrarMenuYValidarOpcionMenuCliente()
+	{
+		int opcionMenuCliente;
+		Scanner teclado = new Scanner(System.in);
+		
+			System.out.println("MENU Cliente");
+			System.out.println("1) Ver datos de la cuenta");
+			System.out.println("2) Ver movimientos de la cuenta");
+			System.out.println("3) Modificar dinero de la cuenta");
+			System.out.println("4) Eliminar cuenta");
+			System.out.println("0) Volver atras");
+			
+			do
+			{
+				System.out.println("Elige una opcion: ");
+				opcionMenuCliente = teclado.nextInt();
+			}while(opcionMenuCliente < 0 || opcionMenuCliente > 4);
+			
+		return opcionMenuCliente;
 	}
 }
