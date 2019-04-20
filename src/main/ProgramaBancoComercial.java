@@ -55,16 +55,15 @@ public class ProgramaBancoComercial
 {
 	public static void main(String[] args)
     {
-    	Scanner teclado = new Scanner(System.in);
+		Scanner teclado = new Scanner(System.in);
     	ValidacionesProgramaBancoComercial validaciones = new ValidacionesProgramaBancoComercial();
     	Utilidades utils = new Utilidades();
     	double cantidad, ingresosMensuales;
-    	int opcionElegida, opcion, opcionModificarDinero, opcionMenuCliente;
+    	int opcionElegida, opcionModificarDinero, opcionMenuCliente;
     	GestionBancoComercial gestionComercial = new GestionBancoComercial();
     	GestionBancoCentral gestionCentral = new GestionBancoCentral();
     	String cuentaDestino, IBAN, DNI, BIC, concepto, IBANNuevoCliente, IBANCliente;
     	GregorianCalendar fecha, fechaActual;
-    	int dia, mes, anyo;
     	char respuestaBorrarCuentas;
     	boolean cuentaBorrada, borradoDefinitivo, ingresado;
     	

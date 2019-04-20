@@ -1,7 +1,5 @@
 package clasesBasicas;
 
-import java.io.Serializable;
-
 import interfaces.Prestamo;
 
 /* ESTUDIO DE INTERFAZ
@@ -25,7 +23,7 @@ import interfaces.Prestamo;
  *	public double getMensualidad();
  */
 
-public class PrestamoImpl implements Prestamo, Cloneable, Serializable
+public class PrestamoImpl implements Prestamo, Cloneable
 {
 	private int ID;
 	private double cantidad;

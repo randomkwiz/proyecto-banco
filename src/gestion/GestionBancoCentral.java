@@ -602,7 +602,7 @@ public class GestionBancoCentral extends GestionBanco
      * Postcondiciones: asociado al nombre devuelve una lista de String
      * */
     public List<String> ultimosDiezMovimientos(String iban_cuenta){
-        String nombre_banco = obtenerNombreBancoComercialPorIBAN(iban_cuenta);
+    	
         File f_cuentas = new File("./Files/BancoCentral/MovimientosCuentas/Movimientos_" + iban_cuenta + ".txt");
         FileReader fr = null;
         BufferedReader br = null;

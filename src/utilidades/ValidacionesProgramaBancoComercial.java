@@ -20,7 +20,7 @@ public class ValidacionesProgramaBancoComercial
 	{
 		GestionBancoCentral gestion = new GestionBancoCentral();
 		Scanner teclado = new Scanner(System.in);
-		String BIC, IBAN;
+		String IBAN;
 		
 		System.out.println("Iniciar sesion...");
 		

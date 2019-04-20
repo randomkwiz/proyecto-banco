@@ -2,8 +2,6 @@ package tests;
 
 import gestion.GestionBancoComercial;
 
-import java.util.GregorianCalendar;
-
 public class GestionBancoComercialTest {
     public static void main(String[] args) {
         GestionBancoComercial gestion = new GestionBancoComercial();

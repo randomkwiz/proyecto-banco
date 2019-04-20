@@ -439,7 +439,7 @@ public class crearFicheros {
 
         File archivoCuentas_BancoComercial = null;
         File[] listadoFilesEnCarpeta = carpetaBancosComerciales.listFiles();
-        File carpetaBanco[] = null;
+        //File carpetaBanco[] = null;
         iban_cuenta=" ";
         File carpetaMovimientos = null;
         File file_movimientos_iban = null;

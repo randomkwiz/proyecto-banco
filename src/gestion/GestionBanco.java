@@ -136,9 +136,11 @@ public abstract class GestionBanco {
      * Comentario: ingresa una cantidad dada de una cuenta
      * Precondiciones: Por valor se pasa una cantidad, por referencia la ID de una cuenta y el nombre del banco. Por valor se pasa dia, mes y año
      * Entrada: String nombre_banco, String ID_Cuenta, double cantidad, int dia, int mes, int anyo
-     * Salida:
+     * Salida: Un boolean indiciando si se ha ingresado el dinero con exito o no
      * Entrada/Salida:
-     * Postcondiciones: Se modificarán los ficheros de Cuentas modificando el saldo y de movimientos, añadiendo el movimiento correspondiente.
+     * Postcondiciones: Asociado al nombre devuelve:
+     * 				-> true si se ha ingresado el dinero con exito, insertando el movimiento en el fichero de movimientos y modificando el saldo en el fichero de cuentas
+     * 				-> false si no se ha podido realizar con exito la operacion
      * */
 	public boolean ingresarDinero(String IBAN,String concepto, double cantidad, GregorianCalendar fecha){
 		
@@ -160,9 +162,11 @@ public abstract class GestionBanco {
      *              Llama a los métodos sacarDinero e ingresarDinero.
      * Precondiciones: Por referencia se pasan las ID de las cuentas y los nombres de los bancos de origen y destino, por valor se pasa la cantidad y dia mes y anyo. Tambien se pasa por referencia el concepto
      * Entrada: (String nombre_banco_origen,String cuenta_origen,String nombre_banco_destino, String cuenta_destino, String concepto,double cantidad, int dia, int mes, int anyo)
-     * Salida:
+     * Salida: Un boolean indicando si se ha realizado bien el movimiento o no
      * Entrada/Salida:
-     * Postcondiciones: Se modificarán los ficheros de cuentas y de movimientos correspondientes.
+     * Postcondiciones: Asociado al nombre devuelve:
+     * 					-> true si se ha realizado bien el movimiento
+     * 					-> false si no se ha realizado bien el movimiento
      * */
 	public boolean realizarMovimiento(String IBANOrigen,String IBANDestino, String concepto,double cantidad, GregorianCalendar fecha){
         
@@ -182,9 +186,11 @@ public abstract class GestionBanco {
      * Comentario: saca una cantidad dada de una cuenta
      * Precondiciones: Por valor se pasa una cantidad, por referencia la ID de una cuenta y el nombre del banco. Se pasa por valor dia mes y año
      * Entrada: String nombre_banco, String ID_Cuenta, double cantidad, int dia, int mes, int anyo
-     * Salida:
+     * Salida: Un boolean indicando si se ha sacado bien el dinero
      * Entrada/Salida:
-     * Postcondiciones: Se modificarán los ficheros de Cuentas modificando el saldo y de movimientos, añadiendo el movimiento correspondiente.
+     * Postcondiciones: Asociado al nombre devuelve:
+     * 					-> true si se ha sacado bien el dinero de la cuenta, insertando el movimiento en el fichero de movimientos y modificando el saldo en el fichero de cuentas
+     * 					-> false si no se ha podido realizar bien la operacion.
      * */
 	public boolean sacarDinero(String IBAN,String concepto, double cantidad, GregorianCalendar fecha){
 		

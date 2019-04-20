@@ -5,7 +5,7 @@
 * */
 package gestion;
 import java.io.*;
-import java.text.ParseException;
+//import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -585,7 +585,7 @@ public class GestionBancoComercial extends GestionBanco{
     public void ordenarMovimientosPorFecha(String iban){
         String nombre_banco = obtenerNombreBancoComercialPorIBAN(iban);
         File ficheroMovimientosCuenta = new File ("./Files/BancosComerciales/"+nombre_banco+"/Movimientos/Movimientos_Cuenta_"+iban+".txt");
-        File temp = new File ("./Files/BancosComerciales/"+nombre_banco+"/Movimientos/Movimientos_Cuenta_"+iban+"_temp.txt");
+        //File temp = new File ("./Files/BancosComerciales/"+nombre_banco+"/Movimientos/Movimientos_Cuenta_"+iban+"_temp.txt");
         FileReader fr = null;
         FileWriter fw = null;
         BufferedReader br = null;
