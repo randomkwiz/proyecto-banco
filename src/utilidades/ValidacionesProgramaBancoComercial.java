@@ -275,4 +275,19 @@ public class ValidacionesProgramaBancoComercial
 			
 		return opcionMenuCliente;
 	}
+	
+	public char leerYValidarBorrarCuentas()
+	{
+		char respuestaBorrarCuentas;
+		
+		Scanner teclado = new Scanner(System.in);
+		
+		do
+			{
+				System.out.println("Estas seguro que deseas borrar permanentemente todas las cuentas marcadas como borradas? (S/N): ");
+				respuestaBorrarCuentas = teclado.next().charAt(0);
+			}while(respuestaBorrarCuentas != 'S' && respuestaBorrarCuentas != 'N');
+		
+		return respuestaBorrarCuentas;
+	}
 }

@@ -1,7 +1,7 @@
 /* ANALISIS
  * 
- * Programa que podrá manejar un banco comercial para hacer distintas cosas, como realizar transferencia a otro banco,
- * ver la liquidez de su cuenta en el banco central, etc.
+ * Programa que podrá gestionar un banco comercial para hacer distintas cosas, como realizar transferencia a otro banco,
+ * ver el saldo de su cuenta en el banco central, etc.
  * 
  */
 
@@ -190,11 +190,9 @@ public class ProgramaBancoComercial
 		  			break;
 	  			case 6:
 	  				//Eliminar permanentemente las cuentas marcadas
-	  				do
-	  				{
-	  					System.out.println("Estas seguro que deseas borrar permanentemente todas las cuentas marcadas como borradas? (S/N): ");
-	  					respuestaBorrarCuentas = teclado.next().charAt(0);
-	  				}while(respuestaBorrarCuentas != 'S' && respuestaBorrarCuentas != 'N');
+	  				
+	  				//Leer y validar borrar cuenta
+	  				respuestaBorrarCuentas = validaciones.leerYValidarBorrarCuentas();
 	  				
 	  				if(respuestaBorrarCuentas == 'S')
 	  				{
