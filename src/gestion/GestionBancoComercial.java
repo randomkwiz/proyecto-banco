@@ -475,8 +475,9 @@ public class GestionBancoComercial extends GestionBanco{
      * Salida: boolean
      * Entrada/Salida:
      * Postcondiciones: asociado al nombre se devuelve true si este iban pertenece a este cliente o false si no
-     * */
-    public boolean isPropietario(String dni_cliente, String iban_cuenta){
+     */
+    public boolean isPropietario(String dni_cliente, String iban_cuenta)
+    {
         String nombre_banco = obtenerNombreBancoComercialPorIBAN(iban_cuenta);
         File f_clientes_cuentas = new File("./Files/BancosComerciales/"+nombre_banco+"/Clientes_Cuentas_"+nombre_banco+".txt");
         FileReader fr = null;
@@ -837,7 +838,7 @@ public class GestionBancoComercial extends GestionBanco{
     		
     		//Crear una cuenta
     		
-    		//Leer cual es la ultima cuenta registrada, para 
+    		//Leer cual es la ultima cuenta registrada
     		try
     		{
     			fr = new FileReader(ficheroCuentas);
