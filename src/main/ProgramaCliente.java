@@ -21,7 +21,7 @@
 package main;
 
 import gestion.GestionBancoComercial;
-import resguardos.ResguardoGestionBancoComercial;
+//import resguardos.ResguardoGestionBancoComercial;
 import utilidades.Utilidades;
 import utilidades.ValidacionProgramaCliente;
 
@@ -32,7 +32,7 @@ import java.util.List;
 public class ProgramaCliente {
     public static void main(String[] args) {
         ValidacionProgramaCliente validar = new ValidacionProgramaCliente();
-        ResguardoGestionBancoComercial resguardo = new ResguardoGestionBancoComercial();
+        //ResguardoGestionBancoComercial resguardo = new ResguardoGestionBancoComercial();
         Utilidades utilidad = new Utilidades();
         GestionBancoComercial gestion = new GestionBancoComercial();
         GregorianCalendar fecha = null;

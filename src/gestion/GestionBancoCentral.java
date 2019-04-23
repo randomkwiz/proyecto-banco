@@ -27,7 +27,7 @@ public class GestionBancoCentral extends GestionBanco
 	{
 		//String nombreBanco = obtenerNombreBancoComercialPorIBAN(IBAN);
 		
-		File ficheroCuentas = new File ("./Files/BancoCentral/Cuentas_BancoCentral.txt");
+		File ficheroCuentas = new File ("./Files/BancoCentral/Cuentas_BancoCentral_Movimientos.txt");
         FileReader leer = null;
         BufferedReader br = null;
         FileWriter fw = null;
@@ -95,7 +95,7 @@ public class GestionBancoCentral extends GestionBanco
      * */
 	public boolean insertarMovimientoEnFicheroMovimientos(String IBAN,boolean isIngresoOrRetirada, String concepto, double cantidad, GregorianCalendar fecha)
 	{
-		File ficheroCuentas = new File ("./Files/BancoCentral/MovimientosCuentas/Movimientos_"+IBAN+".txt");
+		File ficheroCuentas = new File ("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".txt");
         FileWriter fw = null;
         BufferedWriter bw = null;
         String signo = "RETIRADA,-";
@@ -137,7 +137,7 @@ public class GestionBancoCentral extends GestionBanco
 	public String datosCuenta(String IBAN)
 	{
 		String cuenta = null;
-		File ficheroCuentas = new File("./Files/BancoCentral/Cuentas_BancoCentral.txt");
+		File ficheroCuentas = new File("./Files/BancoCentral/Cuentas_BancoCentral_Movimientos.txt");
 		FileReader fr = null;
 		BufferedReader br = null;
 		String registro;
@@ -179,7 +179,7 @@ public class GestionBancoCentral extends GestionBanco
 	{
 		boolean registrado = false;
 		
-		File ficheroClientes = new File ("./Files/BancoCentral/Clientes_BancoCentral.txt");
+		File ficheroClientes = new File ("./Files/BancoCentral/Clientes_BancoCentral_Maestro.txt");
         FileReader leer = null;
         BufferedReader br = null;
         
@@ -224,7 +224,7 @@ public class GestionBancoCentral extends GestionBanco
 	{
 		boolean registrado = false;
 		//System.out.println("IBANRegistrado en resguardo");
-		File ficheroCuentas = new File ("./Files/BancoCentral/Cuentas_BancoCentral.txt");
+		File ficheroCuentas = new File ("./Files/BancoCentral/Cuentas_BancoCentral_Maestro.txt");
         FileReader leer = null;
         BufferedReader br = null;
         //FileWriter fw = null;
@@ -268,7 +268,7 @@ public class GestionBancoCentral extends GestionBanco
      * Postcondiciones: asociado al nombre devuelve un arraylist
      * */
     public List<String> buscarMovimientosPorFecha(String IBAN, int anyo){
-        File file_movimientos = new File("./Files/BancoCentral/MovimientosCuentas/Movimientos_"+IBAN+".txt");
+        File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".txt");
         FileReader fr = null;
         BufferedReader br = null;
         GregorianCalendar fecha = new GregorianCalendar();
@@ -308,7 +308,7 @@ public class GestionBancoCentral extends GestionBanco
      * Postcondiciones: asociado al nombre devuelve un arraylist
      * */
     public List<String> buscarMovimientosPorFecha(String IBAN, int mes, int anyo){
-        File file_movimientos = new File("./Files/BancoCentral/MovimientosCuentas/Movimientos_"+IBAN+".txt");
+        File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".txt");
         FileReader fr = null;
         BufferedReader br = null;
         GregorianCalendar fecha = new GregorianCalendar();
@@ -348,7 +348,7 @@ public class GestionBancoCentral extends GestionBanco
      * Postcondiciones: asociado al nombre devuelve un arraylist
      * */
     public List<String> buscarMovimientosPorFecha(String IBAN, int dia,int mes,int anyo){
-    	File file_movimientos = new File("./Files/BancoCentral/MovimientosCuentas/Movimientos_"+IBAN+".txt");
+    	File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".txt");
         FileReader fr = null;
         BufferedReader br = null;
         GregorianCalendar fecha = new GregorianCalendar();
@@ -387,8 +387,9 @@ public class GestionBancoCentral extends GestionBanco
      * Entrada/Salida:
      * Postcondiciones: asociado al nombre devuelve true si el iban corresponde a una cuenta del fichero CuentasBorradas y false si no
      * */
+    //TODO Este metodo pierde un poco de sentido, aunque se podria hacer que comprobara si hay un registro con el mismo IBAN que tenga un * (de hecho si se hace este metodo, se podria llamar en el metodo de sincronizacion cuando vaya a comprobar si es una cuenta a borrar)
     public boolean isCuentaBorrada(String iban){
-        File f_cuentasBorradas = new File("./Files/BancoCentral/CuentasBorradas_BancoCentral.txt");
+        File f_cuentasBorradas = new File("./Files/BancoCentral/CuentasBorradas_BancoCentral_Movimientos.txt");
         FileReader fr = null;
         BufferedReader br = null;
         boolean isBorrada = false;
@@ -419,8 +420,10 @@ public class GestionBancoCentral extends GestionBanco
      * Entrada/Salida:
      * Postcondiciones: modifica el fichero de cuentas borradas
      * */
+    
+    //TODO Hay que rehacerlo, que escriba un registro en el fichero movimientos con un asterisco
     public boolean marcarCuentaComoBorrada(String iban_cuenta){
-        File f_cuentasBorradas = new File("./Files/BancoCentral/CuentasBorradas_BancoCentral.txt");
+        File f_cuentasBorradas = new File("./Files/BancoCentral/CuentasBorradas_BancoCentral_Movimientos.txt");
         FileWriter fw = null;
         BufferedWriter bw = null;
         boolean borrada = false;
@@ -452,13 +455,14 @@ public class GestionBancoCentral extends GestionBanco
      * Entrada/Salida:
      * Postcondiciones: modifica varios ficheros
      * */
+    //TODO hay que revisarlo al completo
     public void eliminarCuentasBorradasDefinitivamente() {
         File carpetaBanco = new File("./Files/BancoCentral");
-        File cuentas = new File(carpetaBanco, "Cuentas_BancoCentral.txt");
-        File clientes = new File(carpetaBanco, "Clientes_BancoCentral.txt");
-        File clientes_cuentas = new File(carpetaBanco, "Clientes_Cuentas_BancoCentral.txt");
-        File cuentasBorradas = new File(carpetaBanco, "CuentasBorradas_BancoCentral.txt");
-        File carpetaMovimientos = new File(carpetaBanco, "MovimientosCuentas");
+        File cuentas = new File(carpetaBanco, "Cuentas_BancoCentral_Movimientos.txt");
+        File clientes = new File(carpetaBanco, "Clientes_BancoCentral_Movimientos.txt");
+        File clientes_cuentas = new File(carpetaBanco, "Clientes_Cuentas_BancoCentral_Movimientos.txt");
+        File cuentasBorradas = new File(carpetaBanco, "CuentasBorradas_BancoCentral_Movimientos.txt");
+        File carpetaMovimientos = new File(carpetaBanco, "TransferenciasCuentas");
         File archivoMovimientosCuenta[] = carpetaMovimientos.listFiles();
         List<String> cuentasABorrar = new ArrayList<String>();
         List<String> registrosMantenidos = new ArrayList<String>();
@@ -602,8 +606,8 @@ public class GestionBancoCentral extends GestionBanco
      * Postcondiciones: asociado al nombre devuelve una lista de String
      * */
     public List<String> ultimosDiezMovimientos(String iban_cuenta){
-        String nombre_banco = obtenerNombreBancoComercialPorIBAN(iban_cuenta);
-        File f_cuentas = new File("./Files/BancoCentral/MovimientosCuentas/Movimientos_" + iban_cuenta + ".txt");
+    	
+        File f_cuentas = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_" + iban_cuenta + ".txt");
         FileReader fr = null;
         BufferedReader br = null;
         List<String> registros = new ArrayList<String>();

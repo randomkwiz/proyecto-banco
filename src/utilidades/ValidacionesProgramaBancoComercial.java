@@ -20,7 +20,7 @@ public class ValidacionesProgramaBancoComercial
 	{
 		GestionBancoCentral gestion = new GestionBancoCentral();
 		Scanner teclado = new Scanner(System.in);
-		String BIC, IBAN;
+		String IBAN;
 		
 		System.out.println("Iniciar sesion...");
 		
@@ -274,5 +274,20 @@ public class ValidacionesProgramaBancoComercial
 			}while(opcionMenuCliente < 0 || opcionMenuCliente > 4);
 			
 		return opcionMenuCliente;
+	}
+	
+	public char leerYValidarBorrarCuentas()
+	{
+		char respuestaBorrarCuentas;
+		
+		Scanner teclado = new Scanner(System.in);
+		
+		do
+			{
+				System.out.println("Estas seguro que deseas borrar permanentemente todas las cuentas marcadas como borradas? (S/N): ");
+				respuestaBorrarCuentas = teclado.next().charAt(0);
+			}while(respuestaBorrarCuentas != 'S' && respuestaBorrarCuentas != 'N');
+		
+		return respuestaBorrarCuentas;
 	}
 }

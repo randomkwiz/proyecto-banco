@@ -1,7 +1,7 @@
 /* ANALISIS
  * 
- * Programa que podrá manejar un banco comercial para hacer distintas cosas, como realizar transferencia a otro banco,
- * ver la liquidez de su cuenta en el banco central, etc.
+ * Programa que podrá gestionar un banco comercial para hacer distintas cosas, como realizar transferencia a otro banco,
+ * ver el saldo de su cuenta en el banco central, etc.
  * 
  */
 
@@ -55,16 +55,15 @@ public class ProgramaBancoComercial
 {
 	public static void main(String[] args)
     {
-    	Scanner teclado = new Scanner(System.in);
+		Scanner teclado = new Scanner(System.in);
     	ValidacionesProgramaBancoComercial validaciones = new ValidacionesProgramaBancoComercial();
     	Utilidades utils = new Utilidades();
     	double cantidad, ingresosMensuales;
-    	int opcionElegida, opcion, opcionModificarDinero, opcionMenuCliente;
+    	int opcionElegida, opcionModificarDinero, opcionMenuCliente;
     	GestionBancoComercial gestionComercial = new GestionBancoComercial();
     	GestionBancoCentral gestionCentral = new GestionBancoCentral();
     	String cuentaDestino, IBAN, DNI, BIC, concepto, IBANNuevoCliente, IBANCliente;
     	GregorianCalendar fecha, fechaActual;
-    	int dia, mes, anyo;
     	char respuestaBorrarCuentas;
     	boolean cuentaBorrada, borradoDefinitivo, ingresado;
     	
@@ -191,11 +190,9 @@ public class ProgramaBancoComercial
 		  			break;
 	  			case 6:
 	  				//Eliminar permanentemente las cuentas marcadas
-	  				do
-	  				{
-	  					System.out.println("Estas seguro que deseas borrar permanentemente todas las cuentas marcadas como borradas? (S/N): ");
-	  					respuestaBorrarCuentas = teclado.next().charAt(0);
-	  				}while(respuestaBorrarCuentas != 'S' && respuestaBorrarCuentas != 'N');
+	  				
+	  				//Leer y validar borrar cuenta
+	  				respuestaBorrarCuentas = validaciones.leerYValidarBorrarCuentas();
 	  				
 	  				if(respuestaBorrarCuentas == 'S')
 	  				{
