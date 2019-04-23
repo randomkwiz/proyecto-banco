@@ -22,7 +22,7 @@ public abstract class GestionBanco {
      * Postcondiciones: Asociado al nombre se devuelve un String
      * */
     public String obtenerBICporNombre(String nombre_banco){
-        File clientesBancoCentral = new File("./Files/BancoCentral/Clientes_BancoCentral.txt");
+        File clientesBancoCentral = new File("./Files/BancoCentral/Clientes_BancoCentral_Maestro.txt");
         FileReader leer = null;
         BufferedReader br = null;
         String registro = " ";
@@ -99,7 +99,7 @@ public abstract class GestionBanco {
      * Postcondiciones: Asociado al nombre se devuelve un String
      * */
     public String obtenerNombrePorBIC(String bic){
-        File clientesBancoCentral = new File("./Files/BancoCentral/Clientes_BancoCentral.txt");
+        File clientesBancoCentral = new File("./Files/BancoCentral/Clientes_BancoCentral_Maestro.txt");
         FileReader leer = null;
         BufferedReader br = null;
         String registro = " ";
@@ -177,6 +177,7 @@ public abstract class GestionBanco {
 		boolean sacado = sacarDinero(IBANOrigen, concepto, cantidad, fecha);
         boolean ingresado = ingresarDinero(IBANDestino, concepto, cantidad, fecha);
         
+        
         if(sacado && ingresado)
         	movimientoRealizado = true;
         
@@ -252,8 +253,11 @@ public abstract class GestionBanco {
 			{	
 				if(campoClaveMovimientos.compareTo(campoClaveMaestro) == 0)
 				{
-					//Modificacion
-					bwMaestroAct.write(registroMovimientos + "\n");
+					
+					if(!registroMovimientos.contains("*"))
+					{
+						bwMaestroAct.write(registroMovimientos + "\n");
+					}
 					
 					//Se mueven los dos punteros
 					registroMovimientos = brMovimientos.readLine();

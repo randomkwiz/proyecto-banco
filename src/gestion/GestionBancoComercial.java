@@ -89,6 +89,7 @@ public class GestionBancoComercial extends GestionBanco{
      * Entrada/Salida:
      * Postcondiciones: modifica varios ficheros
      * */
+    //TODO Revisar entero
     public boolean eliminarCuentasBorradasDefinitivamente(String bic) {
         File carpetaBanco = new File("./Files/BancosComerciales/" + obtenerNombrePorBIC(bic));
         File cuentas = new File(carpetaBanco, "Cuentas_" + obtenerNombrePorBIC(bic) + ".txt");
@@ -292,7 +293,7 @@ public class GestionBancoComercial extends GestionBanco{
      * Postcondiciones: asociado al nombre devuelve un arraylist
      * */
     public List<String> buscarMovimientosPorFecha(String iban_cuenta, int mes_buscado,int anyo_buscado){
-        File file_movimientos = new File("./Files/BancosComerciales/"+obtenerNombreBancoComercialPorIBAN(iban_cuenta)+"/Movimientos/Movimientos_Cuenta_"+iban_cuenta+".txt");
+        File file_movimientos = new File("./Files/BancosComerciales/"+obtenerNombreBancoComercialPorIBAN(iban_cuenta)+"/Transferencia/Transferencia_Cuenta_"+iban_cuenta+".txt");
         FileReader fr = null;
         BufferedReader br = null;
         GregorianCalendar fecha = new GregorianCalendar();
@@ -332,7 +333,7 @@ public class GestionBancoComercial extends GestionBanco{
      * Postcondiciones: asociado al nombre devuelve un arraylist
      * */
     public List<String> buscarMovimientosPorFecha(String iban_cuenta, int dia_buscado,int mes_buscado,int anyo_buscado){
-        File file_movimientos = new File("./Files/BancosComerciales/"+obtenerNombreBancoComercialPorIBAN(iban_cuenta)+"/Movimientos/Movimientos_Cuenta_"+iban_cuenta+".txt");
+        File file_movimientos = new File("./Files/BancosComerciales/"+obtenerNombreBancoComercialPorIBAN(iban_cuenta)+"/Transferencias/Transferencias_Cuenta_"+iban_cuenta+".txt");
         FileReader fr = null;
         BufferedReader br = null;
         GregorianCalendar fecha = new GregorianCalendar();
@@ -373,7 +374,7 @@ public class GestionBancoComercial extends GestionBanco{
      * */
     public List<String> ultimosDiezMovimientos(String iban_cuenta){
         String nombre_banco = obtenerNombreBancoComercialPorIBAN(iban_cuenta);
-        File f_cuentas = new File("./Files/BancosComerciales/" + nombre_banco +"/Movimientos/Movimientos_Cuenta_" + iban_cuenta + ".txt");
+        File f_cuentas = new File("./Files/BancosComerciales/" + nombre_banco +"/Transferencias/Transferencias_Cuenta_" + iban_cuenta + ".txt");
         FileReader fr = null;
         BufferedReader br = null;
         List<String> registros = new ArrayList<String>();
@@ -448,7 +449,7 @@ public class GestionBancoComercial extends GestionBanco{
 
         if(iban_cuenta.length() >= 13) {
             nombre_banco = obtenerNombreBancoComercialPorIBAN(iban_cuenta);
-            f_cuentas = new File("./Files/BancosComerciales/" + nombre_banco + "/Cuentas_" + nombre_banco + ".txt");
+            f_cuentas = new File("./Files/BancosComerciales/" + nombre_banco + "/Cuentas_" + nombre_banco + "_Maestro.txt");
             if (f_cuentas.exists()){
                 try {
                     fr = new FileReader(f_cuentas);
@@ -479,7 +480,7 @@ public class GestionBancoComercial extends GestionBanco{
     public boolean isPropietario(String dni_cliente, String iban_cuenta)
     {
         String nombre_banco = obtenerNombreBancoComercialPorIBAN(iban_cuenta);
-        File f_clientes_cuentas = new File("./Files/BancosComerciales/"+nombre_banco+"/Clientes_Cuentas_"+nombre_banco+".txt");
+        File f_clientes_cuentas = new File("./Files/BancosComerciales/"+nombre_banco+"/Clientes_Cuentas_"+nombre_banco+"_Maestro.txt");
         FileReader fr = null;
         BufferedReader br = null;
         boolean isProp = false;
@@ -517,7 +518,7 @@ public class GestionBancoComercial extends GestionBanco{
      * */
     public String obtenerClientePorIBAN(String iban_cuenta){
         String nombre_banco = obtenerNombreBancoComercialPorIBAN(iban_cuenta);
-        File fichero_clientes_cuentas = new File("./Files/BancosComerciales/"+nombre_banco+"/Clientes_Cuentas_"+nombre_banco+".txt");
+        File fichero_clientes_cuentas = new File("./Files/BancosComerciales/"+nombre_banco+"/Clientes_Cuentas_"+nombre_banco+"_Maestro.txt");
         FileReader fr = null;
         BufferedReader br = null;
         String registro = " ";
@@ -550,7 +551,7 @@ public class GestionBancoComercial extends GestionBanco{
      * Postcondiciones: Asociado al nombre se devuelve el IBAN de la cuenta que pertenece a dicho cliente
      * */
     public String obtenerIBANPorCliente(String nombre_banco, String dni_cliente){
-        File fichero_clientes_cuentas = new File("./Files/BancosComerciales/"+nombre_banco+"/Clientes_Cuentas_"+nombre_banco+".txt");
+        File fichero_clientes_cuentas = new File("./Files/BancosComerciales/"+nombre_banco+"/Clientes_Cuentas_"+nombre_banco+"_Maestro.txt");
         FileReader fr = null;
         BufferedReader br = null;
         String registro = " ";
@@ -585,7 +586,7 @@ public class GestionBancoComercial extends GestionBanco{
      * */
     public void ordenarMovimientosPorFecha(String iban){
         String nombre_banco = obtenerNombreBancoComercialPorIBAN(iban);
-        File ficheroMovimientosCuenta = new File ("./Files/BancosComerciales/"+nombre_banco+"/Movimientos/Movimientos_Cuenta_"+iban+".txt");
+        File ficheroMovimientosCuenta = new File ("./Files/BancosComerciales/"+nombre_banco+"/Transferencias/Transferencias_Cuenta_"+iban+".txt");
         //File temp = new File ("./Files/BancosComerciales/"+nombre_banco+"/Movimientos/Movimientos_Cuenta_"+iban+"_temp.txt");
         FileReader fr = null;
         FileWriter fw = null;
@@ -659,7 +660,7 @@ public class GestionBancoComercial extends GestionBanco{
      * */
     public boolean insertarMovimientoEnFicheroMovimientos(String ID_Cuenta,boolean isIngresoOrRetirada, String concepto, double cantidad,GregorianCalendar fecha){
         String nombre_banco = obtenerNombreBancoComercialPorIBAN(ID_Cuenta);
-        File ficheroCuentas = new File ("./Files/BancosComerciales/"+nombre_banco+"/Movimientos/Movimientos_Cuenta_"+ID_Cuenta+".txt");
+        File ficheroCuentas = new File ("./Files/BancosComerciales/"+nombre_banco+"/Transferencias/Transferencias_Cuenta_"+ID_Cuenta+".txt");
         FileWriter fw = null;
         BufferedWriter bw = null;
         String signo = "RETIRADA,-";
@@ -694,9 +695,10 @@ public class GestionBancoComercial extends GestionBanco{
      * Entrada/Salida:
      * Postcondiciones: Se modifica el fichero de Cuentas y se actualiza el saldo pertinente.
      * */
+    //TODO Este método no está bien: Tiene que escribir un registro nuevo en el fichero de movimientos, no modificar el maestro directamente.
     public boolean modificarSaldoEnFicheroCuentas(String iban_cuenta, boolean sumaOresta,double cantidad){
         String nombre_banco = obtenerNombreBancoComercialPorIBAN(iban_cuenta);
-        File ficheroCuentas = new File ("./Files/BancosComerciales/"+nombre_banco+"/Cuentas_"+nombre_banco+".txt");
+        File ficheroCuentas = new File ("./Files/BancosComerciales/"+nombre_banco+"/Cuentas_"+nombre_banco+"_Movimientos.txt");
         FileReader leer = null;
         BufferedReader br = null;
         FileWriter fw = null;
@@ -757,7 +759,7 @@ public class GestionBancoComercial extends GestionBanco{
     {
     	boolean registrado = false;
     	String nombreBanco = this.obtenerNombrePorBIC(BIC);
-    	File ficheroClientes = new File ("./Files/BancosComerciales/"+nombreBanco+"/Clientes_"+nombreBanco+".txt");
+    	File ficheroClientes = new File ("./Files/BancosComerciales/"+nombreBanco+"/Clientes_"+nombreBanco+"_Maestro.txt");
 		FileReader leer = null;
 	    BufferedReader br = null;
 	    String campos[] = null;
@@ -809,8 +811,8 @@ public class GestionBancoComercial extends GestionBanco{
     	if(this.DNIRegistrado(DNI, BIC) == false && DNI.length() == 10)
     	{
     		String nombreBanco = this.obtenerNombrePorBIC(BIC);
-    		File ficheroClientes = new File("./Files/BancosComerciales/"+nombreBanco+"/Clientes_"+nombreBanco+".txt");
-    		File ficheroCuentas = new File("./Files/BancosComerciales/"+nombreBanco+"/Cuentas_"+nombreBanco+".txt");
+    		File ficheroClientes = new File("./Files/BancosComerciales/"+nombreBanco+"/Clientes_"+nombreBanco+"_Movimientos.txt");
+    		File ficheroCuentas = new File("./Files/BancosComerciales/"+nombreBanco+"/Cuentas_"+nombreBanco+"_Movimientos.txt");
     		FileWriter fw = null;
     		BufferedWriter bw = null;
     		
@@ -910,7 +912,7 @@ public class GestionBancoComercial extends GestionBanco{
 	{
 		String cuenta = null;
 		String nombreBanco = this.obtenerNombreBancoComercialPorIBAN(IBAN);
-		File ficheroCuentas = new File("./Files/BancosComerciales/"+nombreBanco+"/Cuentas_"+nombreBanco+".txt");
+		File ficheroCuentas = new File("./Files/BancosComerciales/"+nombreBanco+"/Cuentas_"+nombreBanco+"_Maestro.txt");
 		FileReader fr = null;
 		BufferedReader br = null;
 		String registro;
@@ -938,5 +940,40 @@ public class GestionBancoComercial extends GestionBanco{
 		//System.out.println("datosCuenta en resguardo");
 		
 		return cuenta;
+	}
+	
+	/* INTERFAZ
+	 * Comentario: Escribe un registro nuevo en un fichero de movimientos determinado
+	 * Prototipo: public boolean escribirRegistroEnMovimientos(String registro, String rutaFichero)
+	 * Entrada: Un String con el registro a escribir, y otro String con la ruta del fichero donde se escribirá.
+	 * Precondiciones: No hay
+	 * Salida: Un boolean indicando si se ha escrito correctamente o no.
+	 * Postcondiciones: Asociado al nombre devuelve:
+	 * 					-> True si se ha escrito correctamente el registro en el fichero correspondiente
+	 * 					-> False si no se ha escrito correctamente.
+	 */
+	public boolean escribirRegistroEnMovimientos(String registro, String rutaFichero)
+	{
+		boolean escrito = false;
+		
+		File fichero = new File(rutaFichero);
+		FileWriter fw = null;
+		BufferedWriter bw = null;
+		
+		try
+		{
+			fw = new FileWriter(fichero, true);
+			bw = new BufferedWriter(fw);
+			
+			bw.write(registro);
+			
+			bw.close();
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return escrito;
 	}
 }
