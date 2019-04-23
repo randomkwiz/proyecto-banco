@@ -1,8 +1,10 @@
 package gestion;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -206,6 +208,135 @@ public abstract class GestionBanco {
         
         return dineroSacado;
     }
+	
+	/* INTERFAZ
+	 * Comentario: Actualiza un fichero maestro determinado, mirando los registros de su fichero de movimiento correspondiente.
+	 * Prototipo: public boolean actualizarFichero(String fichero)
+	 * Entrada: Un string con la ruta del fichero
+	 * Precondiciones: 
+	 * Salida: 
+	 * Postcondiciones: 
+	 */
+	public boolean actualizarFichero(String fichero, int posicionCampoClave)
+	{
+		boolean actualizado = false;
+		File ficheroMaestro = new File(fichero + "_Maestro.txt");
+		File ficheroMovimientos = new File(fichero + "_Movimientos.txt");
+		File ficheroMaestroAct = new File(fichero + "_Maestro_act.txt");
+		FileReader frMaestro = null;
+		FileReader frMovimientos = null;
+		FileWriter fwMaestroAct = null;
+		BufferedReader brMaestro = null;
+		BufferedReader brMovimientos = null;
+		BufferedWriter bwMaestroAct = null;
+		
+		try
+		{
+			frMaestro = new FileReader(ficheroMaestro);
+			frMovimientos = new FileReader(ficheroMovimientos);
+			fwMaestroAct = new FileWriter(ficheroMaestroAct);
+			
+			brMaestro = new BufferedReader(frMaestro);
+			brMovimientos = new BufferedReader(frMovimientos);
+			bwMaestroAct = new BufferedWriter(fwMaestroAct);
+			
+			//Leer primeros registros de ficheroMovimientos y ficheroMaestro
+			String registroMovimientos = brMovimientos.readLine();
+			String registroMaestro = brMaestro.readLine();
+			
+			String campoClaveMovimientos = registroMovimientos.split(",")[posicionCampoClave];
+			String campoClaveMaestro = registroMaestro.split(",")[posicionCampoClave];
+			
+			//Mientras no sea fin de fichero en ninguno de los dos
+			while(registroMovimientos != null && registroMaestro != null)
+			{	
+				if(campoClaveMovimientos.compareTo(campoClaveMaestro) == 0)
+				{
+					//Modificacion
+					bwMaestroAct.write(registroMovimientos + "\n");
+					
+					//Se mueven los dos punteros
+					registroMovimientos = brMovimientos.readLine();
+					if(registroMovimientos != null)
+						campoClaveMovimientos = registroMovimientos.split(",")[posicionCampoClave];
+					
+					registroMaestro = brMaestro.readLine();
+					if(registroMaestro != null)
+						campoClaveMaestro = registroMaestro.split(",")[posicionCampoClave];
+				}
+				else if(campoClaveMovimientos.compareTo(campoClaveMaestro) > 0)
+				{
+					
+					while(campoClaveMovimientos.compareTo(campoClaveMaestro) > 0 && registroMaestro != null)
+					{
+						//Escribir registro de maestro en maestroAct
+						bwMaestroAct.write(registroMaestro + "\n");
+						
+						//leer registro de maestro
+						
+						registroMaestro = brMaestro.readLine();
+						
+						if(registroMaestro != null)
+						{
+							campoClaveMaestro = registroMaestro.split(",")[posicionCampoClave];
+						}
+					}
+				}
+				else if(campoClaveMovimientos.compareTo(campoClaveMaestro) < 0)
+				{
+					//Es un alta o un error
+					bwMaestroAct.write(registroMovimientos + "\n");
+					
+					//Leer registro de movimiento
+					registroMovimientos = brMovimientos.readLine();
+					
+					if(registroMovimientos != null)
+						campoClaveMovimientos = registroMovimientos.split(",")[posicionCampoClave];
+				}
+			}
+			//Se ha acabado el fichero de movimientos y aun quedan registros en el maestro
+			while(registroMaestro != null)
+			{
+				//Escribir registro de maestro en maestroAct
+				bwMaestroAct.write(registroMaestro + "\n");
+				
+				//leer registro de maestro
+				registroMaestro = brMaestro.readLine();
+				
+				if(registroMaestro != null)
+					campoClaveMaestro = registroMaestro.split(",")[posicionCampoClave];
+			}
+			//Se ha acabado el fichero maestro y aun quedan registros en el de movimientos
+			while(registroMovimientos != null) 
+			{
+				//Escribir registro de movimientos en maestroAct
+				bwMaestroAct.write(registroMovimientos + "\n");
+				
+				//leer registro de movimientos
+				registroMovimientos = brMovimientos.readLine();
+				
+				if(registroMovimientos != null)
+					campoClaveMovimientos = registroMovimientos.split(",")[posicionCampoClave];
+			}
+			
+			//Cerrar archivos
+			brMaestro.close();
+			brMovimientos.close();
+			bwMaestroAct.close();
+			
+			ficheroMaestro.delete();
+			ficheroMaestroAct.renameTo(ficheroMaestro);
+			
+			ficheroMovimientos.delete();
+			ficheroMovimientos.createNewFile();
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return actualizado;
+	}
 
 	
 }
