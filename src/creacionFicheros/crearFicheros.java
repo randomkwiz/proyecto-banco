@@ -109,7 +109,7 @@ public class crearFicheros {
         //Fichero del banco central que contiene las cuentas que gestiona (una cuenta por cada banco comercial). Y fichero de cuentas borradas
 
         File listadoCuentas_BancoCentral_maestro = new File(carpetaBancoCentral, "Cuentas_BancoCentral_Maestro.txt");
-        File listadoCuentas_BancoCentral = new File(carpetaBancoCentral, "Cuentas_BancoCentral_Movimiento.txt");
+        File listadoCuentas_BancoCentral = new File(carpetaBancoCentral, "Cuentas_BancoCentral_Movimientos.txt");
 
         try{
             if(listadoCuentas_BancoCentral.createNewFile()){
@@ -153,7 +153,7 @@ public class crearFicheros {
 
         /*Fichero que relaciona las cuentas con los clientes del BANCO CENTRAL*/
         File clientes_cuentas_BancoCentral_maestro = new File(carpetaBancoCentral, "Clientes_Cuentas_BancoCentral_Maestro.txt");
-        File clientes_cuentas_BancoCentral = new File(carpetaBancoCentral, "Clientes_Cuentas_BancoCentral_Movimiento.txt");
+        File clientes_cuentas_BancoCentral = new File(carpetaBancoCentral, "Clientes_Cuentas_BancoCentral_Movimientos.txt");
         String linea[] = new String[2];
         String campo[][] = new String[2][3];
 
