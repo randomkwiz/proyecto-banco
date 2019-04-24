@@ -1,11 +1,9 @@
 package gestion;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import clasesBasicas.TransferenciaImpl;
+import interfaces.Transferencia;
+
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,7 +14,7 @@ public class GestionBancoCentral extends GestionBanco
 {
 	/* INTERFAZ
      * Signatura: public void modificarSaldoEnFicheroCuentas(String nombre_banco,String iban_cuenta, boolean sumaOresta,double cantidad)
-     * Comentario: Este método se encarga de modificar en el fichero de Cuentas, el registro del saldo total (campo 2).
+     * Comentario: Este m�todo se encarga de modificar en el fichero de Cuentas, el registro del saldo total (campo 2).
      * Precondiciones: Se pasa por referencia el ID de la cuenta a modificar y por valor la cantidad a añadir o substraer. Se pasa boolean que es true si añade la cantidad o false si la resta
      * Entrada: String nombre_banco, String ID_Cuenta, boolean sumaOresta, double cantidad
      * Salida:
@@ -25,67 +23,64 @@ public class GestionBancoCentral extends GestionBanco
      * */
 	public boolean modificarSaldoEnFicheroCuentas(String IBAN, boolean sumaOresta,double cantidad)
 	{
-		//String nombreBanco = obtenerNombreBancoComercialPorIBAN(IBAN);
-		
-		File ficheroCuentas = new File ("./Files/BancoCentral/Cuentas_BancoCentral_Movimientos.txt");
-        FileReader leer = null;
-        BufferedReader br = null;
-        FileWriter fw = null;
-        BufferedWriter bw = null;
-        String campos[] = null;
-        List<String> registros = new ArrayList<String>();
-        String registro = " ";
+        //String nombreBanco = obtenerNombreBancoComercialPorIBAN(IBAN);
+
+        File ficheroCuentas = new File ("./Files/BancoCentral/Cuentas_BancoCentral_Movimientos.txt");
+        ObjectOutputStream escribir = null;
+        ObjectInputStream leer = null;;
+        List<TransferenciaImpl> registros = new ArrayList<TransferenciaImpl>();
+        boolean cont = true;
         boolean saldoModificado = false;
+        TransferenciaImpl trans = null;
 
-        try 
+        try
         {
-            leer = new FileReader(ficheroCuentas);
-            br = new BufferedReader(leer);
+            leer = new ObjectInputStream(new FileInputStream(ficheroCuentas));
 
-            while(br.ready())
+            while(cont)
             {
-                registro = br.readLine();
-                campos = registro.split(",");
-
-                if(campos[0].equals(IBAN))
+                trans =(TransferenciaImpl)leer.readObject();
+                if(trans.getID_Cuenta().equals(IBAN))
                 {
                     if(sumaOresta)
                     {
-                        registro = registro.replace(campos[1], Double.toString(cantidad+Double.parseDouble(campos[1])));
-                   		saldoModificado = true;
+                        trans.setCantidad(trans.getCantidad()+cantidad);
+                        saldoModificado = true;
                     }
                     else
                     {
-                        registro = registro.replace(campos[1], Double.toString(Double.parseDouble(campos[1])-cantidad));
+                        trans.setCantidad(trans.getCantidad()-cantidad);
                         saldoModificado = true;
                     }
                 }
+                registros.add(trans);
 
-                registros.add(registro);
             }
-            br.close();
+            leer.close();
 
-            /*Sí, aquí lo escribe de nuevo ¯\_(ツ)_/¯ */
-            fw = new FileWriter(ficheroCuentas);
-            bw = new BufferedWriter(fw);
-            for(String s : registros) {
-                bw.write(s);
-                bw.newLine();
+            for(int i = 0; i < registros.size(); i ++){
+                escribir = new ObjectOutputStream(new FileOutputStream(ficheroCuentas));
+                escribir.writeObject(registros.get(i));
+                escribir.close();
             }
-            bw.close();
-            
+
+
         }
         catch (IOException e)
         {
-        	e.printStackTrace();
+            e.printStackTrace();
         }
-        
+        catch (ClassNotFoundException c){
+            c.printStackTrace();
+
+        }
+
         return saldoModificado;
 	}
 	
 	/* INTERFAZ
      * Signatura: public void insertarMovimientoEnFicheroMovimientos(String nombre_banco,String ID_Cuenta,boolean isIngresoOrRetirada, String concepto, double cantidad,int dia, int mes, int anyo)
-     * Comentario: Este método se encarga de modificar en el fichero de movimientos de la cuenta, añade un nuevo movimiento.
+     * Comentario: Este m�todo se encarga de modificar en el fichero de movimientos de la cuenta, añade un nuevo movimiento.
      * Precondiciones: Se pasa por referencia el ID de la cuenta y del banco a modificar y por valor la cantidad de dinero a mover. Se pasa
      *                  un boolean que es true si el movimiento es un ingreso o false si es una retirada de dinero. Tambien se pasa la fecha como tres valores enteros (se supone válida)
      * Entrada: (String nombre_banco,String ID_Cuenta,boolean isIngresoOrRetirada, double cantidad,int dia, int mes, int anyo)
@@ -95,28 +90,24 @@ public class GestionBancoCentral extends GestionBanco
      * */
 	public boolean insertarMovimientoEnFicheroMovimientos(String IBAN,boolean isIngresoOrRetirada, String concepto, double cantidad, GregorianCalendar fecha)
 	{
-		File ficheroCuentas = new File ("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".txt");
-        FileWriter fw = null;
-        BufferedWriter bw = null;
+		File ficheroCuentas = new File ("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".dat");
+        TransferenciaImpl trans = new TransferenciaImpl(IBAN,isIngresoOrRetirada,concepto,cantidad,fecha);
         String signo = "RETIRADA,-";
+        boolean movimientoInsertado = false;
+        ObjectOutputStream oos = null;
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         sdf.setCalendar(fecha);
         String fechaformateada = sdf.format(fecha.getTime());
-        boolean movimientoInsertado = false;
-        
         try 
         {
-            fw = new FileWriter(ficheroCuentas,true);
-            bw = new BufferedWriter(fw);
-            if(isIngresoOrRetirada)
+            oos = new ObjectOutputStream(new FileOutputStream(ficheroCuentas));
+            if(trans.isIngresoOrRetirada())
             	
                 signo = "INGRESO,+";
-            
-            bw.write(concepto+","+signo+Double.toString(cantidad)+","+fechaformateada);
-            bw.newLine();
+
+            oos.writeChars(trans.getConcepto()+","+signo+Double.parseDouble(trans.getCantidad()+","+fechaformateada+"\n"));
             movimientoInsertado = true;
-            bw.close();
-            
+            oos.close();
         }
         catch (IOException e)
         {
@@ -267,30 +258,26 @@ public class GestionBancoCentral extends GestionBanco
      * Entrada/Salida:
      * Postcondiciones: asociado al nombre devuelve un arraylist
      * */
-    public List<String> buscarMovimientosPorFecha(String IBAN, int anyo){
-        File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".txt");
-        FileReader fr = null;
-        BufferedReader br = null;
-        GregorianCalendar fecha = new GregorianCalendar();
-        List<String> registros_buscados = new ArrayList<String>();
-        String registro= " ";
+    public List<TransferenciaImpl> buscarMovimientosPorFecha(String IBAN, int anyo){
+        File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".dat");
+        ObjectInputStream leer = null;
+        List<TransferenciaImpl> registros_buscados = new ArrayList<TransferenciaImpl>();
+        TransferenciaImpl registro = null;
+        boolean cont = true;
 
 
         try{
-            fr = new FileReader(file_movimientos);
-            br = new BufferedReader(fr);
-
-            while (br.ready()){
-                registro = br.readLine();
-                fecha.set(Calendar.YEAR, Integer.parseInt(registro.split(",")[3].split("/")[2]));
-                fecha.set(Calendar.MONTH, Integer.parseInt(registro.split(",")[3].split("/")[1]));
-                fecha.set(Calendar.DAY_OF_MONTH, Integer.parseInt(registro.split(",")[3].split("/")[0]));
-                if (fecha.get(Calendar.YEAR) ==  anyo ){
+            leer = new ObjectInputStream(new FileInputStream(file_movimientos));
+            while (cont){
+                registro = (TransferenciaImpl) leer.readObject();
+                if (registro.getFecha().get(Calendar.YEAR) ==  anyo ){
                     registros_buscados.add(registro);
                 }
             }
-            br.close();
+            leer.close();
         }catch (IOException e){
+            e.printStackTrace();
+        }catch (ClassNotFoundException e){
             e.printStackTrace();
         }
 
@@ -307,30 +294,26 @@ public class GestionBancoCentral extends GestionBanco
      * Entrada/Salida:
      * Postcondiciones: asociado al nombre devuelve un arraylist
      * */
-    public List<String> buscarMovimientosPorFecha(String IBAN, int mes, int anyo){
-        File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".txt");
-        FileReader fr = null;
-        BufferedReader br = null;
-        GregorianCalendar fecha = new GregorianCalendar();
-        List<String> registros_buscados = new ArrayList<String>();
-        String registro= " ";
+    public List<TransferenciaImpl> buscarMovimientosPorFecha(String IBAN, int mes, int anyo){
+        File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".dat");
+        ObjectInputStream leer = null;
+        List<TransferenciaImpl> registros_buscados = new ArrayList<TransferenciaImpl>();
+        TransferenciaImpl registro= " ";
+        boolean cont = true;
 
 
         try{
-            fr = new FileReader(file_movimientos);
-            br = new BufferedReader(fr);
-
-            while (br.ready()){
-                registro = br.readLine();
-                fecha.set(Calendar.YEAR, Integer.parseInt(registro.split(",")[3].split("/")[2]));
-                fecha.set(Calendar.MONTH, Integer.parseInt(registro.split(",")[3].split("/")[1]));
-                fecha.set(Calendar.DAY_OF_MONTH, Integer.parseInt(registro.split(",")[3].split("/")[0]));
-                if (fecha.get(Calendar.YEAR) ==  anyo && fecha.get(Calendar.MONTH) == mes ){
+            leer = new ObjectInputStream(new FileInputStream(file_movimientos));
+            while (cont){
+                registro = (TransferenciaImpl) leer.readObject();
+                if (registro.getFecha().get(Calendar.YEAR) ==  anyo && registro.getFecha().get(Calendar.MONTH) == mes ){
                     registros_buscados.add(registro);
                 }
             }
-            br.close();
+            leer.close();
         }catch (IOException e){
+            e.printStackTrace();
+        }catch (ClassNotFoundException e){
             e.printStackTrace();
         }
 
@@ -347,30 +330,24 @@ public class GestionBancoCentral extends GestionBanco
      * Entrada/Salida:
      * Postcondiciones: asociado al nombre devuelve un arraylist
      * */
-    public List<String> buscarMovimientosPorFecha(String IBAN, int dia,int mes,int anyo){
-    	File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".txt");
-        FileReader fr = null;
-        BufferedReader br = null;
-        GregorianCalendar fecha = new GregorianCalendar();
-        List<String> registros_buscados = new ArrayList<String>();
-        String registro= " ";
-
-
+    public List<TransferenciaImpl> buscarMovimientosPorFecha(String IBAN, int dia,int mes,int anyo){
+    	File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".dat");
+        List<TransferenciaImpl> registros_buscados = new ArrayList<TransferenciaImpl>();
+        TransferenciaImpl registro = null;
+        ObjectInputStream leer = null;
+        boolean cont = true;
         try{
-            fr = new FileReader(file_movimientos);
-            br = new BufferedReader(fr);
-
-            while (br.ready()){
-                registro = br.readLine();
-                fecha.set(Calendar.YEAR, Integer.parseInt(registro.split(",")[3].split("/")[2]));
-                fecha.set(Calendar.MONTH, Integer.parseInt(registro.split(",")[3].split("/")[1]));
-                fecha.set(Calendar.DAY_OF_MONTH, Integer.parseInt(registro.split(",")[3].split("/")[0]));
-                if (fecha.get(Calendar.YEAR) ==  anyo && fecha.get(Calendar.MONTH) == mes && fecha.get(Calendar.DAY_OF_MONTH) == dia ){
+            leer = new ObjectInputStream(new FileInputStream(file_movimientos));
+            while (cont){
+                registro = (TransferenciaImpl) leer.readObject();
+                if (registro.getFecha().get(Calendar.YEAR) ==  anyo && registro.getFecha().get(Calendar.MONTH) == mes && registro.getFecha().get(Calendar.DAY_OF_MONTH) == dia ){
                     registros_buscados.add(registro);
                 }
             }
-            br.close();
+            leer.close();
         }catch (IOException e){
+            e.printStackTrace();
+        }catch (ClassNotFoundException e){
             e.printStackTrace();
         }
 
@@ -605,26 +582,27 @@ public class GestionBancoCentral extends GestionBanco
      * Entrada/Salida:
      * Postcondiciones: asociado al nombre devuelve una lista de String
      * */
-    public List<String> ultimosDiezMovimientos(String iban_cuenta){
+    public List<TransferenciaImpl> ultimosDiezMovimientos(String iban_cuenta){
     	
-        File f_cuentas = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_" + iban_cuenta + ".txt");
-        FileReader fr = null;
-        BufferedReader br = null;
-        List<String> registros = new ArrayList<String>();
-        String registro = " ";
+        File f_cuentas = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_" + iban_cuenta + ".dat");
+        ObjectInputStream leer = null;
+        List<TransferenciaImpl> registros = new ArrayList<TransferenciaImpl>();
+        TransferenciaImpl registro = null;
         int lineas=0;
+        boolean cont = true;
 
 
             if (f_cuentas.exists()){
                 try {
-                    fr = new FileReader(f_cuentas);
-                    br = new BufferedReader(fr);
-                    while (br.ready() && lineas < 10) {
-                        registro = br.readLine();
+                    leer = new ObjectInputStream(new FileInputStream(f_cuentas));
+                    while (cont && lineas < 10) {
+                        registro = (TransferenciaImpl) leer.readObject();
                         registros.add(registro);
                         lineas++;
                     }
                 } catch (IOException e) {
+                    e.printStackTrace();
+                }catch (ClassNotFoundException e){
                     e.printStackTrace();
                 }
             }
