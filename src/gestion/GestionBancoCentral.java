@@ -1,6 +1,7 @@
 package gestion;
 
 import clasesBasicas.TransferenciaImpl;
+import utilidades.MyObjectOutputStream;
 import utilidades.Utilidades;
 
 import java.io.*;
@@ -113,13 +114,13 @@ public class GestionBancoCentral
 		File ficheroCuentas = new File ("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".dat");
         TransferenciaImpl trans = new TransferenciaImpl(IBAN,isIngresoOrRetirada,concepto,cantidad,fecha);
         boolean movimientoInsertado = false;
-        ObjectOutputStream oos = null;
+        MyObjectOutputStream oos = null;
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         sdf.setCalendar(fecha);
         String fechaformateada = sdf.format(fecha.getTime());
         try 
         {
-            oos = new ObjectOutputStream(new FileOutputStream(ficheroCuentas));
+            oos = new MyObjectOutputStream(new FileOutputStream(ficheroCuentas,true));
             oos.writeObject(trans);
             movimientoInsertado = true;
             oos.close();
@@ -611,13 +612,15 @@ public class GestionBancoCentral
                 try {
                     leer = new ObjectInputStream(new FileInputStream(f_cuentas));
                     while (cont && lineas < 10) {
-                        if(!cont != true) {
+
                             registro = (TransferenciaImpl) leer.readObject();
                             registros.add(registro);
                             lineas++;
-                        }
+
                     }
                     leer.close();
+                }catch (EOFException e){
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }catch (ClassNotFoundException e){
