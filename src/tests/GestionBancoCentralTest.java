@@ -11,7 +11,7 @@ public class GestionBancoCentralTest
 	{
 		GestionBancoCentral gestion = new GestionBancoCentral();
 
-		System.out.println("gestion.BICRegistrado(\"CAIXESBBXXX\"): " + gestion.BICRegistrado("CAIXESBBXXX"));
+		/*System.out.println("gestion.BICRegistrado(\"CAIXESBBXXX\"): " + gestion.BICRegistrado("CAIXESBBXXX"));
 		
 		System.out.println("gestion.datosCuenta(\"ESPCAIXESBBXXX0000000\"): " + gestion.datosCuenta("ESPCAIXESBBXXX0000000"));
 		
@@ -32,13 +32,14 @@ public class GestionBancoCentralTest
 		gestion.ingresarDinero("ESPINGDESMMXXX0000000", "Concepto", 25000, new GregorianCalendar());
 		System.out.println("DESPUES -> " + gestion.datosCuenta("ESPINGDESMMXXX0000000"));
 		
-		System.out.println("-------------------------------------------");
+		System.out.println("-------------------------------------------");*/
 		
-		System.out.println("gestion.modificarSaldoEnFicheroCuentas(\"ESPCAIXESBBXXX0000000\", true, 500)");
-		System.out.println("ANTES -> " + gestion.datosCuenta("ESPCAIXESBBXXX0000000"));
-		gestion.modificarSaldoEnFicheroCuentas("ESPCAIXESBBXXX0000000", true, 500);
-		System.out.println("DESPUES -> " + gestion.datosCuenta("ESPCAIXESBBXXX0000000"));
-		
+		//System.out.println("gestion.modificarSaldoEnFicheroCuentas(\"ESPCAIXESBBXXX0000000\", true, 500)");
+		//System.out.println("ANTES -> " + gestion.datosCuenta("ESPCAIXESBBXXX0000000"));
+		//gestion.modificarSaldoEnFicheroCuentas("ESPCAIXESBBXXX0000000", true, 200);
+		//System.out.println("DESPUES -> " + gestion.datosCuenta("ESPCAIXESBBXXX0000000"));
+		System.out.println(gestion.obtenerSaldoPorIBAN("ESPCAIXESBBXXX0000000"));
+		/*
 		System.out.println("-------------------------------------------");
 		
 		System.out.println("gestion.realizarMovimiento(\"ESPCAIXESBBXXX0000000\", \"ESPINGDESMMXXX0000000\", \"test_realizarMovimiento\", fechaActual)");
@@ -87,6 +88,7 @@ public class GestionBancoCentralTest
 		System.out.println("ANTES -> gestion.isCuentaBorrada(\"ESPINGDESMMXXX0000000\") " + gestion.IBANRegistrado("ESPINGDESMMXXX0000000"));
 		gestion.eliminarCuentasBorradasDefinitivamente();
 		System.out.println("DESPUES -> gestion.isCuentaBorrada(\"ESPINGDESMMXXX0000000\") " + gestion.IBANRegistrado("ESPINGDESMMXXX0000000"));
+	*/
 	}
 
 }
