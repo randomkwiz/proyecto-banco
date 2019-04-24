@@ -71,31 +71,31 @@ public boolean modificarSaldoEnFicheroCuentas(String IBAN, boolean sumaOresta,do
         List<String> registros = new ArrayList<String>();
         String registro = " ";
         boolean saldoModificado = false;
-        boolean añadidoEnMovimientos = false;
+        boolean anhadidoEnMovimientos = false;
+        
+        double saldoNuevo = 0;
 
         //Escribe el registro en el fichero de movimientos
         if(sumaOresta)
         {
-            registro = IBAN + ",+" + cantidad;
-            añadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
+        	saldoNuevo = obtenerSaldoPorIBAN(IBAN) + cantidad;
+            registro = IBAN + "," + saldoNuevo;
+            anhadidoEnMovimientos= escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
         }
         else
         {
-            registro = IBAN + ",-" + cantidad;
-            añadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
+        	saldoNuevo = obtenerSaldoPorIBAN(IBAN) - cantidad;
+            registro = IBAN + "," + saldoNuevo;
+            anhadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
         }
 
         //Si se ha añadido en el fichero de movimientos, ahora sincronizar ambos ficheros
-        if(añadidoEnMovimientos)
+        if(anhadidoEnMovimientos)
         {
             actualizarFichero("./Files/BancoCentral/Cuentas_BancoCentral", 0);
             saldoModificado = true;
         }
-
-        //Limpiar el fichero de movimientos
-
-        //Pasar el contenido del fichero maestro actualizado al maestro antiguo.
-
+        
         return saldoModificado;
     }
 	
@@ -942,7 +942,7 @@ public boolean modificarSaldoEnFicheroCuentas(String IBAN, boolean sumaOresta,do
 			bwMaestroAct.close();
 			
 			ficheroMaestro.delete();
-			ficheroMaestroAct.renameTo(ficheroMaestro);
+			System.out.println("QUEHAPASAO: " + ficheroMaestroAct.renameTo(ficheroMaestro));
 			
 			ficheroMovimientos.delete();
 			ficheroMovimientos.createNewFile();

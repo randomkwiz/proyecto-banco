@@ -73,9 +73,12 @@ public class GestionBancoComercialTest {
         System.out.println(gestion.obtenerNombrePorBIC("CAIXESBBXXX"));
  */
         //gestion.marcarCuentaComoBorrada("ESPBSCHESMMXXX0000001");
-        //gestion.marcarCuentaComoBorrada("ESPBSCHESMMXXX0000002");
+        //System.out.println(gestion.isIBANvalido("ESPBSCHESMMXXX0000002"));
+        //System.out.println(gestion.marcarCuentaComoBorrada("ESPBSCHESMMXXX0000002"));
        //gestion.eliminarCuentasBorradasDefinitivamente("BSCHESMMXXX");
 
-        System.out.println(gestion.datosCuenta("ESPBSCHESMMXXX0000002"));
+        //System.out.println(gestion.datosCuenta("ESPBSCHESMMXXX0000002"));
+        //System.out.println(gestion.modificarSaldoEnFicheroCuentas("ESPCAIXESBBXXX0000001", true, 400));
+    
     }
 }

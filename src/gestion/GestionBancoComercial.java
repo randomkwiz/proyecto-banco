@@ -24,6 +24,7 @@ public class GestionBancoComercial{
      * Entrada/Salida:
      * Postcondiciones: asociado al nombre devuelve true si el iban corresponde a una cuenta del fichero CuentasBorradas y false si no
      * */
+	//TODO Cambiar esto, ya no buscar en ese fichero.
     public boolean isCuentaBorrada(String iban){
         File f_cuentasBorradas = new File("./Files/BancosComerciales/"+obtenerNombreBancoComercialPorIBAN(iban)+"/CuentasBorradas_"+obtenerNombreBancoComercialPorIBAN(iban)+".txt");
         FileReader fr = null;
@@ -56,24 +57,14 @@ public class GestionBancoComercial{
      * Entrada/Salida:
      * Postcondiciones: modifica el fichero de cuentas borradas
      * */
-    public boolean marcarCuentaComoBorrada(String iban_cuenta){
-        File f_cuentasBorradas = new File("./Files/BancosComerciales/"+obtenerNombreBancoComercialPorIBAN(iban_cuenta)+"/CuentasBorradas_"+obtenerNombreBancoComercialPorIBAN(iban_cuenta)+".txt");
-        FileWriter fw = null;
-        BufferedWriter bw = null;
+    public boolean marcarCuentaComoBorrada(String iban_cuenta)
+    {
         boolean borrada = false;
-
-        try{
-            fw = new FileWriter(f_cuentasBorradas,true);
-            bw = new BufferedWriter(fw);
-
-            bw.write(iban_cuenta);
-            bw.newLine();
-            borrada = true;
-
-            bw.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+        
+        String nombreBanco = obtenerNombreBancoComercialPorIBAN(iban_cuenta);
+        
+        if(isIBANvalido(iban_cuenta))
+        	borrada = escribirRegistroEnMovimientos(iban_cuenta + ",*\n", "./Files/BancosComerciales/" + nombreBanco + "/Cuentas_" + nombreBanco + "_Movimientos.txt");
         
         return borrada;
     }
@@ -684,6 +675,16 @@ public class GestionBancoComercial{
         return movimientoInsertado;
     }
 
+    public double obtenerSaldoPorIBAN(String IBAN)
+	{
+		String cuenta = datosCuenta(IBAN);
+		double saldo = 0;
+		
+		if(cuenta != null)
+			saldo = Double.parseDouble(cuenta.split(",")[1]);
+		
+		return saldo;
+	}
 
     /*
      * INTERFAZ
@@ -696,56 +697,41 @@ public class GestionBancoComercial{
      * Postcondiciones: Se modifica el fichero de Cuentas y se actualiza el saldo pertinente.
      * */
     //TODO Este m�todo no est� bien: Tiene que escribir un registro nuevo en el fichero de movimientos, no modificar el maestro directamente.
-    public boolean modificarSaldoEnFicheroCuentas(String iban_cuenta, boolean sumaOresta,double cantidad){
-        String nombre_banco = obtenerNombreBancoComercialPorIBAN(iban_cuenta);
-        File ficheroCuentas = new File ("./Files/BancosComerciales/"+nombre_banco+"/Cuentas_"+nombre_banco+"_Movimientos.txt");
-        FileReader leer = null;
-        BufferedReader br = null;
-        FileWriter fw = null;
-        BufferedWriter bw = null;
-        String campos[] = null;
-        List<String> registros = new ArrayList<String>();   //toma ya usando arraylist Â¯\_(ãƒ„)_/Â¯
-        String registro = " ";
-        boolean saldoModificado = false;
+    public boolean modificarSaldoEnFicheroCuentas(String IBAN, boolean sumaOresta,double cantidad)
+    {
+    	 String nombreBanco = obtenerNombreBancoComercialPorIBAN(IBAN);
+    	 File ficheroCuentas = new File("./Files/BancosComerciales/" + nombreBanco + "/Cuentas_"+ nombreBanco +"_Movimientos.txt");
 
-        try {
-            leer = new FileReader(ficheroCuentas);
-            br = new BufferedReader(leer);
-
-            while(br.ready()){
-                registro = br.readLine();
-                campos = registro.split(",");
-
-                if(campos[0].equals(iban_cuenta)){
-                    if(sumaOresta){
-                        registro = registro.replace(campos[1], Double.toString(cantidad+Double.parseDouble(campos[1])));
-                        saldoModificado = true;
-                    }else{
-                        registro = registro.replace(campos[1], Double.toString(Double.parseDouble(campos[1])-cantidad));
-                        saldoModificado = true;
-                    }
-
-                }
-
-                registros.add(registro);
-            }
-            br.close();
-
-
-
-            fw = new FileWriter(ficheroCuentas);
-            bw = new BufferedWriter(fw);
-            for(String s : registros) {
-                bw.write(s);
-                bw.newLine();
-            }
-            bw.close();
-
-
-        }catch (IOException e){e.printStackTrace();}
-
-        return saldoModificado;
-    }
+		 String registro = " ";
+		 
+		 boolean saldoModificado = false;
+		 boolean anhadidoEnMovimientos = false;
+		 
+		 double saldoNuevo = 0;
+		
+		 //Escribe el registro en el fichero de movimientos
+		 if(sumaOresta)
+		 {
+		 	saldoNuevo = obtenerSaldoPorIBAN(IBAN) + cantidad;
+		     registro = IBAN + "," + saldoNuevo;
+		     anhadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
+		 }
+		 else
+		 {
+		 	saldoNuevo = obtenerSaldoPorIBAN(IBAN) - cantidad;
+		     registro = IBAN + "," + saldoNuevo;
+		     anhadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
+		 }
+		
+		 //Si se ha añadido en el fichero de movimientos, ahora sincronizar ambos ficheros
+		 if(anhadidoEnMovimientos)
+		 {
+		     actualizarFichero("./Files/BancosComerciales/" + nombreBanco + "/Cuentas_"+ nombreBanco, 0);
+		     saldoModificado = true;
+		 }
+		 
+		 return saldoModificado;
+     }
     
     /* INTERFAZ
      * Comentario: Comprueba si un cliente (DNI) está registrado en un banco(BIC)
@@ -966,7 +952,7 @@ public class GestionBancoComercial{
 			bw = new BufferedWriter(fw);
 			
 			bw.write(registro);
-			
+			escrito = true;
 			bw.close();
 		}
 		catch(IOException e)
