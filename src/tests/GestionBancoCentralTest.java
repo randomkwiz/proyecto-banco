@@ -34,11 +34,11 @@ public class GestionBancoCentralTest
 		
 		System.out.println("-------------------------------------------");*/
 		
-		//System.out.println("gestion.modificarSaldoEnFicheroCuentas(\"ESPCAIXESBBXXX0000000\", true, 500)");
-		//System.out.println("ANTES -> " + gestion.datosCuenta("ESPCAIXESBBXXX0000000"));
-		//gestion.modificarSaldoEnFicheroCuentas("ESPCAIXESBBXXX0000000", true, 200);
-		//System.out.println("DESPUES -> " + gestion.datosCuenta("ESPCAIXESBBXXX0000000"));
-		System.out.println(gestion.obtenerSaldoPorIBAN("ESPCAIXESBBXXX0000000"));
+		System.out.println("gestion.modificarSaldoEnFicheroCuentas(\"ESPCAIXESBBXXX0000000\", true, 500)");
+		System.out.println("ANTES -> " + gestion.datosCuenta("ESPCAIXESBBXXX0000000"));
+		gestion.modificarSaldoEnFicheroCuentas("ESPCAIXESBBXXX0000000", true, 200);
+		System.out.println("DESPUES -> " + gestion.datosCuenta("ESPCAIXESBBXXX0000000"));
+		//System.out.println(gestion.obtenerSaldoPorIBAN("ESPCAIXESBBXXX0000000"));
 		/*
 		System.out.println("-------------------------------------------");
 		

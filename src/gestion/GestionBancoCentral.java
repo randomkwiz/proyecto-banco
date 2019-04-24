@@ -1,9 +1,15 @@
 package gestion;
-
+import clasesBasicas.TransferenciaImpl;
+import utilidades.Utilidades;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 import clasesBasicas.TransferenciaImpl;
 import utilidades.MyObjectOutputStream;
 import utilidades.Utilidades;
-
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,12 +17,13 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+
 public class GestionBancoCentral
 {
     /* INTERFAZ
      * Comentario: Escribe un registro nuevo en un fichero de movimientos determinado
      * Prototipo: public boolean escribirRegistroEnMovimientos(String registro, String rutaFichero)
-     * Entrada: Un String con el registro a escribir, y otro String con la ruta del fichero donde se escribir�.
+     * Entrada: Un String con el registro a escribir, y otro String con la ruta del fichero donde se escribirá.
      * Precondiciones: No hay
      * Salida: Un boolean indicando si se ha escrito correctamente o no.
      * Postcondiciones: Asociado al nombre devuelve:
@@ -48,11 +55,10 @@ public class GestionBancoCentral
         return escrito;
     }
 
-
-    /* INTERFAZ
+  /* INTERFAZ
      * Signatura: public void modificarSaldoEnFicheroCuentas(String nombre_banco,String iban_cuenta, boolean sumaOresta,double cantidad)
-     * Comentario: Este m�todo se encarga de modificar en el fichero de Cuentas, el registro del saldo total (campo 2).
-     * Precondiciones: Se pasa por referencia el ID de la cuenta a modificar y por valor la cantidad a añadir o substraer. Se pasa boolean que es true si añade la cantidad o false si la resta
+     * Comentario: Este método se encarga de modificar en el fichero de Cuentas, el registro del saldo total (campo 2).
+     * Precondiciones: Se pasa por referencia el ID de la cuenta a modificar y por valor la cantidad a aÃ±adir o substraer. Se pasa boolean que es true si aÃ±ade la cantidad o false si la resta
      * Entrada: String nombre_banco, String ID_Cuenta, boolean sumaOresta, double cantidad
      * Salida:
      * Entrada/Salida:
@@ -71,22 +77,22 @@ public class GestionBancoCentral
         List<String> registros = new ArrayList<String>();
         String registro = " ";
         boolean saldoModificado = false;
-        boolean a�adidoEnMovimientos = false;
+        boolean añadidoEnMovimientos = false;
 
         //Escribe el registro en el fichero de movimientos
         if(sumaOresta)
         {
             registro = IBAN + ",+" + cantidad;
-            a�adidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
+            añadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
         }
         else
         {
             registro = IBAN + ",-" + cantidad;
-            a�adidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
+            añadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
         }
 
-        //Si se ha a�adido en el fichero de movimientos, ahora sincronizar ambos ficheros
-        if(a�adidoEnMovimientos)
+        //Si se ha añadido en el fichero de movimientos, ahora sincronizar ambos ficheros
+        if(añadidoEnMovimientos)
         {
             actualizarFichero("./Files/BancoCentral/Cuentas_BancoCentral", 0);
             saldoModificado = true;
@@ -98,16 +104,17 @@ public class GestionBancoCentral
 
         return saldoModificado;
     }
-	
+
+
 	/* INTERFAZ
      * Signatura: public void insertarMovimientoEnFicheroMovimientos(String nombre_banco,String ID_Cuenta,boolean isIngresoOrRetirada, String concepto, double cantidad,int dia, int mes, int anyo)
-     * Comentario: Este m�todo se encarga de modificar en el fichero de movimientos de la cuenta, añade un nuevo movimiento.
+     * Comentario: Este método se encarga de modificar en el fichero de movimientos de la cuenta, aÃ±ade un nuevo movimiento.
      * Precondiciones: Se pasa por referencia el ID de la cuenta y del banco a modificar y por valor la cantidad de dinero a mover. Se pasa
-     *                  un boolean que es true si el movimiento es un ingreso o false si es una retirada de dinero. Tambien se pasa la fecha como tres valores enteros (se supone válida)
+     *                  un boolean que es true si el movimiento es un ingreso o false si es una retirada de dinero. Tambien se pasa la fecha como tres valores enteros (se supone vÃ¡lida)
      * Entrada: (String nombre_banco,String ID_Cuenta,boolean isIngresoOrRetirada, double cantidad,int dia, int mes, int anyo)
      * Salida:
      * Entrada/Salida:
-     * Postcondiciones: Se modifica el fichero de movimientos de cuentas, añadiendo un movimiento nuevo.
+     * Postcondiciones: Se modifica el fichero de movimientos de cuentas, aÃ±adiendo un movimiento nuevo.
      * */
 	public boolean insertarMovimientoEnFicheroMovimientos(String IBAN,boolean isIngresoOrRetirada, String concepto, double cantidad, GregorianCalendar fecha)
 	{
@@ -132,7 +139,7 @@ public class GestionBancoCentral
         
         return movimientoInsertado;
 	}
-	
+
 	/* INTERFAZ
 	 * Comentario: Accede al fichero de cuentas y busca una cuenta por su IBAN para leer sus datos
 	 * Prototipo: public String datosCuenta(String IBAN)
@@ -173,14 +180,14 @@ public class GestionBancoCentral
 		
 		return cuenta;
 	}
-	
+
 	/* INTERFAZ
 	 * Comentario: Comprueba si existe un cliente(BIC) registrado en el banco central
 	 * Prototipo: public boolean BICRegistrado(String BIC)
 	 * Entrada: un String con el BIC del clente a comprobar
 	 * Precondiciones: No hay
 	 * Salida: un boolean indicando si el BIC esta registrado ya o no
-	 * Postcondiciones: Asociado al nombre devuelve true si el BIC est� ya registrado en el banco o false de lo contrario.
+	 * Postcondiciones: Asociado al nombre devuelve true si el BIC está ya registrado en el banco o false de lo contrario.
 	 */
 	public boolean BICRegistrado(String BIC)
 	{
@@ -218,14 +225,14 @@ public class GestionBancoCentral
 		
 		return registrado;
 	}
-	
+
 	/* INTERFAZ
 	 * Comentario: Comprueba si existe una cuenta(IBAN) registrada en el banco central
 	 * Prototipo: public boolean IBANRegistrado(String IBAN)
 	 * Entrada: un String con el IBAN de la cuenta a comprobar
 	 * Precondiciones: No hay
 	 * Salida: un boolean indicando si el IBAN esta registrado ya o no
-	 * Postcondiciones: Asociado al nombre devuelve true si el IBAN est� ya registrado en el banco o false de lo contrario.
+	 * Postcondiciones: Asociado al nombre devuelve true si el IBAN está ya registrado en el banco o false de lo contrario.
 	 */
 	public boolean IBANRegistrado(String IBAN)
 	{
@@ -263,80 +270,8 @@ public class GestionBancoCentral
 		
 		return registrado;
 	}
-	
-	/*
-     * INTERFAZ
-     * Signatura: public ArrayList<String> buscarMovimientosPorFecha(String iban_cuenta, int anyo_buscado)
-     * Comentario: busca los movimientos que se hicieron en una cuenta en la fecha dada
-     * Precondiciones: Se pasa un iban y un int
-     * Entrada: String iban, int anyo_buscado
-     * Salida: arraylist de cadenas con el / los movimientos requeridos
-     * Entrada/Salida:
-     * Postcondiciones: asociado al nombre devuelve un arraylist
-     * */
-    public List<TransferenciaImpl> buscarMovimientosPorFecha(String IBAN, int anyo){
-        File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".dat");
-        ObjectInputStream leer = null;
-        List<TransferenciaImpl> registros_buscados = new ArrayList<TransferenciaImpl>();
-        TransferenciaImpl registro = null;
-        boolean cont = true;
 
-
-        try{
-            leer = new ObjectInputStream(new FileInputStream(file_movimientos));
-            while (cont){
-                registro = (TransferenciaImpl) leer.readObject();
-                if (registro.getFecha().get(Calendar.YEAR) ==  anyo ){
-                    registros_buscados.add(registro);
-                }
-            }
-            leer.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }catch (ClassNotFoundException e){
-            e.printStackTrace();
-        }
-
-        return registros_buscados;
-    }
-    
-    /*
-     * INTERFAZ
-     * Signatura: public ArrayList<String> buscarMovimientosPorFecha(String iban_cuenta, int mes_buscado, int anyo_buscado)
-     * Comentario: busca los movimientos que se hicieron en una cuenta en la fecha dada
-     * Precondiciones: Se pasa un iban y dos int
-     * Entrada: String iban, int mes_buscado, int anyo_buscado
-     * Salida: arraylist de cadenas con el / los movimientos requeridos
-     * Entrada/Salida:
-     * Postcondiciones: asociado al nombre devuelve un arraylist
-     * */
-    public List<TransferenciaImpl> buscarMovimientosPorFecha(String IBAN, int mes, int anyo){
-        File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".dat");
-        ObjectInputStream leer = null;
-        List<TransferenciaImpl> registros_buscados = new ArrayList<TransferenciaImpl>();
-        TransferenciaImpl registro= null;
-        boolean cont = true;
-
-
-        try{
-            leer = new ObjectInputStream(new FileInputStream(file_movimientos));
-            while (cont){
-                registro = (TransferenciaImpl) leer.readObject();
-                if (registro.getFecha().get(Calendar.YEAR) ==  anyo && registro.getFecha().get(Calendar.MONTH) == mes ){
-                    registros_buscados.add(registro);
-                }
-            }
-            leer.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }catch (ClassNotFoundException e){
-            e.printStackTrace();
-        }
-
-        return registros_buscados;
-    }
-    
-    /*
+ /*
      * INTERFAZ
      * Signatura: public ArrayList<String> buscarMovimientosPorFecha(String iban_cuenta,int dia_buscado, int mes_buscado, int anyo_buscado)
      * Comentario: busca los movimientos que se hicieron en una cuenta en la fecha dada
@@ -369,8 +304,8 @@ public class GestionBancoCentral
 
         return registros_buscados;
     }
-    
-    /*
+
+   /*
      * INTERFAZ
      * Signatura: public boolean isCuentaBorrada(String iban)
      * Comentario: Comprueba si el iban pertenece a una cuenta del fichero CuentasBorradas
@@ -402,8 +337,7 @@ public class GestionBancoCentral
         }
         return isBorrada;
     }
-    
-    /*
+   /*
      * INTERFAZ
      * Signatura: public void marcarCuentaComoBorrada(String iban_cuenta)
      * Comentario: Escribe en el fichero CuentasBorradas la cuenta indicada
@@ -436,8 +370,8 @@ public class GestionBancoCentral
         
         return borrada;
     }
-    
-    /*
+
+  /*
      * INTERFAZ
      * Signatura: public void eliminarCuentasBorradasDefinitivamente(String bic)
      * Comentario: Elimina definitivamente el rastro de las cuentas marcadas como borradas en el fichero CuentasBorradas.
@@ -480,7 +414,7 @@ public class GestionBancoCentral
         }
 
         for (int i = 0; i < cuentasABorrar.size(); i++) {
-            /*Comprobación y eliminación del fichero de Cuentas*/
+            /*ComprobaciÃ³n y eliminaciÃ³n del fichero de Cuentas*/
             try {
                 fr = new FileReader(cuentas);
                 br = new BufferedReader(fr);
@@ -508,7 +442,7 @@ public class GestionBancoCentral
                 e.printStackTrace();
             }
 
-            /*Comprobación y eliminación del fichero de Clientes_Cuentas_ */
+            /*ComprobaciÃ³n y eliminaciÃ³n del fichero de Clientes_Cuentas_ */
             try {
                 fr = new FileReader(clientes_cuentas);
                 br = new BufferedReader(fr);
@@ -538,7 +472,7 @@ public class GestionBancoCentral
                 e.printStackTrace();
             }
 
-            /*Comprobación y eliminación del fichero de Clientes */
+            /*ComprobaciÃ³n y eliminaciÃ³n del fichero de Clientes */
             try {
                 fr = new FileReader(clientes);
                 br = new BufferedReader(fr);
@@ -587,7 +521,6 @@ public class GestionBancoCentral
 
         }//cierra el if
     }
-    
     /*
      * INTERFAZ
      * Signatura: public List<String> ultimosDiezMovimientos(String iban_cuenta)
@@ -629,8 +562,6 @@ public class GestionBancoCentral
             }
             return registros;
     }
-
-
     /*
      * INTERFAZ
      * Signatura: public String obtenerBICporNombre(String nombre_banco)
@@ -744,10 +675,10 @@ public class GestionBancoCentral
         return nombre;
     }
 
-    /* INTERFAZ
+   /* INTERFAZ
      * Signatura: public void ingresarDinero(String nombre_banco, String ID_Cuenta,String concepto, double cantidad, int dia, int mes, int anyo)
      * Comentario: ingresa una cantidad dada de una cuenta
-     * Precondiciones: Por valor se pasa una cantidad, por referencia la ID de una cuenta y el nombre del banco. Por valor se pasa dia, mes y año
+     * Precondiciones: Por valor se pasa una cantidad, por referencia la ID de una cuenta y el nombre del banco. Por valor se pasa dia, mes y aÃ±o
      * Entrada: String nombre_banco, String ID_Cuenta, double cantidad, int dia, int mes, int anyo
      * Salida: Un boolean indiciando si se ha ingresado el dinero con exito o no
      * Entrada/Salida:
@@ -771,8 +702,8 @@ public class GestionBancoCentral
 
     /* INTERFAZ
      * Signatura: public void realizarMovimiento(String nombre_banco_origen,String cuenta_origen,String nombre_banco_destino, String cuenta_destino, String concepto,double cantidad, int dia, int mes, int anyo)
-     * Comentario: Realiza un movimiento bancario, sacando una cantidad de la cuenta de origen e ingresándola en la cuenta destino.
-     *              Llama a los métodos sacarDinero e ingresarDinero.
+     * Comentario: Realiza un movimiento bancario, sacando una cantidad de la cuenta de origen e ingresÃ¡ndola en la cuenta destino.
+     *              Llama a los mÃ©todos sacarDinero e ingresarDinero.
      * Precondiciones: Por referencia se pasan las ID de las cuentas y los nombres de los bancos de origen y destino, por valor se pasa la cantidad y dia mes y anyo. Tambien se pasa por referencia el concepto
      * Entrada: (String nombre_banco_origen,String cuenta_origen,String nombre_banco_destino, String cuenta_destino, String concepto,double cantidad, int dia, int mes, int anyo)
      * Salida: Un boolean indicando si se ha realizado bien el movimiento o no
@@ -798,7 +729,7 @@ public class GestionBancoCentral
     /*INTERFAZ
      * Signatura: public void sacarDinero(String nombre_banco, String ID_Cuenta, String concepto,double cantidad, int dia, int mes, int anyo)
      * Comentario: saca una cantidad dada de una cuenta
-     * Precondiciones: Por valor se pasa una cantidad, por referencia la ID de una cuenta y el nombre del banco. Se pasa por valor dia mes y año
+     * Precondiciones: Por valor se pasa una cantidad, por referencia la ID de una cuenta y el nombre del banco. Se pasa por valor dia mes y aÃ±o
      * Entrada: String nombre_banco, String ID_Cuenta, double cantidad, int dia, int mes, int anyo
      * Salida: Un boolean indicando si se ha sacado bien el dinero
      * Entrada/Salida:
@@ -820,8 +751,7 @@ public class GestionBancoCentral
 
         return dineroSacado;
     }
-
-    /* INTERFAZ
+  /* INTERFAZ
      * Comentario: Actualiza un fichero maestro determinado, mirando los registros de su fichero de movimiento correspondiente.
      * Prototipo: public boolean actualizarFichero(String fichero)
      * Entrada: Un string con la ruta del fichero
