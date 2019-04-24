@@ -1,5 +1,7 @@
 package utilidades;
 
+import clasesBasicas.TransferenciaImpl;
+
 import java.io.*;
 import java.util.*;
 
@@ -8,18 +10,16 @@ public class Utilidades {
     *Signatura: public void imprimirMovimientos(List<String> movimientos)
     * Comentario: imprime una lista de Strings en pantalla
     * */
-    public void imprimirMovimientos(List<String> movimientos){
-    	String[] campos;
-    	
-        for(String element:movimientos)
+    public void imprimirMovimientos(List<TransferenciaImpl> movimientos){
+
+        String tipo = " ";
+        for(TransferenciaImpl element:movimientos)
         {
-            campos = element.split(",");
-            
             System.out.println("-------------------------------");
-            System.out.println("Fecha: " + campos[3]);
-            System.out.println("Tipo: " + campos[1]);
-            System.out.println("Cantidad: " + campos[2]);
-            System.out.println("Concepto: " + campos[0]);
+            System.out.println("Fecha: " + element.toStringFecha());
+            System.out.println("Tipo: " + ((element.isIngresoOrRetirada())?"INGRESO":"RETIRADA"));
+            System.out.println("Cantidad: " + element.getCantidad());
+            System.out.println("Concepto: " + element.getConcepto());
         }
     }
     

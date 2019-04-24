@@ -69,7 +69,7 @@ public class ValidacionProgramaCliente {
             do {
                 System.out.println("IBAN: ");
                 iban_cuenta = sc.next().toUpperCase();
-            } while (!gbc.isIBANvalido(iban_cuenta) || gbc.isCuentaBorrada(iban_cuenta));
+            } while (!gbc.isIBANvalido(iban_cuenta));
 
         return iban_cuenta;
     }
