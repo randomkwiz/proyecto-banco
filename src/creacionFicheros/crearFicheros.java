@@ -199,6 +199,7 @@ public class crearFicheros {
         String registro=" ";
         String[] campos = null;
         String nombreArchivo= " ";
+        ObjectOutputStream escribirBinario = null;
 
             try {
                 leer = new FileReader(listadoCuentas_BancoCentral_maestro);
@@ -208,9 +209,16 @@ public class crearFicheros {
                 while (br.ready()) {
                     registro = br.readLine();
                     campos = registro.split(",");
-                    nombreArchivo = "Transferencias_" + campos[0]+".txt";
+                    nombreArchivo = "Transferencias_" + campos[0]+".dat";
                     File f_movimientos_BancoCentral = new File(carpetaMovimientos_BancoCentral, nombreArchivo);
                     if(f_movimientos_BancoCentral.createNewFile()){
+                        try{
+                            escribirBinario = new ObjectOutputStream(new FileOutputStream(f_movimientos_BancoCentral));
+
+                            escribirBinario.close();
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }
                         System.out.println(nombreArchivo+" creado con éxito.");
                     }else{
                         System.out.println("Error en la creación de "+nombreArchivo+"\nO bien el archivo ya existe.");
@@ -220,6 +228,9 @@ public class crearFicheros {
             } catch (IOException e) {
                 e.getStackTrace();
             }
+
+
+
 
         //FIN
 
@@ -508,8 +519,14 @@ public class crearFicheros {
                     registro = br.readLine();
                     campos = registro.split(",");
                     iban_cuenta = campos[0];
-                    file_movimientos_iban = new File(carpetaMovimientos, "Transferencias_Cuenta_" + iban_cuenta+".txt");
+                    file_movimientos_iban = new File(carpetaMovimientos, "Transferencias_Cuenta_" + iban_cuenta+".dat");
                     if (file_movimientos_iban.createNewFile()) {
+                        try{
+                            escribirBinario = new ObjectOutputStream(new FileOutputStream(file_movimientos_iban));
+                            escribirBinario.close();
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }
                         System.out.println("Exito al crear el archivo " + file_movimientos_iban.getName());
                     } else {
                         System.out.println("Erros al crear el archivo " + file_movimientos_iban.getName() + " o bien el archivo ya existe.");
