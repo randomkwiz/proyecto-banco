@@ -1,5 +1,7 @@
 package tests;
 
+import java.util.GregorianCalendar;
+
 import gestion.GestionBancoComercial;
 
 public class GestionBancoComercialTest {
@@ -75,10 +77,18 @@ public class GestionBancoComercialTest {
         //gestion.marcarCuentaComoBorrada("ESPBSCHESMMXXX0000001");
         //System.out.println(gestion.isIBANvalido("ESPBSCHESMMXXX0000002"));
         //System.out.println(gestion.marcarCuentaComoBorrada("ESPBSCHESMMXXX0000002"));
+        //System.out.println(gestion.eliminarCuenta("ESPBSCHESMMXXX0000002"));
        //gestion.eliminarCuentasBorradasDefinitivamente("BSCHESMMXXX");
 
         //System.out.println(gestion.datosCuenta("ESPBSCHESMMXXX0000002"));
+        //System.out.println(gestion.obtenerSaldoPorIBAN("ESPCAIXESBBXXX0000001"));
         //System.out.println(gestion.modificarSaldoEnFicheroCuentas("ESPCAIXESBBXXX0000001", true, 400));
-    
+        //System.out.println(gestion.obtenerSaldoPorIBAN("ESPCAIXESBBXXX0000001"));
+        //System.out.println(gestion.obtenerClientePorIBAN("ESPCAIXESBBXXX0000001"));
+        
+        //System.out.println(gestion.insertarCliente("CAIXESBBXXX", "30216092-E", 1000));
+        
+        System.out.println(gestion.sacarDinero("ESPCAIXESBBXXX0000001", "Conceptazo", 100, new GregorianCalendar()));
+        //System.out.println(gestion.ultimosDiezMovimientos("ESPCAIXESBBXXX0000001"));
     }
 }
