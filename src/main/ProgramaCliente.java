@@ -20,6 +20,7 @@
 * */
 package main;
 
+import clasesBasicas.TransferenciaImpl;
 import gestion.GestionBancoComercial;
 //import resguardos.ResguardoGestionBancoComercial;
 import utilidades.Utilidades;
@@ -39,7 +40,7 @@ public class ProgramaCliente {
         int opcion, dia, mes, anyo;
         double cantidad;
         String iban_cuenta, iban_destino,concepto;
-        List<String> movimientos = new ArrayList<String>();
+        List<TransferenciaImpl> movimientos = new ArrayList<TransferenciaImpl>();
 
         //pedirValidarInicioSesion
         iban_cuenta = validar.inicioSesion();
