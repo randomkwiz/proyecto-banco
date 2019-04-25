@@ -5,7 +5,10 @@
 * */
 package gestion;
 import java.io.*;
-
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -163,15 +166,17 @@ public class GestionBancoComercial {
         boolean cont = true;
 
 
-        try{
+        try {
             leer = new ObjectInputStream(new FileInputStream(file_movimientos));
-            while (cont){
+            while (cont) {
                 registro = (TransferenciaImpl) leer.readObject();
-                if (registro.getFecha().get(Calendar.YEAR) ==  anyo && registro.getFecha().get(Calendar.MONTH) == mes ){
+                if (registro.getFecha().get(Calendar.YEAR) == anyo && registro.getFecha().get(Calendar.MONTH) == mes - 1) {
                     registros_buscados.add(registro);
                 }
             }
             leer.close();
+        }catch (EOFException e){
+
         }catch (IOException e){
             e.printStackTrace();
         }catch (ClassNotFoundException e){
@@ -197,15 +202,17 @@ public class GestionBancoComercial {
         TransferenciaImpl registro = null;
         ObjectInputStream leer = null;
         boolean cont = true;
-        try{
+        try {
             leer = new ObjectInputStream(new FileInputStream(file_movimientos));
-            while (cont){
+            while (cont) {
                 registro = (TransferenciaImpl) leer.readObject();
-                if (registro.getFecha().get(Calendar.YEAR) ==  anyo && registro.getFecha().get(Calendar.MONTH) == mes && registro.getFecha().get(Calendar.DAY_OF_MONTH) == dia ){
+                if (registro.getFecha().get(Calendar.YEAR) == anyo && registro.getFecha().get(Calendar.MONTH) == mes - 1 && registro.getFecha().get(Calendar.DAY_OF_MONTH) == dia) {
                     registros_buscados.add(registro);
                 }
             }
             leer.close();
+        }catch (EOFException e){
+
         }catch (IOException e){
             e.printStackTrace();
         }catch (ClassNotFoundException e){
@@ -444,9 +451,10 @@ public class GestionBancoComercial {
     public void ordenarMovimientosPorFecha(String iban){
         String nombre_banco = obtenerNombreBancoComercialPorIBAN(iban);
         File ficheroMovimientosCuenta = new File ("./Files/BancosComerciales/"+nombre_banco+"/Transferencias/Transferencias_Cuenta_"+iban+".dat");
-        //File temp = new File ("./Files/BancosComerciales/"+nombre_banco+"/Movimientos/Movimientos_Cuenta_"+iban+"_temp.txt");
+        File temp = new File ("./Files/BancosComerciales/"+nombre_banco+"/Transferencias/Transferencias_Cuenta_"+iban+"_temp.dat");
         ObjectInputStream leer = null;
         ObjectOutputStream escribir = null;
+        MyObjectOutputStream escribirMyObject = null;
         List<TransferenciaImpl> registros = new ArrayList<TransferenciaImpl>();    //arraylist - considerar cambiar a array
         TransferenciaImpl registro = null;
         TransferenciaImpl aux = null; //para el bubblesort de mÃƒÂ¡s abajo
@@ -482,7 +490,16 @@ public class GestionBancoComercial {
 
 
         try{
-           escribir = new ObjectOutputStream(new FileOutputStream(ficheroMovimientosCuenta));
+            escribir = new ObjectOutputStream(new FileOutputStream(ficheroMovimientosCuenta));
+            escribir.close();
+        }catch ( IOException e ){
+            e.printStackTrace();
+        }
+
+
+        try{
+           escribirMyObject = new MyObjectOutputStream(new FileOutputStream(ficheroMovimientosCuenta));
+
             for(int i = 0; i < registros.size(); i ++){
                 escribir.writeObject(registros.get(i));
 
@@ -491,6 +508,22 @@ public class GestionBancoComercial {
         }catch ( IOException e ){
             e.printStackTrace();
         }
+/*
+        ficheroMovimientosCuenta.delete();
+        temp.renameTo(ficheroMovimientosCuenta);
+        Path source = Paths.get(temp.getPath());
+        Path dest = Paths.get(ficheroMovimientosCuenta.getPath());
+
+        try
+        {
+            Files.move(source, dest, StandardCopyOption.REPLACE_EXISTING);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+*/
+
 
     }
 
@@ -507,7 +540,7 @@ public class GestionBancoComercial {
      * */
     public boolean insertarMovimientoEnFicheroMovimientos(String ID_Cuenta,boolean isIngresoOrRetirada, String concepto, double cantidad,GregorianCalendar fecha){
         String nombre_banco = obtenerNombreBancoComercialPorIBAN(ID_Cuenta);
-        File ficheroCuentas = new File ("./Files/BancosComerciales/"+nombre_banco+"/Transferencias/Transferencias_Cuenta_"+ID_Cuenta+".txt");
+        File ficheroCuentas = new File ("./Files/BancosComerciales/"+nombre_banco+"/Transferencias/Transferencias_Cuenta_"+ID_Cuenta+".dat");
         TransferenciaImpl trans = new TransferenciaImpl(ID_Cuenta,isIngresoOrRetirada,concepto,cantidad,fecha);
         boolean movimientoInsertado = false;
 
@@ -554,7 +587,7 @@ public class GestionBancoComercial {
 
         String registro = " ";
         boolean saldoModificado = false;
-        boolean añadidoEnMovimientos = false;
+        boolean anhadidoEnMovimientos = false;
         double nuevaCantidad;
 
         //Escribe el registro en el fichero de movimientos
@@ -562,17 +595,17 @@ public class GestionBancoComercial {
         {
         	nuevaCantidad = obtenerSaldoPorIBAN(IBAN) + cantidad;
             registro = IBAN + "," + nuevaCantidad;
-            añadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
+            anhadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
         }
         else
         {
         	nuevaCantidad = obtenerSaldoPorIBAN(IBAN) - cantidad;
             registro = IBAN + "," + nuevaCantidad;
-            añadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
+            anhadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
         }
 
         //Si se ha añadido en el fichero de movimientos, ahora sincronizar ambos ficheros
-        if(añadidoEnMovimientos)
+        if(anhadidoEnMovimientos)
         {
             actualizarFichero("./Files/BancosComerciales/" + nombreBanco + "/Cuentas_" + nombreBanco, 0);
             saldoModificado = true;

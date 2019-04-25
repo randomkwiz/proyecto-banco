@@ -77,22 +77,22 @@ public class GestionBancoCentral
         List<String> registros = new ArrayList<String>();
         String registro = " ";
         boolean saldoModificado = false;
-        boolean añadidoEnMovimientos = false;
+        boolean anhadidoEnMovimientos = false;
 
         //Escribe el registro en el fichero de movimientos
         if(sumaOresta)
         {
             registro = IBAN + ",+" + cantidad;
-            añadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
+            anhadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
         }
         else
         {
             registro = IBAN + ",-" + cantidad;
-            añadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
+            anhadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
         }
 
         //Si se ha añadido en el fichero de movimientos, ahora sincronizar ambos ficheros
-        if(añadidoEnMovimientos)
+        if(anhadidoEnMovimientos)
         {
             actualizarFichero("./Files/BancoCentral/Cuentas_BancoCentral", 0);
             saldoModificado = true;
@@ -271,7 +271,85 @@ public class GestionBancoCentral
 		return registrado;
 	}
 
- /*
+    /*
+     * INTERFAZ
+     * Signatura: public ArrayList<String> buscarMovimientosPorFecha(String iban_cuenta, int anyo_buscado)
+     * Comentario: busca los movimientos que se hicieron en una cuenta en la fecha dada
+     * Precondiciones: Se pasa un iban y un int
+     * Entrada: String iban, int anyo_buscado
+     * Salida: arraylist de cadenas con el / los movimientos requeridos
+     * Entrada/Salida:
+     * Postcondiciones: asociado al nombre devuelve un arraylist
+     * */
+    public List<TransferenciaImpl> buscarMovimientosPorFecha(String IBAN, int anyo){
+        File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".dat");
+        ObjectInputStream leer = null;
+        List<TransferenciaImpl> registros_buscados = new ArrayList<TransferenciaImpl>();
+        TransferenciaImpl registro = null;
+        boolean cont = true;
+
+        try {
+            leer = new ObjectInputStream(new FileInputStream(file_movimientos));
+            while (cont) {
+                registro = (TransferenciaImpl) leer.readObject();
+                if (registro.getFecha().get(Calendar.YEAR) == anyo) {
+                    registros_buscados.add(registro);
+                }
+            }
+            leer.close();
+        }catch (EOFException e){
+        }catch (IOException e){
+            e.printStackTrace();
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+
+        return registros_buscados;
+    }
+
+    /*
+     * INTERFAZ
+     * Signatura: public ArrayList<String> buscarMovimientosPorFecha(String iban_cuenta, int mes_buscado, int anyo_buscado)
+     * Comentario: busca los movimientos que se hicieron en una cuenta en la fecha dada
+     * Precondiciones: Se pasa un iban y dos int
+     * Entrada: String iban, int mes_buscado, int anyo_buscado
+     * Salida: arraylist de cadenas con el / los movimientos requeridos
+     * Entrada/Salida:
+     * Postcondiciones: asociado al nombre devuelve un arraylist
+     * */
+    public List<TransferenciaImpl> buscarMovimientosPorFecha(String IBAN, int mes, int anyo){
+        File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".dat");
+        ObjectInputStream leer = null;
+        List<TransferenciaImpl> registros_buscados = new ArrayList<TransferenciaImpl>();
+        TransferenciaImpl registro= null;
+        boolean cont = true;
+        //System.out.println("Mes pasado por parametro: "+mes);
+        //System.out.println("Año pasado por parametro: "+anyo);
+
+        try {
+            leer = new ObjectInputStream(new FileInputStream(file_movimientos));
+            while (cont) {
+                registro = (TransferenciaImpl) leer.readObject();
+               // System.out.println("Mes a comparar: "+registro.getFecha().get(Calendar.MONTH) );
+                //System.out.println("Año a comparar: "+registro.getFecha().get(Calendar.YEAR));
+                if (registro.getFecha().get(Calendar.YEAR) == anyo && registro.getFecha().get(Calendar.MONTH) == mes-1) {   /*Se pone así porque los meses de Calendar van de 0(enero) a 11(diciembre)*/
+                    registros_buscados.add(registro);
+                }
+            }
+            leer.close();
+        }catch (EOFException e){
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+
+        return registros_buscados;
+    }
+
+
+    /*
      * INTERFAZ
      * Signatura: public ArrayList<String> buscarMovimientosPorFecha(String iban_cuenta,int dia_buscado, int mes_buscado, int anyo_buscado)
      * Comentario: busca los movimientos que se hicieron en una cuenta en la fecha dada
@@ -287,15 +365,17 @@ public class GestionBancoCentral
         TransferenciaImpl registro = null;
         ObjectInputStream leer = null;
         boolean cont = true;
-        try{
+        try {
             leer = new ObjectInputStream(new FileInputStream(file_movimientos));
-            while (cont){
+            while (cont) {
                 registro = (TransferenciaImpl) leer.readObject();
-                if (registro.getFecha().get(Calendar.YEAR) ==  anyo && registro.getFecha().get(Calendar.MONTH) == mes && registro.getFecha().get(Calendar.DAY_OF_MONTH) == dia ){
+                if (registro.getFecha().get(Calendar.YEAR) == anyo && registro.getFecha().get(Calendar.MONTH) == mes-1 && registro.getFecha().get(Calendar.DAY_OF_MONTH) == dia) {
                     registros_buscados.add(registro);
                 }
             }
             leer.close();
+        }catch (EOFException e){
+
         }catch (IOException e){
             e.printStackTrace();
         }catch (ClassNotFoundException e){
