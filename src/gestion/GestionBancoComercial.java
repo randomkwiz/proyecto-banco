@@ -62,7 +62,6 @@ public class GestionBancoComercial {
      * */
     public boolean marcarCuentaComoBorrada(String iban_cuenta)
     {
-        boolean cuentaBorrada = false;
         boolean borrada = false;
         
         String registroCuenta = iban_cuenta + ",*\n";
@@ -554,7 +553,7 @@ public class GestionBancoComercial {
 
         String registro = " ";
         boolean saldoModificado = false;
-        boolean añadidoEnMovimientos = false;
+        boolean anhadidoEnMovimientos = false;
         double nuevaCantidad;
 
         //Escribe el registro en el fichero de movimientos
@@ -562,17 +561,17 @@ public class GestionBancoComercial {
         {
         	nuevaCantidad = obtenerSaldoPorIBAN(IBAN) + cantidad;
             registro = IBAN + "," + nuevaCantidad;
-            añadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
+            anhadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
         }
         else
         {
         	nuevaCantidad = obtenerSaldoPorIBAN(IBAN) - cantidad;
             registro = IBAN + "," + nuevaCantidad;
-            añadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
+            anhadidoEnMovimientos = escribirRegistroEnMovimientos(registro + "\n",ficheroCuentas.getPath());
         }
 
         //Si se ha añadido en el fichero de movimientos, ahora sincronizar ambos ficheros
-        if(añadidoEnMovimientos)
+        if(anhadidoEnMovimientos)
         {
             actualizarFichero("./Files/BancosComerciales/" + nombreBanco + "/Cuentas_" + nombreBanco, 0);
             saldoModificado = true;
