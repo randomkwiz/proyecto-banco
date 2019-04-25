@@ -99,4 +99,11 @@ public class TransferenciaImpl implements Serializable {
         String fechaformateada = sdf.format(fecha.getTime());
         return ID_Cuenta+","+isIngresoOrRetirada+","+concepto+","+cantidad+","+fechaformateada;
     }
+
+    public String toStringFecha() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setCalendar(fecha);
+        String fechaformateada = sdf.format(fecha.getTime());
+        return fechaformateada;
+    }
 }
