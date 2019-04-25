@@ -1,8 +1,4 @@
-/*
-*  Voy a codificar aquÃƒÂ­ los mÃƒÂ©todos que he puesto en "ResguardoGestionBancoComercial"
-*   a pesar de que creo que irÃƒÂ­an en la clase bÃƒÂ¡sica "BancoComercial" pero por tenerlos separados.
-* Si luego vemos que son de BancoComercial, los cambio a allÃƒÂ­.
-* */
+
 package gestion;
 import java.io.*;
 
@@ -90,7 +86,7 @@ public class GestionBancoComercial {
      * Entrada/Salida:
      * Postcondiciones: modifica varios ficheros
      * */
-    //TODO Revisar entero
+    
     public boolean eliminarCuenta(String IBAN) 
     {
         boolean eliminada = false;
@@ -108,7 +104,7 @@ public class GestionBancoComercial {
         return eliminada;
     }
 
-    /*
+   /*
      * INTERFAZ
      * Signatura: public ArrayList<String> buscarMovimientosPorFecha(String iban_cuenta, int anyo_buscado)
      * Comentario: busca los movimientos que se hicieron en una cuenta en la fecha dada
@@ -162,15 +158,17 @@ public class GestionBancoComercial {
         boolean cont = true;
 
 
-        try{
+        try {
             leer = new ObjectInputStream(new FileInputStream(file_movimientos));
-            while (cont){
+            while (cont) {
                 registro = (TransferenciaImpl) leer.readObject();
-                if (registro.getFecha().get(Calendar.YEAR) ==  anyo && registro.getFecha().get(Calendar.MONTH) == mes ){
+                if (registro.getFecha().get(Calendar.YEAR) == anyo && registro.getFecha().get(Calendar.MONTH) == mes - 1) {
                     registros_buscados.add(registro);
                 }
             }
             leer.close();
+        }catch (EOFException e){
+
         }catch (IOException e){
             e.printStackTrace();
         }catch (ClassNotFoundException e){
@@ -196,15 +194,17 @@ public class GestionBancoComercial {
         TransferenciaImpl registro = null;
         ObjectInputStream leer = null;
         boolean cont = true;
-        try{
+        try {
             leer = new ObjectInputStream(new FileInputStream(file_movimientos));
-            while (cont){
+            while (cont) {
                 registro = (TransferenciaImpl) leer.readObject();
-                if (registro.getFecha().get(Calendar.YEAR) ==  anyo && registro.getFecha().get(Calendar.MONTH) == mes && registro.getFecha().get(Calendar.DAY_OF_MONTH) == dia ){
+                if (registro.getFecha().get(Calendar.YEAR) == anyo && registro.getFecha().get(Calendar.MONTH) == mes - 1 && registro.getFecha().get(Calendar.DAY_OF_MONTH) == dia) {
                     registros_buscados.add(registro);
                 }
             }
             leer.close();
+        }catch (EOFException e){
+
         }catch (IOException e){
             e.printStackTrace();
         }catch (ClassNotFoundException e){
@@ -224,7 +224,7 @@ public class GestionBancoComercial {
      * Entrada/Salida:
      * Postcondiciones: asociado al nombre devuelve una lista de String
      * */
-    public List<TransferenciaImpl> ultimosDiezMovimientos(String iban_cuenta){
+ public List<TransferenciaImpl> ultimosDiezMovimientos(String iban_cuenta){
 
         File f_cuentas = new File("./Files/BancosComerciales/"+obtenerNombrePorBIC(obtenerBICporIBAN(iban_cuenta))+"/Transferencias/Transferencias_Cuenta_" + iban_cuenta + ".dat");
         ObjectInputStream leer = null;
@@ -443,9 +443,10 @@ public class GestionBancoComercial {
     public void ordenarMovimientosPorFecha(String iban){
         String nombre_banco = obtenerNombreBancoComercialPorIBAN(iban);
         File ficheroMovimientosCuenta = new File ("./Files/BancosComerciales/"+nombre_banco+"/Transferencias/Transferencias_Cuenta_"+iban+".dat");
-        //File temp = new File ("./Files/BancosComerciales/"+nombre_banco+"/Movimientos/Movimientos_Cuenta_"+iban+"_temp.txt");
+        File temp = new File ("./Files/BancosComerciales/"+nombre_banco+"/Transferencias/Transferencias_Cuenta_"+iban+"_temp.dat");
         ObjectInputStream leer = null;
         ObjectOutputStream escribir = null;
+        MyObjectOutputStream escribirMyObject = null;
         List<TransferenciaImpl> registros = new ArrayList<TransferenciaImpl>();    //arraylist - considerar cambiar a array
         TransferenciaImpl registro = null;
         TransferenciaImpl aux = null; //para el bubblesort de mÃƒÂ¡s abajo
@@ -479,9 +480,18 @@ public class GestionBancoComercial {
             }
         }
 
+/*
+        try{
+            escribir = new ObjectOutputStream(new FileOutputStream(ficheroMovimientosCuenta));
+            escribir.close();
+        }catch ( IOException e ){
+            e.printStackTrace();
+        }
+
 
         try{
-           escribir = new ObjectOutputStream(new FileOutputStream(ficheroMovimientosCuenta));
+           escribirMyObject = new MyObjectOutputStream(new FileOutputStream(ficheroMovimientosCuenta));
+
             for(int i = 0; i < registros.size(); i ++){
                 escribir.writeObject(registros.get(i));
 
@@ -490,6 +500,39 @@ public class GestionBancoComercial {
         }catch ( IOException e ){
             e.printStackTrace();
         }
+
+ */
+        try{
+            escribir = new ObjectOutputStream(new FileOutputStream(temp));
+
+            for(int i = 0; i < registros.size(); i ++){
+                escribir.writeObject(registros.get(i));
+
+            }
+            escribir.close();
+        }catch ( IOException e ){
+            e.printStackTrace();
+        }
+        Path source = Paths.get(temp.getPath());
+        Path dest = Paths.get(ficheroMovimientosCuenta.getPath());
+        System.out.println("Existe carpeta destino: ->" + ficheroMovimientosCuenta.getParentFile().exists() );
+        System.out.println("ES carpeta? destino: ->" + ficheroMovimientosCuenta.getParentFile().isDirectory() );
+        System.out.println("Existe fichero original (no el temp): ->" + ficheroMovimientosCuenta.exists() );
+        System.out.println("Existe fichero temp (el temp): ->" + temp.exists() );
+        ficheroMovimientosCuenta.delete();
+        temp.renameTo(ficheroMovimientosCuenta);
+
+
+        try
+        {
+            Files.move(source, dest, StandardCopyOption.REPLACE_EXISTING);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
+
 
     }
 
@@ -504,9 +547,9 @@ public class GestionBancoComercial {
      * Entrada/Salida:
      * Postcondiciones: Se modifica el fichero de movimientos de cuentas, aÃƒÂ±adiendo un movimiento nuevo.
      * */
-    public boolean insertarMovimientoEnFicheroMovimientos(String ID_Cuenta,boolean isIngresoOrRetirada, String concepto, double cantidad,GregorianCalendar fecha){
+     public boolean insertarMovimientoEnFicheroMovimientos(String ID_Cuenta,boolean isIngresoOrRetirada, String concepto, double cantidad,GregorianCalendar fecha){
         String nombre_banco = obtenerNombreBancoComercialPorIBAN(ID_Cuenta);
-        File ficheroCuentas = new File ("./Files/BancosComerciales/"+nombre_banco+"/Transferencias/Transferencias_Cuenta_"+ID_Cuenta+".txt");
+        File ficheroCuentas = new File ("./Files/BancosComerciales/"+nombre_banco+"/Transferencias/Transferencias_Cuenta_"+ID_Cuenta+".dat");
         TransferenciaImpl trans = new TransferenciaImpl(ID_Cuenta,isIngresoOrRetirada,concepto,cantidad,fecha);
         boolean movimientoInsertado = false;
 
@@ -530,6 +573,14 @@ public class GestionBancoComercial {
         return movimientoInsertado;
     }
     
+  /* INTERFAZ
+     * Comentario: Obtiene el saldo de una cuenta(IBAN)
+     * Prototipo: public double obtenerSaldoPorIBAN(String IBAN)
+     * Entrada: Un String con el IBAN del que se quiere obtener su saldo
+     * Precondiciones: El IBAN ha de ser de una cuenta existente            <- Esto es interesante
+     * Salida: un double con el saldo de la cuenta
+     * Postcondiciones: Asociado al nombre devuelve un double con el saldo de la cuenta.
+     */
     public double obtenerSaldoPorIBAN(String IBAN)
     {
     	return Double.parseDouble(datosCuenta(IBAN).split(",")[1]);
@@ -546,7 +597,7 @@ public class GestionBancoComercial {
      * Entrada/Salida:
      * Postcondiciones: Se modifica el fichero de Cuentas y se actualiza el saldo pertinente.
      * */
-    //TODO Este método no está bien: Tiene que escribir un registro nuevo en el fichero de movimientos, no modificar el maestro directamente.
+    
     public boolean modificarSaldoEnFicheroCuentas(String IBAN, boolean sumaOresta,double cantidad){
     	String nombreBanco = obtenerNombreBancoComercialPorIBAN(IBAN);
     	File ficheroCuentas = new File ("./Files/BancosComerciales/" + nombreBanco + "/Cuentas_" + nombreBanco + "_Movimientos.txt");
@@ -749,7 +800,7 @@ public class GestionBancoComercial {
 		{
 			e.printStackTrace();
 		}
-		//System.out.println("datosCuenta en resguardo");
+
 		
 		return cuenta;
 	}

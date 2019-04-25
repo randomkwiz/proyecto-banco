@@ -1,3 +1,4 @@
+
 package gestion;
 import clasesBasicas.TransferenciaImpl;
 import utilidades.Utilidades;
@@ -23,7 +24,7 @@ public class GestionBancoCentral
     /* INTERFAZ
      * Comentario: Escribe un registro nuevo en un fichero determinado
      * Prototipo: public boolean escribirRegistroEnFichero(String registro, String rutaFichero)
-     * Entrada: Un String con el registro a escribir, y otro String con la ruta del fichero donde se escribirá.
+     * Entrada: Un String con el registro a escribir, y otro String con la ruta del fichero donde se escribirï¿½.
      * Precondiciones: No hay
      * Salida: Un boolean indicando si se ha escrito correctamente o no.
      * Postcondiciones: Asociado al nombre devuelve:
@@ -103,7 +104,7 @@ public class GestionBancoCentral
 
 	/* INTERFAZ
      * Signatura: public void insertarMovimientoEnFicheroMovimientos(String IBAN,boolean isIngresoOrRetirada, String concepto, double cantidad, GregorianCalendar fecha)
-     * Comentario: Añade un nuevo movimiento en el fichero de movimientos de la cuenta.
+     * Comentario: Aï¿½ade un nuevo movimiento en el fichero de movimientos de la cuenta.
      * Precondiciones: Se pasa por referencia el ID de la cuenta y por valor la cantidad de dinero a mover. Se pasa
      *                  un boolean que es true si el movimiento es un ingreso o false si es una retirada de dinero. Tambien se pasa la fecha como tres valores enteros (se supone vÃƒÂ¡lida)
      * Entrada: String IBAN,boolean isIngresoOrRetirada, String concepto, double cantidad, GregorianCalendar fecha
@@ -136,7 +137,6 @@ public class GestionBancoCentral
         
         return movimientoInsertado;
 	}
-
 	/* INTERFAZ
 	 * Comentario: Accede al fichero de cuentas y busca una cuenta por su IBAN para leer sus datos
 	 * Prototipo: public String datosCuenta(String IBAN)
@@ -144,12 +144,12 @@ public class GestionBancoCentral
 	 * Entrada: el IBAN de la cuenta
 	 * Salida: un String con los datos de la cuenta
 	 * Postcondiciones: Asociado al nombre devuelve un String con los datos de la cuenta separados por comas, o null
-	 * 					Si el IBAN no está registrado en el fichero.
+	 * 					Si el IBAN no estï¿½ registrado en el fichero.
 	 */
 	public String datosCuenta(String IBAN)
 	{
 		String cuenta = null;
-		File ficheroCuentas = new File("./Files/BancoCentral/Cuentas_BancoCentral_Movimientos.txt");
+		File ficheroCuentas = new File("./Files/BancoCentral/Cuentas_BancoCentral_Maestro.txt");
 		FileReader fr = null;
 		BufferedReader br = null;
 		String registro;
@@ -184,7 +184,7 @@ public class GestionBancoCentral
 	 * Entrada: un String con el BIC del cliente a comprobar
 	 * Precondiciones: No hay
 	 * Salida: un boolean indicando si el BIC esta registrado ya o no
-	 * Postcondiciones: Asociado al nombre devuelve true si el BIC está ya registrado en el banco o false de lo contrario.
+	 * Postcondiciones: Asociado al nombre devuelve true si el BIC estï¿½ ya registrado en el banco o false de lo contrario.
 	 */
 	public boolean BICRegistrado(String BIC)
 	{
@@ -229,7 +229,7 @@ public class GestionBancoCentral
 	 * Entrada: un String con el IBAN de la cuenta a comprobar
 	 * Precondiciones: No hay
 	 * Salida: un boolean indicando si el IBAN esta registrado ya o no
-	 * Postcondiciones: Asociado al nombre devuelve true si el IBAN está ya registrado en el banco o false de lo contrario.
+	 * Postcondiciones: Asociado al nombre devuelve true si el IBAN estï¿½ ya registrado en el banco o false de lo contrario.
 	 */
 	public boolean IBANRegistrado(String IBAN)
 	{
@@ -274,21 +274,103 @@ public class GestionBancoCentral
      * Entrada/Salida:
      * Postcondiciones: asociado al nombre devuelve un arraylist
      * */
+   public List<TransferenciaImpl> buscarMovimientosPorFecha(String IBAN, int anyo){
+        File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".dat");
+        ObjectInputStream leer = null;
+        List<TransferenciaImpl> registros_buscados = new ArrayList<TransferenciaImpl>();
+        TransferenciaImpl registro = null;
+        boolean cont = true;
+
+        try {
+            leer = new ObjectInputStream(new FileInputStream(file_movimientos));
+            while (cont) {
+                registro = (TransferenciaImpl) leer.readObject();
+                if (registro.getFecha().get(Calendar.YEAR) == anyo) {
+                    registros_buscados.add(registro);
+                }
+            }
+            leer.close();
+        }catch (EOFException e){
+        }catch (IOException e){
+            e.printStackTrace();
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+
+        return registros_buscados;
+    }
+
+  
+  
+    /*
+     * INTERFAZ
+     * Signatura: public ArrayList<String> buscarMovimientosPorFecha(String iban_cuenta, int mes_buscado, int anyo_buscado)
+     * Comentario: busca los movimientos que se hicieron en una cuenta en la fecha dada
+     * Precondiciones: Se pasa un iban y dos int
+     * Entrada: String iban, int mes_buscado, int anyo_buscado
+     * Salida: arraylist de cadenas con el / los movimientos requeridos
+     * Entrada/Salida:
+     * Postcondiciones: asociado al nombre devuelve un arraylist
+     * */
+    public List<TransferenciaImpl> buscarMovimientosPorFecha(String IBAN, int mes, int anyo){
+        File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".dat");
+        ObjectInputStream leer = null;
+        List<TransferenciaImpl> registros_buscados = new ArrayList<TransferenciaImpl>();
+        TransferenciaImpl registro= null;
+        boolean cont = true;
+        //System.out.println("Mes pasado por parametro: "+mes);
+        //System.out.println("AÃ±o pasado por parametro: "+anyo);
+
+        try {
+            leer = new ObjectInputStream(new FileInputStream(file_movimientos));
+            while (cont) {
+                registro = (TransferenciaImpl) leer.readObject();
+               // System.out.println("Mes a comparar: "+registro.getFecha().get(Calendar.MONTH) );
+                //System.out.println("AÃ±o a comparar: "+registro.getFecha().get(Calendar.YEAR));
+                if (registro.getFecha().get(Calendar.YEAR) == anyo && registro.getFecha().get(Calendar.MONTH) == mes-1) {   /*Se pone asÃ­ porque los meses de Calendar van de 0(enero) a 11(diciembre)*/
+                    registros_buscados.add(registro);
+                }
+            }
+            leer.close();
+        }catch (EOFException e){
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+
+        return registros_buscados;
+    }
+
+
+    /*
+     * INTERFAZ
+     * Signatura: public ArrayList<String> buscarMovimientosPorFecha(String iban_cuenta,int dia_buscado, int mes_buscado, int anyo_buscado)
+     * Comentario: busca los movimientos que se hicieron en una cuenta en la fecha dada
+     * Precondiciones: Se pasa un iban y tres int
+     * Entrada: String iban,int dia_buscado, int mes_buscado, int anyo_buscado
+     * Salida: arraylist de cadenas con el / los movimientos requeridos
+     * Entrada/Salida:
+     * Postcondiciones: asociado al nombre devuelve un arraylist
+     * */
     public List<TransferenciaImpl> buscarMovimientosPorFecha(String IBAN, int dia,int mes,int anyo){
     	File file_movimientos = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_"+IBAN+".dat");
         List<TransferenciaImpl> registros_buscados = new ArrayList<TransferenciaImpl>();
         TransferenciaImpl registro = null;
         ObjectInputStream leer = null;
         boolean cont = true;
-        try{
+        try {
             leer = new ObjectInputStream(new FileInputStream(file_movimientos));
-            while (cont){
+            while (cont) {
                 registro = (TransferenciaImpl) leer.readObject();
-                if (registro.getFecha().get(Calendar.YEAR) ==  anyo && registro.getFecha().get(Calendar.MONTH) == mes && registro.getFecha().get(Calendar.DAY_OF_MONTH) == dia ){
+                if (registro.getFecha().get(Calendar.YEAR) == anyo && registro.getFecha().get(Calendar.MONTH) == mes-1 && registro.getFecha().get(Calendar.DAY_OF_MONTH) == dia) {
                     registros_buscados.add(registro);
                 }
             }
             leer.close();
+        }catch (EOFException e){
+
         }catch (IOException e){
             e.printStackTrace();
         }catch (ClassNotFoundException e){
@@ -397,7 +479,7 @@ public class GestionBancoCentral
      * Entrada/Salida:
      * Postcondiciones: asociado al nombre devuelve una lista de String
      * */
-    public List<TransferenciaImpl> ultimosDiezMovimientos(String iban_cuenta){
+       public List<TransferenciaImpl> ultimosDiezMovimientos(String iban_cuenta){
     	
         File f_cuentas = new File("./Files/BancoCentral/TransferenciasCuentas/Transferencias_" + iban_cuenta + ".dat");
         ObjectInputStream leer = null;
@@ -633,8 +715,8 @@ public class GestionBancoCentral
      * Prototipo: public boolean actualizarFichero(String fichero)
      * Entrada: Un string con la ruta del fichero y un int con la posicion que ocupa el campo clave en cada registro
      * Precondiciones: No hay
-     * Salida: Un boolean indicando si se actualizó correctamente el fichero maestro
-     * Postcondiciones: Devuelve true si se actualizaó bien, flase de lo contrario
+     * Salida: Un boolean indicando si se actualizï¿½ correctamente el fichero maestro
+     * Postcondiciones: Devuelve true si se actualizaï¿½ bien, flase de lo contrario
      */
     public boolean actualizarFichero(String fichero, int posicionCampoClave)
     {
@@ -783,4 +865,7 @@ public class GestionBancoCentral
     }
 
     
+
+  
+   
 }

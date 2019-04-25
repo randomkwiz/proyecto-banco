@@ -6,6 +6,22 @@ import java.io.*;
 import java.util.*;
 
 public class Utilidades {
+
+    /*
+     *Signatura: public void imprimirMovimientos(TransferenciaImpl movimientos)
+     * Comentario: imprime un movimiento. Método sobrecargado
+     * */
+    public void imprimirMovimientos(TransferenciaImpl element){
+
+        String tipo = " ";
+            System.out.println("-------------------------------");
+            System.out.println("Fecha: " + element.toStringFecha());
+            System.out.println("Tipo: " + ((element.isIngresoOrRetirada())?"INGRESO":"RETIRADA"));
+            System.out.println("Cantidad: " + element.getCantidad());
+            System.out.println("Concepto: " + element.getConcepto());
+
+    }
+
     /*
     *Signatura: public void imprimirMovimientos(List<String> movimientos)
     * Comentario: imprime una lista de Strings en pantalla
