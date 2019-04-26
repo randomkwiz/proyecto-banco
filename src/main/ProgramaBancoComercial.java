@@ -172,13 +172,13 @@ public class ProgramaBancoComercial
 	  			  				
 	  			  			case 4: 
 	  			  				//Eliminar cuenta
-	  			  				cuentaBorrada = gestionComercial.marcarCuentaComoBorrada(IBANCliente);	//TODO Algun mensaje de ayuda al usuario para que sepa si se realizó bien la operación o no
+	  			  				cuentaBorrada = gestionComercial.eliminarCuenta(IBANCliente);
 	  			  				if(cuentaBorrada)
 	  			  				{
-	  			  					System.out.println("Cuenta con IBAN " + IBANCliente + " marcada como borrada");
+	  			  					System.out.println("Cuenta con IBAN " + IBANCliente + " borrada");
 	  			  				}
 	  			  				else
-	  			  					System.out.println("La cuenta no pudo marcarse como borrada, vuelva a intentarlo");
+	  			  					System.out.println("La cuenta no pudo borrarse, vuelva a intentarlo");
 	  			  				
 	  			  				break;
 	  			  				
@@ -188,21 +188,6 @@ public class ProgramaBancoComercial
 			  			opcionMenuCliente = validaciones.mostrarMenuYValidarOpcionMenuCliente();
 		  			}
 		  			break;
-	  			case 6:
-	  				//Eliminar permanentemente las cuentas marcadas
-	  				
-	  				//Leer y validar borrar cuenta
-	  				respuestaBorrarCuentas = validaciones.leerYValidarBorrarCuentas();
-	  				
-	  				if(respuestaBorrarCuentas == 'S')
-	  				{
-	  					borradoDefinitivo = gestionComercial.eliminarCuentasBorradasDefinitivamente(BIC); //TODO algun mensaje de ayuda al usuario para que sepa si se borró bien o no
-	  					if(borradoDefinitivo)
-	  						System.out.println("Las cuentas del banco han sido borradas permanentemente");
-	  					else
-	  						System.out.println("No se ha podido borrar permanententemente las cuentas, intentelo de nuevo");
-	  				}
-	  				break;
     		}
 	  		
 	  		//Mostrar menu y validar opcion elegida
