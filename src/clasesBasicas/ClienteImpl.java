@@ -26,7 +26,6 @@
  * */
 package clasesBasicas;
 import interfaces.Cliente;
-import interfaces.Cuenta;
 
 public class ClienteImpl implements Cliente{
 
@@ -36,8 +35,8 @@ public class ClienteImpl implements Cliente{
 
     public ClienteImpl()
     {
-    	this.BIC_Banco = "000000MMXXX";
-    	this.DNI = "00000000A";
+    	this.BIC_Banco = "XXXXXXXXXXX";
+    	this.DNI = "00000000-A";
     	this.ingresoMensual = 0;
     }
 
@@ -67,67 +66,7 @@ public class ClienteImpl implements Cliente{
     public void setIngresoMensual(double ingresoMensual) {
         this.ingresoMensual = ingresoMensual;
     }
-
-    //metodos añadidos
-
-    /*
-    * INTERFAZ
-    * Signatura: public void sacarDinero(Cuenta cuenta, double cantidad)
-    * Comentario: recibe un objeto tipo Cuenta y una cantidad de dinero y saca ese dinero de esa cuenta
-    * Precondiciones: la cuenta debe existir. Por referencia se pasa un objeto tipo Cuenta y por valor se pasa un real.
-    * Entradas: Cuenta cuenta y double cantidad
-    * Salidas:
-    * Postcondiciones: se modifica el fichero.
-    * */
-    @Deprecated
-    public void sacarDinero(Cuenta cuenta, double cantidad){
-        System.out.println("En construcción");
-    }
-
-    /*
-     * INTERFAZ
-     * Signatura: public void ingresarDinero(Cuenta cuenta, double cantidad)
-     * Comentario: recibe un objeto tipo Cuenta y una cantidad de dinero e introduce ese dinero en esa cuenta
-     * Precondiciones: la cuenta debe existir. Por referencia se pasa un objeto tipo Cuenta y por valor se pasa un real.
-     * Entradas: Cuenta cuenta y double cantidad
-     * Salidas:
-     * Postcondiciones: se modifica el fichero.
-     * */
-    @Deprecated
-    public void ingresarDinero(Cuenta cuenta, double cantidad){
-        System.out.println("En construcción");
-    }
-
-    /*
-     * INTERFAZ
-     * Signatura: public void realizarTransferencia(Cuenta origen, Cuenta destino, double cantidad)
-     * Comentario: recibe dos objeto tipo Cuenta y una cantidad de dinero. Saca esa cantidad de la cuenta de origen y la ingresa en la cuenta destino.
-     * Precondiciones: las cuentas deben existir. Por referencia se pasa un objeto tipo Cuenta y por valor se pasa un real.
-     *    -->          La cuenta origen debe tener esa cantidad de dinero que se desea sacar. --> esto no sé si quitarlo
-     * Entradas: Cuenta origen, Cuenta destino y double cantidad
-     * Salidas:
-     * Postcondiciones: se modifica el fichero.
-     * */
-    @Deprecated
-    public void realizarTransferencia(Cuenta origen, Cuenta destino, double cantidad){
-        System.out.println("En construcción");
-    }
-
-    /*
-     * INTERFAZ
-     * Signatura: public void verHistorialTransferencias(Cuenta cuenta)
-     * Comentario: imprime en pantalla el historial de movimientos de una Cuenta
-     * Precondiciones: La cuenta debe existir
-     * Entradas: Cuenta cuenta
-     * Salidas:
-     * Postcondiciones: imprime en pantalla
-     * */
-    @Deprecated
-    public void verHistorialTransferencias(Cuenta cuenta){
-        System.out.println("En construcción");
-    }
-
-
+    
     //Metodos Object
 
     @Override

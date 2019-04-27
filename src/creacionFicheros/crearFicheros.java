@@ -36,7 +36,19 @@ public class crearFicheros {
         /*Primero creamos los ficheros de banco central*/
 
         //Esto es para el fichero del banco central que almacena los clientes (bancos comerciales) que lleva.
-        File listadoBancosComerciales_BancoCentral = new File(carpetaBancoCentral, "Clientes_BancoCentral.txt");
+        File listadoBancosComerciales_BancoCentral_maestro = new File(carpetaBancoCentral, "Clientes_BancoCentral_Maestro.txt");
+        File listadoBancosComerciales_BancoCentral = new File(carpetaBancoCentral, "Clientes_BancoCentral_Movimientos.txt");
+        try{
+            if(listadoBancosComerciales_BancoCentral.createNewFile()){
+                System.out.println("El fichero se creó con éxito");
+            }else{
+                System.out.println("El fichero no se creó con éxito o bien ya existe");
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+
         BancoComercial bancos[] = new BancoComercial[3];
         bancos[0] = new BancoComercial("ESP","CAIXESBBXXX", "LaCaixa");
         bancos[1] = new BancoComercial("ESP","BSCHESMMXXX", "Santander");
@@ -44,7 +56,7 @@ public class crearFicheros {
 
 
             try{
-                escribir = new FileWriter(listadoBancosComerciales_BancoCentral);
+                escribir = new FileWriter(listadoBancosComerciales_BancoCentral_maestro);
                 bw = new BufferedWriter(escribir);
                 for(int i = 0; i < bancos.length; i ++){
                     bw.write(bancos[i].toString());
@@ -57,7 +69,7 @@ public class crearFicheros {
 
 
             try{
-                leer = new FileReader(listadoBancosComerciales_BancoCentral);
+                leer = new FileReader(listadoBancosComerciales_BancoCentral_maestro);
                 br = new BufferedReader(leer);
                 while(br.ready()) {
                     System.out.println(br.readLine());
@@ -94,15 +106,28 @@ public class crearFicheros {
         }
         //FIN fichero con datos del banco central
 
-        //Fichero del banco central que contiene las cuentas que gestiona (una cuenta por cada banco comercial)
+        //Fichero del banco central que contiene las cuentas que gestiona (una cuenta por cada banco comercial). Y fichero de cuentas borradas
 
-        File listadoCuentas_BancoCentral = new File(carpetaBancoCentral, "Cuentas_BancoCentral.txt");
+        File listadoCuentas_BancoCentral_maestro = new File(carpetaBancoCentral, "Cuentas_BancoCentral_Maestro.txt");
+        File listadoCuentas_BancoCentral = new File(carpetaBancoCentral, "Cuentas_BancoCentral_Movimientos.txt");
+
+        try{
+            if(listadoCuentas_BancoCentral.createNewFile()){
+                System.out.println("El fichero se creó con éxito");
+            }else{
+                System.out.println("El fichero no se creó con éxito o bien ya existe");
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
         CuentaImpl cuentas[] = new CuentaImpl[3];
         cuentas[0] = new CuentaImpl("ESPCAIXESBBXXX0000000", 5000000.0);
         cuentas[1] = new CuentaImpl("ESPBSCHESMMXXX0000000", 5000000.0);
         cuentas[2] = new CuentaImpl("ESPINGDESMMXXX0000000", 5000000.0);
+
+
         try{
-            escribir = new FileWriter(listadoCuentas_BancoCentral);
+            escribir = new FileWriter(listadoCuentas_BancoCentral_maestro);
             bw = new BufferedWriter(escribir);
             for(int i = 0; i < cuentas.length; i ++){
                 bw.write(cuentas[i].toString());
@@ -115,7 +140,7 @@ public class crearFicheros {
 
 
         try{
-            leer = new FileReader(listadoCuentas_BancoCentral);
+            leer = new FileReader(listadoCuentas_BancoCentral_maestro);
             br = new BufferedReader(leer);
             while(br.ready()) {
                 System.out.println(br.readLine());
@@ -127,12 +152,24 @@ public class crearFicheros {
 
 
         /*Fichero que relaciona las cuentas con los clientes del BANCO CENTRAL*/
-
-        File clientes_cuentas_BancoCentral = new File(carpetaBancoCentral, "Clientes_Cuentas_BancoCentral.txt");
+        File clientes_cuentas_BancoCentral_maestro = new File(carpetaBancoCentral, "Clientes_Cuentas_BancoCentral_Maestro.txt");
+        File clientes_cuentas_BancoCentral = new File(carpetaBancoCentral, "Clientes_Cuentas_BancoCentral_Movimientos.txt");
         String linea[] = new String[2];
         String campo[][] = new String[2][3];
+
+
         try{
-            escribir = new FileWriter(clientes_cuentas_BancoCentral);
+            if(clientes_cuentas_BancoCentral.createNewFile()){
+                System.out.println("El fichero se creó con éxito");
+            }else{
+                System.out.println("El fichero no se creó con éxito o bien ya existe");
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        try{
+            escribir = new FileWriter(clientes_cuentas_BancoCentral_maestro);
             bw = new BufferedWriter(escribir);
             for(int i =0; i< cuentas.length; i++){
                 linea[0] = cuentas[i].toString();
@@ -141,7 +178,7 @@ public class crearFicheros {
                 linea[1] = bancos[i].toString();
                 campo[1] = linea[1].split(",");
 
-                bw.write(campo[1][1]+","+campo[0][1]);
+                bw.write(campo[1][1]+","+campo[0][0]);//ojocuidao con esto
                 bw.newLine();
             }
 
@@ -156,24 +193,32 @@ public class crearFicheros {
 
 
         //Fichero con los movimientos de cada cuenta que maneja
-        File carpetaMovimientos_BancoCentral = new File(carpetaBancoCentral, "MovimientosCuentas");
+        File carpetaMovimientos_BancoCentral = new File(carpetaBancoCentral, "TransferenciasCuentas");
         carpetaMovimientos_BancoCentral.mkdir();
 
         String registro=" ";
         String[] campos = null;
         String nombreArchivo= " ";
+        ObjectOutputStream escribirBinario = null;
 
             try {
-                leer = new FileReader(listadoCuentas_BancoCentral);
+                leer = new FileReader(listadoCuentas_BancoCentral_maestro);
                 br = new BufferedReader(leer);
 
 
                 while (br.ready()) {
                     registro = br.readLine();
                     campos = registro.split(",");
-                    nombreArchivo = "Movimientos_" + campos[0]+".txt";
+                    nombreArchivo = "Transferencias_" + campos[0]+".dat";
                     File f_movimientos_BancoCentral = new File(carpetaMovimientos_BancoCentral, nombreArchivo);
                     if(f_movimientos_BancoCentral.createNewFile()){
+                        try{
+                            escribirBinario = new ObjectOutputStream(new FileOutputStream(f_movimientos_BancoCentral));
+
+                            escribirBinario.close();
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }
                         System.out.println(nombreArchivo+" creado con éxito.");
                     }else{
                         System.out.println("Error en la creación de "+nombreArchivo+"\nO bien el archivo ya existe.");
@@ -183,6 +228,9 @@ public class crearFicheros {
             } catch (IOException e) {
                 e.getStackTrace();
             }
+
+
+
 
         //FIN
 
@@ -194,7 +242,7 @@ public class crearFicheros {
 
         //Esto crea una carpeta por cada cliente del banco central. O sea, una carpeta por cada banco comercial.
         try {
-            leer = new FileReader(listadoBancosComerciales_BancoCentral);
+            leer = new FileReader(listadoBancosComerciales_BancoCentral_maestro);
             br = new BufferedReader(leer);
             while (br.ready()) {
                 registro = br.readLine();
@@ -210,28 +258,36 @@ public class crearFicheros {
 
         //FIN
 
-        //Vamos a crear un archivo de cuentas en cada carpeta de cada banco comercial.
+        //Vamos a crear un archivo de cuentas en cada carpeta de cada banco comercial. Y otro de cuentas_borradas vacío
         String nombre_carpeta_banco_comercial[] = carpetaBancosComerciales.list();
         String bancoComercial=" ";
         File archivo_Cuentas_BancosComerciales = null;
+        File archivo_Cuentas_BancosComerciales_maestro = null;
         File carpetaSuperior = null;
 
 
         for(int i = 0; i < nombre_carpeta_banco_comercial.length; i ++) {
             try {
                 carpetaSuperior = new File(carpetaBancosComerciales, nombre_carpeta_banco_comercial[i]);
-                archivo_Cuentas_BancosComerciales = new File(carpetaSuperior, "Cuentas_" + nombre_carpeta_banco_comercial[i] + ".txt");
+                archivo_Cuentas_BancosComerciales_maestro = new File(carpetaSuperior, "Cuentas_" + nombre_carpeta_banco_comercial[i] + "_Maestro.txt");
+                archivo_Cuentas_BancosComerciales = new File(carpetaSuperior, "Cuentas_" + nombre_carpeta_banco_comercial[i] + "_Movimientos.txt");
+
                 if (archivo_Cuentas_BancosComerciales.createNewFile()) {
                     System.out.println("Exito al crear " + archivo_Cuentas_BancosComerciales.getPath());
                 } else {
                     System.out.println("Error al crear " + archivo_Cuentas_BancosComerciales.getPath() + " o bien el archivo ya existe.");
+                }
+                if (archivo_Cuentas_BancosComerciales_maestro.createNewFile()) {
+                    System.out.println("Exito al crear " + archivo_Cuentas_BancosComerciales_maestro.getPath());
+                } else {
+                    System.out.println("Error al crear " + archivo_Cuentas_BancosComerciales_maestro.getPath() + " o bien el archivo ya existe.");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             if (archivo_Cuentas_BancosComerciales.exists()){
                 try {
-                    leer = new FileReader(listadoBancosComerciales_BancoCentral);
+                    leer = new FileReader(listadoBancosComerciales_BancoCentral_maestro);
                     br = new BufferedReader(leer);
                     while (br.ready()) {
                         registro = br.readLine();
@@ -248,7 +304,7 @@ public class crearFicheros {
 
 
             try {
-                escribir = new FileWriter(archivo_Cuentas_BancosComerciales);
+                escribir = new FileWriter(archivo_Cuentas_BancosComerciales_maestro);
                 bw = new BufferedWriter(escribir);
                 bw.write(new CuentaImpl(bancoComercial+"0000001", Math.random() * 8502).toString());
                 bw.newLine();
@@ -272,10 +328,12 @@ public class crearFicheros {
     /*Fichero de clientes con los datos de los clientes de cada banco comercial*/
 
         File archivo_Clientes_BancosComerciales = null;
+        File archivo_Clientes_BancosComerciales_Maestro = null;
         for(int i = 0; i < nombre_carpeta_banco_comercial.length; i ++) {
             try {
                 carpetaSuperior = new File(carpetaBancosComerciales, nombre_carpeta_banco_comercial[i]);
-                archivo_Clientes_BancosComerciales = new File(carpetaSuperior, "Clientes_" + nombre_carpeta_banco_comercial[i] + ".txt");
+                archivo_Clientes_BancosComerciales_Maestro = new File(carpetaSuperior, "Clientes_" + nombre_carpeta_banco_comercial[i] + "_Maestro.txt");
+                archivo_Clientes_BancosComerciales = new File(carpetaSuperior, "Clientes_" + nombre_carpeta_banco_comercial[i] + "_Movimientos.txt");
                 if (archivo_Clientes_BancosComerciales.createNewFile()) {
                     System.out.println("Exito al crear " + archivo_Clientes_BancosComerciales.getPath());
                 } else {
@@ -288,14 +346,14 @@ public class crearFicheros {
             /*obtener bic por nombre*/
             String bic = " ";
             try{
-                leer = new FileReader(new File("./Files/BancoCentral/Clientes_BancoCentral.txt"));
+                leer = new FileReader(new File("./Files/BancoCentral/Clientes_BancoCentral_Maestro.txt"));
                 br = new BufferedReader(leer);
                 while(br.ready()){
                     registro = br.readLine();
                     campos = registro.split(",");
 
                     if ( campos[1].equals(carpetaSuperior.getName())){
-                        bic = campos[0].substring(3,13);
+                        bic = campos[0].substring(3,14);
                     }
                 }
             }catch (IOException e){
@@ -306,7 +364,7 @@ public class crearFicheros {
 
 
             try{
-                escribir = new FileWriter(archivo_Clientes_BancosComerciales);
+                escribir = new FileWriter(archivo_Clientes_BancosComerciales_Maestro);
                 bw = new BufferedWriter(escribir);
 
                     bw.write(new ClienteImpl(bic, "28835488-C", Math.random()*1500).toString());
@@ -336,28 +394,37 @@ public class crearFicheros {
         /*Fichero clientes - cuentas banco comercial*/
 
         File archivo_Clientes_Cuentas_BancosComerciales = null;
+        File archivo_Clientes_Cuentas_BancosComerciales_maestro =null;
         List<String> iban_cuentas = new ArrayList<String>();
         List<String> dni_clientes = new ArrayList<String>();
         String iban_cuenta = " ";
         String dni_cliente = " ";
 
 
+
         for(int i = 0; i < nombre_carpeta_banco_comercial.length; i ++) {
             try {
                 carpetaSuperior = new File(carpetaBancosComerciales, nombre_carpeta_banco_comercial[i]);
-                archivo_Clientes_Cuentas_BancosComerciales = new File(carpetaSuperior, "Clientes_Cuentas_" + nombre_carpeta_banco_comercial[i] + ".txt");
+                archivo_Clientes_Cuentas_BancosComerciales_maestro = new File(carpetaSuperior, "Clientes_Cuentas_" + nombre_carpeta_banco_comercial[i] + "_Maestro.txt");
+                archivo_Clientes_Cuentas_BancosComerciales = new File(carpetaSuperior, "Clientes_Cuentas_" + nombre_carpeta_banco_comercial[i] + "_Movimientos.txt");
                 if (archivo_Clientes_Cuentas_BancosComerciales.createNewFile()) {
                     System.out.println("Exito al crear " + archivo_Clientes_Cuentas_BancosComerciales.getPath());
                 } else {
                     System.out.println("Error al crear " + archivo_Clientes_Cuentas_BancosComerciales.getPath() + " o bien el archivo ya existe.");
+                }
+                if (archivo_Clientes_Cuentas_BancosComerciales_maestro.createNewFile()) {
+                    System.out.println("Exito al crear " + archivo_Clientes_Cuentas_BancosComerciales_maestro.getPath());
+                } else {
+                    System.out.println("Error al crear " + archivo_Clientes_Cuentas_BancosComerciales_maestro.getPath() + " o bien el archivo ya existe.");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             try{
-                archivo_Cuentas_BancosComerciales = new File(carpetaSuperior, "Cuentas_" + nombre_carpeta_banco_comercial[i] + ".txt");
-                leer = new FileReader(archivo_Cuentas_BancosComerciales);
+
+                archivo_Cuentas_BancosComerciales_maestro = new File(carpetaSuperior, "Cuentas_" + nombre_carpeta_banco_comercial[i] + "_Maestro.txt");
+                leer = new FileReader(archivo_Cuentas_BancosComerciales_maestro);
                 br = new BufferedReader(leer);
 
                 while(br.ready()){
@@ -372,8 +439,8 @@ public class crearFicheros {
 
 
             try{
-                archivo_Clientes_BancosComerciales = new File(carpetaSuperior, "Clientes_" + nombre_carpeta_banco_comercial[i] + ".txt");
-                leer = new FileReader(archivo_Clientes_BancosComerciales);
+                archivo_Clientes_BancosComerciales_Maestro = new File(carpetaSuperior, "Clientes_" + nombre_carpeta_banco_comercial[i] + "_Maestro.txt");
+                leer = new FileReader(archivo_Clientes_BancosComerciales_Maestro);
                 br = new BufferedReader(leer);
 
                 while(br.ready()){
@@ -388,18 +455,16 @@ public class crearFicheros {
             }
 
             try{
-                escribir = new FileWriter(archivo_Clientes_Cuentas_BancosComerciales);
+                escribir = new FileWriter(archivo_Clientes_Cuentas_BancosComerciales_maestro);
                 bw = new BufferedWriter(escribir);
                 for(int j =0; j < iban_cuentas.size(); j ++){
                     bw.write(dni_clientes.get(j)+","+iban_cuentas.get(j));
                     bw.newLine();
                 }
                 bw.close();
-
             }catch (IOException e){
                 e.printStackTrace();
             }
-
             dni_clientes.clear();
             iban_cuentas.clear();
 
@@ -416,29 +481,52 @@ public class crearFicheros {
 
         /*-----*/
 
-        /*crear archivo de MOVIMIENTO de cada cuenta en cada carpeta de cada banco comercial*/
+        /*crear archivo de TRANSFERENCIAS de cada cuenta en cada carpeta de cada banco comercial*/
 
         File archivoCuentas_BancoComercial = null;
         File[] listadoFilesEnCarpeta = carpetaBancosComerciales.listFiles();
-        File carpetaBanco[] = null;
+        //File carpetaBanco[] = null;
         iban_cuenta=" ";
         File carpetaMovimientos = null;
         File file_movimientos_iban = null;
+        File archivoCuentas_BancoComercial_maestro = null;
         for(int i =0; i < listadoFilesEnCarpeta.length; i ++) {
             System.out.println("Listado files en carpeta: " + listadoFilesEnCarpeta[i].getName());
-            archivoCuentas_BancoComercial = new File(listadoFilesEnCarpeta[i], "Cuentas_"+listadoFilesEnCarpeta[i].getName()+".txt");
+            archivoCuentas_BancoComercial = new File(listadoFilesEnCarpeta[i], "Cuentas_"+listadoFilesEnCarpeta[i].getName()+"_Movimientos.txt");
+            archivoCuentas_BancoComercial_maestro = new File(listadoFilesEnCarpeta[i], "Cuentas_"+listadoFilesEnCarpeta[i].getName()+"_Maestro.txt");
+            try{
+                if (archivoCuentas_BancoComercial.createNewFile()){
+                    System.out.println("El archivo "+archivo_Clientes_BancosComerciales_Maestro+" fue creado con éxito.");
+                }else{
+                    System.out.println("El archivo "+archivo_Clientes_BancosComerciales_Maestro+" no fue creado con éxito o bien ya existe.");
+                }
+                if (archivoCuentas_BancoComercial_maestro.createNewFile()){
+                    System.out.println("El archivo "+archivo_Clientes_BancosComerciales_Maestro+" fue creado con éxito.");
+                }else{
+                    System.out.println("El archivo "+archivo_Clientes_BancosComerciales_Maestro+" no fue creado con éxito o bien ya existe.");
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
             try {
-                leer = new FileReader(archivoCuentas_BancoComercial);
-                System.out.println(archivoCuentas_BancoComercial.getName());
+                leer = new FileReader(archivoCuentas_BancoComercial_maestro);
+                System.out.println(archivoCuentas_BancoComercial_maestro.getName());
                 br = new BufferedReader(leer);
-                carpetaMovimientos = new File(listadoFilesEnCarpeta[i], "Movimientos");
+                carpetaMovimientos = new File(listadoFilesEnCarpeta[i], "Transferencias");
                 carpetaMovimientos.mkdir();
                 while (br.ready()) {
                     registro = br.readLine();
                     campos = registro.split(",");
                     iban_cuenta = campos[0];
-                    file_movimientos_iban = new File(carpetaMovimientos, "Movimientos_Cuenta_" + iban_cuenta+".txt");
+                    file_movimientos_iban = new File(carpetaMovimientos, "Transferencias_Cuenta_" + iban_cuenta+".dat");
                     if (file_movimientos_iban.createNewFile()) {
+                        try{
+                            escribirBinario = new ObjectOutputStream(new FileOutputStream(file_movimientos_iban));
+                            escribirBinario.close();
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }
                         System.out.println("Exito al crear el archivo " + file_movimientos_iban.getName());
                     } else {
                         System.out.println("Erros al crear el archivo " + file_movimientos_iban.getName() + " o bien el archivo ya existe.");

@@ -1,7 +1,7 @@
 package tests;
 
 import clasesBasicas.BancoCentral;
-import clasesBasicas.CuentaImpl;
+//import clasesBasicas.CuentaImpl;
 
 public class BancoCentralTest {
 
