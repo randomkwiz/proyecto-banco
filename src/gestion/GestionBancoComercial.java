@@ -1,6 +1,6 @@
-
 package gestion;
 import java.io.*;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,11 +12,12 @@ import clasesBasicas.ClienteImpl;
 import clasesBasicas.CuentaImpl;
 import clasesBasicas.TransferenciaImpl;
 import utilidades.MyObjectOutputStream;
+import utilidades.Utilidades;
 
 
 public class GestionBancoComercial {
-	
-	  /*
+
+      /*
      * INTERFAZ
      * Signatura: public boolean crearFicheroCuentaTransferencias(String nuevo_iban)
      * Comentario: Crea un fichero de transferencias para el IBAN dado. Devuelve false si el fichero ya existe o si no se pudo crear. True si sí lo creó.
@@ -34,48 +35,9 @@ public class GestionBancoComercial {
         FileReader fr = null;
         BufferedReader br = null;
         ObjectOutputStream oos = null;
-        String registro = " ";
-        String campos[] = null;
-        String IBANUltimaCuenta = " ";
-        String BIC = obtenerBICporIBAN(nuevo_iban);
-        String numeroCuentaUltima = " ";
-        String numeroCuenta = " ";
         boolean exito = false;
 
-        //Ultima numero de cuenta
-        try
-        {
-            fr = new FileReader(ficheroCuentas);
-            br = new BufferedReader(fr);
-
-            while(br.ready())
-            {
-                registro = br.readLine();
-
-                if(br.ready() == false)
-                {
-                    campos = registro.split(",");
-                    if(campos != null)
-                        IBANUltimaCuenta = campos[0];
-                }
-            }
-
-            if(IBANUltimaCuenta == null)
-                IBANUltimaCuenta = "ESP" + BIC + "0000000";
-
-            br.close();
-            fr.close();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-
-        numeroCuentaUltima = this.obtenerNumCuentaPorIBAN(IBANUltimaCuenta);
-
-        numeroCuenta = String.valueOf((Integer.parseInt(numeroCuentaUltima) + 1));
-        fichero_nuevo = new File(carpetaTransferencias, "Transferencias_Cuenta_"+numeroCuenta+".dat");
-
+        fichero_nuevo = new File(carpetaTransferencias, "Transferencias_Cuenta_"+nuevo_iban+".dat");
         //Crea el fichero
         try{
             oos = new ObjectOutputStream(new FileOutputStream(fichero_nuevo));
@@ -91,9 +53,6 @@ public class GestionBancoComercial {
         return exito;
 
     }
-
-
-	
 
     /*
      * INTERFAZ
@@ -131,7 +90,7 @@ public class GestionBancoComercial {
     /*
      * INTERFAZ
      * Signatura: public void marcarCuentaComoBorrada(String iban_cuenta)
-     * Comentario: Marca como borrada con * una cuenta
+     * Comentario: Comentario: Marca como borrada con * una cuenta
      * Precondiciones: Se pasa un iban
      * Entrada: String iban
      * Salida:
@@ -183,7 +142,6 @@ public class GestionBancoComercial {
         	//Eliminar el fichero de las transferencias.
         	File ficheroTransferencias = new File("./Files/BancosComerciales/"+nombreBanco+"/Transferencias/Transferencias_Cuenta_"+IBAN+".dat");
         	boolean borrado = ficheroTransferencias.delete();
-        	
         	
         	if(cuentaEliminada && clienteEliminado && cuentaClienteEliminado && borrado)
         		eliminada = true;
@@ -509,7 +467,7 @@ public class GestionBancoComercial {
             while (br.ready()){
                 registro = br.readLine();
 
-               if (registro.split(",")[0].equals(dni_cliente.toUpperCase())){
+                if (registro.split(",")[0].equals(dni_cliente.toUpperCase())){
                     iban_cuenta = registro.split(",")[1];
                 }
             }
@@ -591,7 +549,7 @@ public class GestionBancoComercial {
             e.printStackTrace();
         }
 
- 
+ */
         try{
             escribir = new ObjectOutputStream(new FileOutputStream(temp));
 
@@ -610,19 +568,23 @@ public class GestionBancoComercial {
         System.out.println("Existe fichero original (no el temp): ->" + ficheroMovimientosCuenta.exists() );
         System.out.println("Existe fichero temp (el temp): ->" + temp.exists() );
         ficheroMovimientosCuenta.delete();
-        temp.renameTo(ficheroMovimientosCuenta);
-
-
-        try
+        
+        if(temp.renameTo(ficheroMovimientosCuenta) == false)
         {
-            Files.move(source, dest, StandardCopyOption.REPLACE_EXISTING);
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
+	        try
+	        {
+	            Files.move(source, dest, StandardCopyOption.REPLACE_EXISTING);
+	        }
+	        catch(FileSystemException e)
+	        {
+	        	System.out.println("error");
+	        }
+	        catch(IOException e)
+	        {
+	            e.printStackTrace();
+	        }
         }
 
-*/
 
     }
 
@@ -714,8 +676,7 @@ public class GestionBancoComercial {
         //Si se ha añadido en el fichero de movimientos, ahora sincronizar ambos ficheros
         if(anhadidoEnMovimientos)
         {
-            actualizarFichero("./Files/BancosComerciales/" + nombreBanco + "/Cuentas_" + nombreBanco, 0);
-            saldoModificado = true;
+            saldoModificado = actualizarFichero("./Files/BancosComerciales/" + nombreBanco + "/Cuentas_" + nombreBanco, 0);
         }
 
         return saldoModificado;
@@ -848,6 +809,9 @@ public class GestionBancoComercial {
 	    	actualizarFichero("./Files/BancosComerciales/" + nombreBanco + "/Clientes_" + nombreBanco, 1);
 	    	actualizarFichero("./Files/BancosComerciales/" + nombreBanco + "/Cuentas_" + nombreBanco, 0);
 	    	actualizarFichero("./Files/BancosComerciales/" + nombreBanco + "/Clientes_Cuentas_" + nombreBanco, 0);
+
+	    	//Crear fichero Transferencias
+            crearFicheroCuentaTransferencias(IBAN);
     	}
     	
     	return IBAN;
@@ -1142,6 +1106,7 @@ public class GestionBancoComercial {
         BufferedReader brMaestro = null;
         BufferedReader brMovimientos = null;
         BufferedWriter bwMaestroAct = null;
+        Utilidades utils = new Utilidades();
 
         try
         {
@@ -1246,8 +1211,12 @@ public class GestionBancoComercial {
             brMaestro.close();
             brMovimientos.close();
             bwMaestroAct.close();
-            ficheroMaestro.delete();
-            ficheroMaestroAct.renameTo(ficheroMaestro);
+            
+            utils.borrarFichero(ficheroMaestro.getPath());
+            utils.renombrarFichero(ficheroMaestroAct.getPath(), ficheroMaestro.getPath());
+            
+//            ficheroMaestro.delete();
+//            ficheroMaestroAct.renameTo(ficheroMaestro);
 
             ficheroMovimientos.delete();
             ficheroMovimientos.createNewFile();

@@ -15,10 +15,11 @@ public class ValidacionProgramaCliente {
             System.out.println("0. Salir");
             System.out.println("1. Realizar transferencia bancaria\n" +
                     "2. Ver datos de la cuenta propia\n" +
-                    "3. Buscar movimientos\n" +
-                    "4. Cancelar cuenta ");
+                    "3. Ver movimientos\n" +
+                    "4. Buscar movimientos\n" +
+                    "5. Cancelar cuenta ");
             op = sc.nextInt();
-        }while(op < 0 && op >4);
+        }while(op < 0 && op >5);
         return op;
     }
 

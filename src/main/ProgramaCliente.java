@@ -55,19 +55,24 @@ public class ProgramaCliente {
                     concepto = validar.concepto();
                     cantidad = validar.cantidadATransferir();
                     fecha = new GregorianCalendar();
-                    mensajeUsuario = (gestion.realizarMovimiento(iban_cuenta,iban_destino,concepto,cantidad,fecha))?"Transferencia realizada con éxito":"Problemas en su operación. Vuelva a intentarlo más tarde";
+                    mensajeUsuario = (gestion.realizarMovimiento(iban_cuenta,iban_destino,concepto,cantidad,fecha))?"Transferencia realizada con exito":"Problemas en su operacion. Vuelva a intentarlo mas tarde";
 
                     System.out.println(mensajeUsuario);
 
                     break;
                 case 2:
-                    //ver datos de la cuenta propia
-                    System.out.println("Últimos diez movimientos de la cuenta:");
+                    //Ver datos de la cuenta propia
+                    utilidad.imprimirDatosCuenta(gestion.datosCuenta(iban_cuenta));
+                    break;
+
+                case 3:
+                    //ver movimientos de la cuenta propia
+                    System.out.println("Ultimos diez movimientos de la cuenta:");
                     //gestion.ordenarMovimientosPorFecha(iban_cuenta); Este método no funciona por error documentado (delete y renameTo)
                     utilidad.imprimirMovimientos(gestion.ultimosDiezMovimientos(iban_cuenta));
 
                     break;
-                case 3:
+                case 4:
                     //buscar movimientos
                     dia = validar.dia();
                     mes = validar.mes();
@@ -83,22 +88,26 @@ public class ProgramaCliente {
                     if(movimientos.size() > 0 ){
                         utilidad.imprimirMovimientos(movimientos);
                     }else{
-                        System.out.println("No existen movimientos con esas características.");
+                        System.out.println("No existen movimientos con esas caracteristicas.");
                     }
                     break;
-                case 4:
+                case 5:
                     //cancelar cuenta
                     if(validar.borrarCuenta()){
-                        if (gestion.eliminarCuenta(iban_cuenta)){
-                            System.out.println("Su cuenta ha sido borrada.");
-                            System.out.println("Se le forzará el cierre de sesión.");
-                            opcion = 0;
-                        }else{
-                            System.out.println("No se pudo eliminar su cuenta. Inténtelo de nuevo más tarde");
-                        }
+
+                    	if(gestion.eliminarCuenta(iban_cuenta))
+                    	{
+	                        System.out.println("Su cuenta ha sido borrada.");
+	                        System.out.println("Se le forzara el cierre de sesion.");
+	                        opcion = 0;
+                    	}
+                    	else
+                    	{
+                    		System.out.println("Hubo un error inesperado, no se borrara su cuenta.");
+                    	}
 
                     }else{
-                        System.out.println("No se borrará su cuenta.");
+                        System.out.println("No se borrara su cuenta.");
                     }
                     break;
 

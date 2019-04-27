@@ -290,4 +290,67 @@ public class ValidacionesProgramaBancoComercial
 		
 		return respuestaBorrarCuentas;
 	}
+
+
+	/*
+	 * INTERFAZ
+	 * Signatura: public int anyo()
+	 * Comentario: pide y valida un año
+	 * Precondiciones:
+	 * Entradas:
+	 * Salidas: int
+	 * Postcondiciones: asociado al nombre se devuelve un año
+	 * */
+	public int anyo(){
+		Scanner sc = new Scanner(System.in);
+		int anyo_buscado = 1582;
+		do {
+			System.out.println("Introduce el año de el o los movimiento(s) a buscar: ");
+			anyo_buscado = sc.nextInt();
+		}while(anyo_buscado < 1582);
+
+		return anyo_buscado;
+	}
+
+	/*
+	 * INTERFAZ
+	 * Signatura: public int mes()
+	 * Comentario: pide y valida un mes. El mes 0 significa que el usuario no desea tener en cuenta el mes en la búsqueda.
+	 * Precondiciones:
+	 * Entradas:
+	 * Salidas: int
+	 * Postcondiciones: asociado al nombre se devuelve un mes
+	 * */
+	public int mes(){
+		Scanner sc = new Scanner(System.in);
+		int mes_buscado ;
+		do {
+			System.out.println("Introduce el mes de el o los movimiento(s) a buscar. Escribe 0 si no deseas tener en cuenta el mes: ");
+			mes_buscado = sc.nextInt();
+		}while(mes_buscado < 0 || mes_buscado > 12);
+
+		return mes_buscado;
+	}
+
+	/*
+	 * INTERFAZ
+	 * Signatura: public int dia()
+	 * Comentario: pide y valida un dia. El dia 0 significa que el usuario no desea tener en cuenta el dia en la búsqueda.
+	 * Precondiciones:
+	 * Entradas:
+	 * Salidas: int
+	 * Postcondiciones: asociado al nombre se devuelve un dia
+	 * */
+	public int dia(){
+		Scanner sc = new Scanner(System.in);
+		int dia_buscado ;
+		do {
+			System.out.println("Introduce el dia de el o los movimiento(s) a buscar. Escribe 0 si no deseas tener en cuenta el dia: ");
+			dia_buscado = sc.nextInt();
+		}while(dia_buscado < 0 || dia_buscado > 31);
+
+		return dia_buscado;
+	}
+
+
 }

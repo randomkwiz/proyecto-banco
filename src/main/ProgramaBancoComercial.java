@@ -42,10 +42,9 @@
 
 package main;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Scanner;
+import java.util.*;
 
+import clasesBasicas.TransferenciaImpl;
 import gestion.GestionBancoCentral;
 import gestion.GestionBancoComercial;
 import utilidades.Utilidades;
@@ -66,6 +65,8 @@ public class ProgramaBancoComercial
     	GregorianCalendar fecha, fechaActual;
     	char respuestaBorrarCuentas;
     	boolean cuentaBorrada, borradoDefinitivo, ingresado;
+    	int dia, mes, anyo;
+    	List<TransferenciaImpl> movimientos = new ArrayList<TransferenciaImpl>();
     	
 	 	//Leer y validar inicio de sesion
     	IBAN = validaciones.iniciarSesion();
@@ -100,11 +101,23 @@ public class ProgramaBancoComercial
 		  			break;
 		  		case 3:
 		  			//buscar movimientos por fecha de la cuenta en el banco central
-		  			fecha = validaciones.leerYValidarFecha();
-		  			
-		  			System.out.println("Movimientos del " + fecha.getTime());
-		  			utils.imprimirMovimientos(gestionCentral.buscarMovimientosPorFecha(IBAN, fecha.get(Calendar.DAY_OF_MONTH), fecha.get(Calendar.MONTH), fecha.get(Calendar.YEAR)));
-		  			break;
+					dia = validaciones.dia();
+					mes = validaciones.mes();
+					anyo = validaciones.anyo();
+					if(mes == 0 && dia == 0){
+						movimientos = gestionCentral.buscarMovimientosPorFecha(IBAN,anyo);
+					}else if (mes != 0 && dia == 0){
+						movimientos = gestionCentral.buscarMovimientosPorFecha(IBAN, mes,anyo);
+					}else{
+						movimientos = gestionCentral.buscarMovimientosPorFecha(IBAN,dia,mes,anyo);
+					}
+
+					if(movimientos.size() > 0 ){
+						utils.imprimirMovimientos(movimientos);
+					}else{
+						System.out.println("No existen movimientos con esas caracteristicas.");
+					}
+		  				break;
 		  		case 4: 
 		  			//cliente nuevo
 		  			DNI = validaciones.leerYValidarDNI(BIC);		
@@ -172,7 +185,7 @@ public class ProgramaBancoComercial
 	  			  				
 	  			  			case 4: 
 	  			  				//Eliminar cuenta
-	  			  				cuentaBorrada = gestionComercial.eliminarCuenta(IBANCliente);
+	  			  				cuentaBorrada = gestionComercial.eliminarCuenta(IBANCliente);	//TODO Algun mensaje de ayuda al usuario para que sepa si se realizó bien la operación o no
 	  			  				if(cuentaBorrada)
 	  			  				{
 	  			  					System.out.println("Cuenta con IBAN " + IBANCliente + " borrada");
@@ -188,6 +201,23 @@ public class ProgramaBancoComercial
 			  			opcionMenuCliente = validaciones.mostrarMenuYValidarOpcionMenuCliente();
 		  			}
 		  			break;
+	  			case 6:
+	  				//Eliminar permanentemente las cuentas marcadas
+	  				
+	  				//Leer y validar borrar cuenta
+	  				respuestaBorrarCuentas = validaciones.leerYValidarBorrarCuentas();
+	  				
+	  				/*if(respuestaBorrarCuentas == 'S')
+	  				{
+	  					borradoDefinitivo = gestionComercial.eliminarCuentasBorradasDefinitivamente(BIC); //TODO algun mensaje de ayuda al usuario para que sepa si se borró bien o no
+	  					if(borradoDefinitivo)
+	  						System.out.println("Las cuentas del banco han sido borradas permanentemente");
+	  					else
+	  						System.out.println("No se ha podido borrar permanententemente las cuentas, intentelo de nuevo");
+	  				}
+
+	  				 */
+	  				break;
     		}
 	  		
 	  		//Mostrar menu y validar opcion elegida

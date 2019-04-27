@@ -106,8 +106,88 @@ public class Utilidades {
             e.printStackTrace();
         }
 
-
-
+    }
+    
+    public boolean borrarFichero(String fichero)
+    {
+    	boolean borrado = false;
+    	File file = new File(fichero);
+    	
+    	borrado = file.delete();
+    	
+    	return borrado;
+    }
+    
+    //Este metodo sustituye File.renameTo() (pero funciona)
+    public boolean renombrarFichero(String fichero, String nuevoNombre)
+    {
+    	boolean renombrado = false;
+    	File file = new File(fichero);
+    	File newName = new File (nuevoNombre);
+    	
+    	FileReader fr = null;
+    	FileWriter fw = null;
+    	BufferedReader br = null;
+    	BufferedWriter bw = null;
+    	List<String> registros = new ArrayList<String>();
+    	String registro = null;
+    	
+    	//renombrado = file.renameTo(newName);
+    	if(file.exists() && newName.exists())
+    	{
+    		
+	    	try
+	    	{
+	    		fr = new FileReader(file);
+	    		br = new BufferedReader(fr);
+	    		
+	    		System.out.println("ready(leer)? " + br.ready());
+	    		while(br.ready())
+	    		{
+	    			registro = br.readLine();
+	    			
+	    			registros.add(registro);
+	    		}
+	    		
+	    		br.close();
+	    		fr.close();
+	    		
+	    	}
+	    	catch(IOException e)
+	    	{
+	    		e.printStackTrace();
+	    	}
+	    	
+	    	borrarFichero(fichero);
+	    	//borrarFichero(nuevoNombre);
+	    	
+	    	try 
+	    	{
+				newName.createNewFile();
+				
+				fw = new FileWriter(newName);
+				bw = new BufferedWriter(fw);
+				
+				System.out.println("longitud: " + registros.size());
+				for(int i = 0 ; i < registros.size(); i++)
+				{
+					bw.write(registros.get(i));
+					bw.newLine();
+				}
+				
+				bw.close();
+				fw.close();
+				
+				renombrado = true;
+				
+			} 
+	    	catch (IOException e) 
+	    	{
+				e.printStackTrace();
+			}
+    	}
+    	
+    	return renombrado;
     }
 
 }
